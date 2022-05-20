@@ -1,0 +1,94 @@
+version: "3.9"
+services:
+  gateway:
+    build:
+      context: gateway/docker
+      dockerfile: dev/nginx/Dockerfile
+    ports:
+      - "80:8080"
+      - "8888:8081"
+
+  client:
+    build:
+      context: client/docker/dev/nginx
+
+  client-node:
+    build:
+      context: client/docker/dev/node
+    environment:
+      REACT_APP_API_URL: http://localhost:8888
+    volumes:
+      - ./client:/app
+    command: sh -c "until [ -f .ready ] ; do sleep 1 ; done && yarn start"
+
+  client-node-cli:
+    build:
+      context: client/docker/dev/node
+    volumes:
+      - ./client:/app
+
+  api:
+    build:
+      context: api/docker
+      dockerfile: dev/nginx/Dockerfile
+    volumes:
+      - ./api:/app
+
+  api-php-fpm:
+    build:
+      context: api/docker
+      dockerfile: dev/php-fpm/Dockerfile
+    environment:
+      APP_NAME: Личный кабинет 120на80
+      APP_URL: http://localhost:8888
+      APP_ENV: local
+      APP_DEBUG: true
+      LOG_CHANNEL: stack
+      LOG_LEVEL: debug
+      DB_HOST: api-db
+      DB_DATABASE: app
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+      FILESYSTEM_DISK: sftp
+      SFTP_URL: http://192.168.2.3/static/s
+      SFTP_HOST: 192.168.2.3
+      SFTP_USERNAME: Social
+      SFTP_PASSWORD: 222326
+    volumes:
+      - ./api:/app
+
+  api-php-cli:
+    build:
+      context: api/docker
+      dockerfile: dev/php-cli/Dockerfile
+    environment:
+      APP_NAME: Личный кабинет 120на80
+      APP_URL: http://localhost:8888
+      APP_ENV: local
+      APP_DEBUG: true
+      LOG_CHANNEL: stack
+      LOG_LEVEL: debug
+      DB_HOST: api-db
+      DB_DATABASE: app
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+      FILESYSTEM_DISK: sftp
+      SFTP_URL: http://192.168.2.3/static/s
+      SFTP_HOST: 192.168.2.3
+      SFTP_USERNAME: Social
+      SFTP_PASSWORD: 222326
+    volumes:
+      - ./api:/app
+
+  api-db:
+    image: mariadb:10.8
+    environment:
+      MARIADB_ROOT_PASSWORD: secret
+      MARIADB_DATABASE: app
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  db-data:

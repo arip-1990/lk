@@ -1,0 +1,333 @@
+.calendar {
+  width: 220px;
+  overflow: hidden;
+  margin: 0 auto;
+  transform: translate3d(0, 0, 0);
+
+  &-header {
+    height: 40px;
+    background: $success;
+    text-align: center;
+    position: relative;
+    z-index: 100;
+
+    h1 {
+      font-size: 1.5rem;
+      line-height: 40px;
+      font-weight: 400;
+      color: #fff;
+      padding: 0;
+      margin: 0;
+    }
+
+    .prev,
+    .next {
+      position: absolute;
+      width: 0px;
+      height: 0px;
+      border-style: solid;
+      top: 50%;
+      margin-top: -7.5px;
+      cursor: pointer;
+    }
+
+    .prev {
+      border-width: 7.5px 10px 7.5px 0;
+      border-color: transparent rgba(#fff, 1) transparent transparent;
+      left: 20px;
+    }
+
+    .next {
+      border-width: 7.5px 0 7.5px 10px;
+      border-color: transparent transparent transparent rgba(#fff, 1);
+      right: 20px;
+    }
+  }
+
+  .month {
+    border: 1px solid $success;
+
+    .week {
+      background: #fff;
+      opacity: 0;
+    }
+
+    &.new .week {
+      animation: fadeIn 1s ease-out;
+      opacity: 1;
+    }
+
+    &.in {
+      &.next .week {
+        animation: moveFromRightFadeMonth 0.4s ease-out;
+        opacity: 1;
+      }
+
+      &.prev .week {
+        animation: moveFromLeftFadeMonth 0.4s ease-out;
+        opacity: 1;
+      }
+    }
+
+    &.out {
+      &.next .week {
+        animation: moveToRightFadeMonth 0.4s ease-in;
+        opacity: 1;
+      }
+
+      &.prev .week {
+        animation: moveToLeftFadeMonth 0.4s ease-in;
+        opacity: 1;
+      }
+    }
+  }
+
+  .day {
+    position: relative;
+    display: inline-block;
+    width: calc(216px / 7);
+    text-align: center;
+    vertical-align: top;
+    color: $primary;
+    padding: 0.25rem;
+    cursor: pointer;
+    z-index: 100;
+
+    &.other {
+      color: $disable;
+    }
+
+    &.today,
+    &.selected {
+      color: #fff !important;
+
+      .day-number {
+        background: $disable;
+        border-radius: 50%;
+      }
+    }
+
+    &.selected .day-number {
+      background: $success;
+    }
+
+    &:hover:not(.other):not(.today):not(.selected) {
+      color: $success !important;
+    }
+
+    &-names {
+      background: $secondary;
+      border-bottom: 1px solid $success;
+
+      .day-name {
+        position: relative;
+        display: inline-block;
+        width: calc(218px / 7);
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #666;
+        letter-spacing: 0.7px;
+      }
+    }
+
+    &-number {
+      font-size: 0.9rem;
+      letter-spacing: 1.4px;
+    }
+
+    .day-events {
+      list-style: none;
+      margin-top: 2px;
+      text-align: center;
+      height: 8px;
+      line-height: 6px;
+      overflow: hidden;
+
+      span {
+        vertical-align: top;
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+        width: 4px;
+        height: 4px;
+        line-height: 4px;
+        margin: 0 1px;
+      }
+    }
+  }
+
+  .blue {
+    background: $primary;
+  }
+
+  .details {
+    position: relative;
+    width: 236px;
+    height: 75px;
+    background: rgba(164, 164, 164, 1);
+    margin-top: 4px;
+    border-radius: 4px;
+
+    &.in {
+      animation: moveFromTopFade 0.5s ease both;
+    }
+
+    &.out {
+      animation: moveToTopFade 0.5s ease both;
+    }
+  }
+
+  .arrow {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    margin-left: -2px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 5px 5px 5px;
+    border-color: transparent transparent rgba(164, 164, 164, 1) transparent;
+    transition: all 0.7s ease;
+  }
+
+  .events {
+    height: 75px;
+    padding: 7px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &.in {
+      animation: fadeIn 0.3s ease both;
+      animation-delay: 0.3s;
+    }
+
+    &.out {
+      animation: fadeOut 0.3s ease both;
+
+      .events {
+        animation: fadeOutShink 0.4s ease both;
+      }
+    }
+  }
+
+  .event {
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0.5px;
+    padding: 2px 16px;
+    vertical-align: top;
+
+    &.empty {
+      color: #eee;
+    }
+
+    &-category {
+      height: 10px;
+      width: 10px;
+      display: inline-block;
+      margin: 6px 0 0;
+      vertical-align: top;
+    }
+
+    span {
+      display: inline-block;
+      padding: 0 0 0 7px;
+    }
+  }
+
+  .legend {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    background: rgba(60, 60, 60, 1);
+    line-height: 30px;
+  }
+
+  .entry {
+    position: relative;
+    padding: 0 0 0 25px;
+    font-size: 13px;
+    display: inline-block;
+    line-height: 30px;
+    background: transparent;
+
+    &:after {
+      position: absolute;
+      content: "";
+      height: 5px;
+      width: 5px;
+      top: 12px;
+      left: 14px;
+    }
+
+    &.blue:after {
+      background: $primary;
+    }
+  }
+}
+
+@keyframes moveFromTopFade {
+  from {
+    height: 0px;
+    margin-top: 0px;
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes moveToTopFade {
+  to {
+    height: 0px;
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes moveToRightFadeMonth {
+  to {
+    opacity: 0;
+    transform: translateX(-30%);
+  }
+}
+
+@keyframes moveFromRightFadeMonth {
+  from {
+    opacity: 0;
+    transform: translateX(30%);
+  }
+}
+
+@keyframes moveToLeftFadeMonth {
+  to {
+    opacity: 0;
+    transform: translateX(30%);
+  }
+}
+
+@keyframes moveFromLeftFadeMonth {
+  from {
+    opacity: 0;
+    transform: translateX(-30%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOutShink {
+  to {
+    opacity: 0;
+    padding: 0px;
+    height: 0px;
+  }
+}

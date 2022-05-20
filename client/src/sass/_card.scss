@@ -1,0 +1,136 @@
+@import "variables";
+
+.card-menu {
+  display: flex;
+  align-items: center;
+  min-height: 112px;
+  background-color: #fff;
+  box-shadow: 0px 0px 18px 12px rgba(34, 60, 80, 0.5);
+
+  &_title {
+    flex: 1 1;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    padding: 0.5rem;
+
+    .icon {
+      width: 64px;
+    }
+
+    .text {
+      font-size: 1.1rem;
+      line-height: 1;
+      margin: 0;
+
+      &_red {
+        color: $error;
+      }
+    }
+  }
+
+  &_description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    align-self: stretch;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: $success;
+    padding: 0.5rem;
+  }
+
+  &__small {
+    min-height: 92px;
+    box-shadow: 0 0 12px 6px rgba(34, 60, 80, 0.5);
+
+    .card-menu_title {
+      .icon {
+        width: 48px;
+      }
+      .text {
+        font-size: 0.95rem;
+      }
+    }
+  }
+}
+
+.ant-card {
+  box-shadow: 0 0 18px 12px rgba(34, 60, 80, 0.5);
+
+  &.test {
+    .ant-card-head {
+      display: flex;
+      justify-content: center;
+      background-color: $success;
+
+      &-title {
+        letter-spacing: 2px;
+        font-size: 1.25rem;
+        color: #fff;
+        padding: 0;
+      }
+    }
+
+    .ant-card-extra {
+      position: absolute;
+      right: 24px;
+    }
+
+    .ant-card-body {
+      flex-direction: column;
+    }
+
+    .ant-card {
+      box-shadow: none;
+      margin: 1rem 0;
+
+      .ant-card-head {
+        background-color: #fafafa;
+
+        &-title {
+          text-align: left;
+          font-weight: normal;
+          text-transform: none;
+          font-size: 1rem;
+          color: rgba(0, 0, 0, 0.85);
+        }
+      }
+    }
+  }
+
+  &-head-title {
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.25rem;
+    color: $primary;
+    white-space: pre-line;
+  }
+
+  &-body {
+    .ant-form {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      min-height: 160px;
+
+      .ant-input {
+        letter-spacing: 2px;
+      }
+    }
+  }
+
+  .ant-card-meta-title,
+  .ant-card-meta-avatar {
+    font-size: 1.5rem;
+    color: #fff;
+  }
+}

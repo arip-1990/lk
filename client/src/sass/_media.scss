@@ -1,0 +1,29 @@
+@import "variables";
+
+.media {
+  position: relative;
+  display: inline-block;
+
+  &:hover .anticon-close-circle {
+    display: inline-block;
+  }
+
+  .anticon-close-circle {
+    display: none;
+    position: absolute;
+    right: 8px;
+    top: 0;
+    font-size: 1.5rem;
+    color: $error;
+    z-index: 99;
+  }
+}
+
+.ant-select {
+  width: 240px;
+  border-bottom: 1px solid rgb(217, 217, 217);
+
+  &-item {
+    color: $primary !important;
+  }
+}

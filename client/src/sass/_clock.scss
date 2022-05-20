@@ -1,0 +1,51 @@
+@import "variables";
+
+.clock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  color: $primary;
+  margin-bottom: 1rem;
+
+  .dottes {
+    display: inline-block;
+    margin: 0 0.5rem;
+    animation-name: blinker;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(1, 0, 0, 1);
+    animation-duration: 1s;
+
+    &:before,
+    &:after {
+      content: "";
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: $success;
+    }
+
+    &:before {
+      margin-bottom: 6px;
+    }
+  }
+}
+
+@keyframes blinker {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes blinker {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

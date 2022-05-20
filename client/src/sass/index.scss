@@ -1,0 +1,288 @@
+@import "variables";
+@import "fonts";
+@import "card";
+@import "layout";
+@import "calendar";
+@import "clock";
+@import "training";
+@import "table";
+@import "media";
+
+body {
+  font-family: "Source Sans Pro";
+}
+
+table,
+.ant-table-container,
+.ant-table-cell {
+  border-color: $success !important;
+}
+
+.primary,
+.active {
+  color: $primary !important;
+}
+
+.red {
+  color: $error !important;
+}
+
+.ant-layout {
+  min-height: 100vh;
+
+  &.login {
+    width: 100%;
+    background-color: #fff;
+    background-image: url(../images/bg_login.jpg);
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: cover;
+  }
+
+  .login {
+    align-self: center;
+    width: 760px;
+    background-color: #fff;
+    margin-left: 3rem;
+
+    .ant-card-body {
+      background-image: url(../images/bg.svg);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+
+    .ant-input-affix-wrapper {
+      border-color: $primary;
+    }
+  }
+}
+
+.ant-row {
+  .ant-col {
+    width: 100%;
+  }
+}
+
+.ant-dropdown-trigger {
+  color: $error;
+}
+
+.test-info {
+  align-items: center;
+  background-color: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+  .percent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 100px;
+    font-weight: 600;
+    color: $error;
+    margin: 0;
+
+    &::after {
+      content: attr(data-percent) "%";
+      position: absolute;
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .ant-col {
+    margin: 0;
+
+    &:last-child {
+      background-color: $success;
+      padding: 0.5rem;
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .ant-table-row {
+    &:nth-child(1) > td,
+    &:nth-child(2) > td {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    &:last-child p {
+      font-size: 1.2rem;
+      color: $error;
+      font-weight: 600;
+    }
+
+    td:first-child {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.ant-card {
+  &:not(.login) .ant-card-head-title {
+    text-align: left;
+  }
+
+  &-head-title {
+    .ant-select {
+      color: $primary;
+
+      .ant-select-arrow {
+        color: $primary;
+      }
+    }
+  }
+}
+
+.result {
+  .ant-row {
+    border-bottom: 1px solid $success;
+
+    &:first-child {
+      border-top: 1px solid $success;
+    }
+  }
+}
+
+.ant-modal {
+  &-title {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+}
+
+.ant-btn:hover,
+.ant-btn:focus {
+  color: $success;
+  border-color: $success;
+}
+
+.ant-btn-primary,
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  color: #fff;
+  background: $success;
+  border-color: $success;
+}
+
+.ant-spin-spinning {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.ant-form-item-label > label,
+.ant-checkbox-wrapper,
+.ant-table-thead > tr > th,
+.ant-list-item-meta-title > a {
+  color: $success;
+}
+
+.ant-list-item-meta-title,
+.ant-list-item-meta-avatar,
+.ant-list-item-meta-title > a:hover {
+  color: $primary;
+}
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td,
+.ant-table tfoot > tr > th,
+.ant-table tfoot > tr > td {
+  padding: 0.5rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.ant-table-tbody > tr {
+  &.disable p {
+    color: $disable !important;
+  }
+
+  &.claim {
+    > td {
+      padding: 0;
+    }
+
+    p,
+    .ant-space {
+      padding: 4px 11px;
+    }
+
+    .ant-picker,
+    .ant-input,
+    .ant-input-number,
+    .ant-select {
+      width: 100%;
+    }
+  }
+}
+
+.ant-list-item-meta-avatar {
+  align-self: center;
+}
+
+.ant-steps .ant-steps-item-icon {
+  margin: 0;
+}
+
+.scroll-list {
+  height: 300px;
+  padding: 8px 24px;
+  overflow: auto;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+}
+
+.breadcrumb__item {
+  font-size: 1rem;
+  color: $primary;
+
+  a {
+    color: rgba($primary, 0.75);
+
+    &:hover {
+      color: $primary;
+    }
+  }
+
+  .anticon {
+    font-size: 1.1rem;
+  }
+}
+
+.table_cell__small {
+  padding: 0 !important;
+}
+
+.avatar-uploader > .ant-upload {
+  width: 128px;
+  height: 128px;
+}
+
+// width
+::-webkit-scrollbar {
+  width: 0.5rem;
+
+  // Track
+  &-track {
+    background-color: #f1f1f1;
+  }
+
+  // Handle
+  &-thumb {
+    background-color: rgba($success, 0.45);
+
+    &:hover {
+      background-color: $success;
+    }
+  }
+}

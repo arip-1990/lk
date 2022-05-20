@@ -1,0 +1,62 @@
+@import "variables";
+
+.training {
+  position: relative;
+
+  &:hover .anticon-close-circle {
+    display: inline-block;
+  }
+
+  .anticon-close-circle {
+    display: none;
+    position: absolute;
+    right: 8px;
+    top: -8px;
+    font-size: 1.5rem;
+    color: $error;
+    z-index: 99;
+  }
+
+  .anticon-fullscreen,
+  .anticon-expand,
+  .anticon-compress,
+  .anticon-fullscreen-exit {
+    top: 8px;
+    left: 8px;
+    font-size: 1.2rem;
+    z-index: 109;
+    transition: transform 300ms ease;
+  }
+
+  .anticon-fullscreen,
+  .anticon-expand {
+    position: absolute;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  .anticon-fullscreen-exit,
+  .anticon-compress {
+    position: fixed;
+
+    &:hover {
+      transform: scale(0.8);
+    }
+  }
+
+  &_full {
+    .anticon-close-circle {
+      display: none !important;
+    }
+
+    iframe {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      z-index: 99;
+    }
+  }
+}
