@@ -11,6 +11,6 @@ class IndexController extends Controller
 {
     public function handle(): JsonResponse
     {
-        return new JsonResponse(StoreResource::collection(Store::query()->orderBy('sort')));
+        return new JsonResponse(StoreResource::collection(Store::query()->orderBy('sort')->get()));
     }
 }
