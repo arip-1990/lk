@@ -20,7 +20,7 @@ class WorkerController extends Controller
         $data = [];
         if (Auth::user()->stores->count()) {
             foreach (Auth::user()->stores as $store) {
-                foreach ($this->prepareData($store->users) as $key => $workers) {
+                foreach ($this->prepareData($store->users, $store) as $key => $workers) {
                     $data[] = [
                         'store' => $key,
                         'workers' => $workers
@@ -29,14 +29,14 @@ class WorkerController extends Controller
             }
         }
         else {
-            User::query()->chunk(100, function (\Illuminate\Database\Eloquent\Collection $users) use (&$data) {
-                foreach ($this->prepareData($users) as $key => $workers) {
+            foreach (Store::all() as $store) {
+                foreach ($this->prepareData($store->users, $store) as $key => $workers) {
                     $data[] = [
                         'store' => $key,
                         'workers' => $workers
                     ];
                 }
-            });
+            }
         }
 
         return new JsonResponse($data);
