@@ -49,7 +49,7 @@ return [
             'host' => env('SFTP_HOST'),
             'username' => env('SFTP_USERNAME'),
             'password' => env('SFTP_PASSWORD'),
-            'root' => '/home/Social',
+            'root' => '/home/' . env('SFTP_USERNAME'),
             'url' => env('SFTP_URL'),
             'visibility' => 'public',
             'timeout' => 10,
