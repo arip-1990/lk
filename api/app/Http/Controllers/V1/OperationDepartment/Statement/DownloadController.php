@@ -25,9 +25,12 @@ class DownloadController extends Controller
             if ($zip->open(Storage::disk('local')->path($zipFile), \ZIPARCHIVE::CREATE) !== true)
                 throw new \DomainException('Невозможно создать архив!');
 
-            foreach (glob(Storage::path($statement->getMediaPath()) . '/' . $statement->id . '_*') as $item) {
-                $tmp = explode('/', $item);
-                $zip->addFile($item, $tmp[count($tmp) - 1]);
+            foreach (Storage::files($statement->getMediaPath()) as $file) {
+                $fileName = explode('/', $file);
+                $fileName = array_pop($fileName);
+                if (str_starts_with($fileName, $statement->id)) {
+                    $zip->addFromString($fileName, Storage::get($file));
+                }
             }
             $zip->close();
         }
@@ -35,6 +38,6 @@ class DownloadController extends Controller
             return new Response($exception->getMessage(), 500);
         }
 
-        return Storage::download($zipFile);
+        return Storage::disk('local')->download($zipFile);
     }
 }

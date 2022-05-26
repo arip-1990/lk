@@ -29,14 +29,16 @@ class WorkerController extends Controller
             }
         }
         else {
-            foreach (Store::all() as $store) {
-                foreach ($this->prepareData($store->users, $store) as $key => $workers) {
-                    $data[] = [
-                        'store' => $key,
-                        'workers' => $workers
-                    ];
+            Store::query()->chunk(10, function (Collection $stores) use (&$data) {
+                foreach ($stores as $store) {
+                    foreach ($this->prepareData($store->users, $store) as $key => $workers) {
+                        $data[] = [
+                            'store' => $key,
+                            'workers' => $workers
+                        ];
+                    }
                 }
-            }
+            });
         }
 
         return new JsonResponse($data);

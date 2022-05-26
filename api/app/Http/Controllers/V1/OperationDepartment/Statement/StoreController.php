@@ -28,7 +28,7 @@ class StoreController extends Controller
         if (!Storage::exists($statement->getMediaPath()))
             Storage::makeDirectory($statement->getMediaPath());
         /** @var UploadedFile $file */
-        foreach ($request->file('media') as $i => $file) {
+        foreach ($request->file('media', []) as $i => $file) {
             if ($file->getError() === UPLOAD_ERR_OK) {
                 Storage::putFileAs($statement->getMediaPath(), $file, $statement->id . '_' . $i . '.' . $file->getClientOriginalExtension());
             }

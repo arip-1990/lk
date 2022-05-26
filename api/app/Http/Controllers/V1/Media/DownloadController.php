@@ -26,10 +26,10 @@ class DownloadController extends Controller
                 throw new \DomainException('Невозможно создать архив!');
 
             foreach (Media::all() as $media) {
-                $newPath = 'Медиа/' . $media?->store->name ?? 'Все';
+                $newPath = 'Медиа/' . ($media?->store->name ?? 'Все');
                 foreach (Storage::files($media->getMediaPath()) as $file) {
                     $tmp = explode('/', $file);
-                    $zip->addFile(Storage::path($file), $newPath . '/' . $tmp[count($tmp) - 1]);
+                    $zip->addFromString($newPath . '/' . array_pop($tmp), Storage::get($file));
                 }
             }
             $zip->close();
@@ -38,6 +38,6 @@ class DownloadController extends Controller
             return new Response($exception->getMessage(), 500);
         }
 
-        return Storage::download($zipFile);
+        return Storage::disk('local')->download($zipFile);
     }
 }

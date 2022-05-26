@@ -39,7 +39,16 @@ class Statement extends Model
 
     public function hasMedia(): bool
     {
-        return !!glob(Storage::path('statements/' . $this->store_id ?? 'office') . '/' . $this->id . '_*');
+        $hasFile = false;
+        foreach (Storage::files($this->getMediaPath()) as $file) {
+            $file = explode('/', $file);
+            $file = array_pop($file);
+            if (str_starts_with($file, $this->id)) {
+                $hasFile = true;
+                break;
+            }
+        }
+        return $hasFile;
     }
 
     public function category(): BelongsTo

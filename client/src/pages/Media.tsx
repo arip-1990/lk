@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Card, Table } from "antd";
+import { Row, Col, Card, Table, Button } from "antd";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { useFetchCategoriesQuery } from "../services/CategoryService";
 import { Card as MediaCard } from "../components";
@@ -7,6 +7,8 @@ import { Media as BaseMedia } from "../components";
 import { ICategory } from "../models/ICategory";
 import { IStore } from "../models/IStore";
 import { useFetchStoresQuery } from "../services/StoreService";
+import { useAuth } from "../hooks/useAuth";
+import { API_URL } from "../services/api";
 
 const getFilterCategories = (categories: ICategory[]): ICategory[] => {
   let data: ICategory[] = [];
@@ -35,6 +37,7 @@ const getCategoryById = (
 
 const Media: React.FC = () => {
   const { storeId, categoryId } = useParams();
+  const { user } = useAuth();
   const {
     data: categories,
     isLoading: categoryLoading,
@@ -117,7 +120,16 @@ const Media: React.FC = () => {
             </Row>
           </Card>
         ) : (
-          <Card style={{ padding: "0.25rem" }}>
+          <Card
+            style={{ padding: "0.25rem" }}
+            // extra={
+            //   user?.role.name === "admin" ? (
+            //     <Button type="primary">
+            //       <a href={`${API_URL}/download/media`}>Скачать все файлы</a>
+            //     </Button>
+            //   ) : null
+            // }
+          >
             <Table
               size="small"
               rowClassName="primary"
