@@ -21,9 +21,10 @@ class StoreController extends Controller
                 'provider_id' => $item['provider'],
                 'store_id' => $item['store'],
                 'user_id' => Auth::id(),
-                'not_attachment' => $item['notAttachment'],
-                'regrading' => $item['regrading'],
-                'short_shelf_life' => $item['shortShelfLife'],
+                'not_delivery' => $item['notDelivery'] ?? null,
+                'not_attachment' => $item['notAttachment'] ?? null,
+                'regrading' => $item['regrading'] ?? null,
+                'short_shelf_life' => $item['shortShelfLife'] ?? null,
             ]);
         }
 
