@@ -16,13 +16,14 @@ class StoreController extends Controller
 {
     public function handle(Category $category, Request $request): JsonResponse
     {
-        if ($request->get('name'))
+        if (!$request->get('name'))
             throw new \DomainException('Отсутствует название документа!');
 
         $document = Document::query()->create([
             'id' => Uuid::uuid4()->toString(),
             'title' => $request->get('name'),
-            'category_id' => $category->id
+            'category_id' => $category->id,
+            'type' => Document::TYPE_PDF
         ]);
 
         /** @var UploadedFile $file */
