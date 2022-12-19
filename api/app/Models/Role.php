@@ -22,4 +22,9 @@ class Role extends Model
     const WORKER = 'worker';
 
     protected $fillable = ['name', 'description'];
+
+    public function isAdmin(): bool
+    {
+        return $this->name === self::ADMIN;
+    }
 }

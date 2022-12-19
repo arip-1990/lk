@@ -5,12 +5,17 @@ namespace App\Http\Controllers\V1\Store;
 use App\Http\Resources\StoreResource;
 use App\Models\Store;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class IndexController extends Controller
 {
-    public function handle(): JsonResponse
+    public function handle(Request $request): JsonResponse
     {
-        return new JsonResponse(StoreResource::collection(Store::query()->orderBy('sort')->get()));
+        $query = Store::query();
+        if (!$request->user()->role?->isAdmin())
+            $query->whereIn('id', $request->user()->stores->pluck('id'));
+
+        return new JsonResponse(StoreResource::collection($query->orderBy('sort')->get()));
     }
 }

@@ -8,7 +8,6 @@ import { ICategory } from "../models/ICategory";
 import { IStore } from "../models/IStore";
 import { useFetchStoresQuery } from "../services/StoreService";
 import { useAuth } from "../hooks/useAuth";
-import { API_URL } from "../services/api";
 
 const getFilterCategories = (categories: ICategory[]): ICategory[] => {
   let data: ICategory[] = [];
