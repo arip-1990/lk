@@ -12,7 +12,7 @@ const User: React.FC = () => {
     middleName: user?.middleName,
     phone: user?.mobilePhone,
     email: user?.email,
-    post: user?.post,
+    post: user?.position,
   };
 
   return (

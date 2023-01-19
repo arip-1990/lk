@@ -8,7 +8,7 @@ export interface IUser {
     mobilePhone: string | null;
     internalPhones: string[];
     email: string | null;
-    post: string;
+    position: string;
     role: {name: string, description: string};
     stores: IStore[];
 }
