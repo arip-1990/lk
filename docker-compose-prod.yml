@@ -31,7 +31,7 @@ services:
     image: ${REGISTRY}/lk-social-client:${IMAGE_TAG}
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 2
       update_config:
         parallelism: 1
         delay: 10s
@@ -42,10 +42,10 @@ services:
     image: ${REGISTRY}/lk-social-api:${IMAGE_TAG}
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 2
       update_config:
         parallelism: 1
-        delay: 5s
+        delay: 10s
     networks:
       - app_net
 
@@ -67,10 +67,10 @@ services:
       SFTP_PASSWORD: 222326
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 2
       update_config:
         parallelism: 1
-        delay: 5s
+        delay: 10s
     networks:
       - app_net
 
@@ -110,7 +110,7 @@ services:
     networks:
       - app_net
 
-  cheduler:
+  scheduler:
     image: ${REGISTRY}/lk-social-api-php-cli:${IMAGE_TAG}
     environment:
       APP_NAME: Личный кабинет 120на80

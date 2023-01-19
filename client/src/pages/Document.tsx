@@ -37,7 +37,7 @@ const Document: React.FC = () => {
           </Link>
         ) : "title" in text ? (
           text.url ? (
-            <a style={{ fontSize: "1.2rem" }} href={text.url}>
+            <a style={{ fontSize: "1.2rem" }} href={text.url} target='_blank'>
               {text.title}
               {user?.role.name === "admin" ? (
                 <DeleteOutlined
