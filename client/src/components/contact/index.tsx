@@ -8,16 +8,16 @@ const columns = [
     dataIndex: "index",
     width: 48,
     align: "center" as "center",
-    render: (index: number, row: any, i: number) => {
+    render: (_: number, row: any, index: number) => {
       if (row.length > 1) {
         return {
-          children: <span>{index}</span>,
+          children: <span>{index + 1}</span>,
           props: {
             rowSpan: row.key.split("-")[1] == "0" ? row.length : 0,
           },
         };
       }
-      return <span>{index}</span>;
+      return <span>{index + 1}</span>;
     },
   },
   {
