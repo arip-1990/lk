@@ -1,51 +1,64 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { FC, MouseEvent, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, Dropdown, Row, Col } from "antd";
 import {
   DownOutlined,
   LogoutOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { MenuClickEventHandler } from "rc-menu/lib/interface";
+import type { MenuProps } from 'antd';
+
 import logo from "../images/logo.svg";
 import { useAuth } from "../hooks/useAuth";
 
-const Header: React.FC = () => {
-  const [current, setCurrent] = React.useState<string>();
+const Header: FC = () => {
+  const {state} = useLocation();
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
-  const handleDropMenu = async (event: any) => {
-    switch (event.key) {
-      case "profile":
-        navigate("/profile", { state: { key: "1", page: "Профиль" } });
-        break;
-      case "score":
-        navigate("/profile", { state: { key: "2", page: "Профиль" } });
-        break;
-      case "claim":
-        navigate("/profile", { state: { key: "3", page: "Профиль" } });
-        break;
-      case "logout":
-        await logout();
-        window.location.reload();
-    }
-  };
+  const handleLogout = (e: MouseEvent) => {
+    e.preventDefault();
+    logout();
+    window.location.reload();
+  }
 
-  const handleMenuClick: MenuClickEventHandler = (e) => {
-    setCurrent(e.key);
-    switch (e.key) {
-      case "store":
-        navigate("/store", { state: { page: "Аптеки" } });
-        break;
-      case "contact":
-        navigate("/contact", { state: { page: "Контакты" } });
-        break;
-      default:
-        setCurrent(undefined);
-        navigate("/");
-    }
-  };
+  const MenuItems: MenuProps['items'] = [
+    {
+      key: "about",
+      label: <Link to='/' state={{ key: undefined, page: "" }}>О компании</Link>,
+    },
+    { 
+      key: "contact",
+      label: <Link to='/contact' state={{ key: "contact", page: "Контакты" }}>Контакты</Link>,
+    },
+    {
+      key: "store",
+      label: <Link to='/store' state={{ key: "store", page: "Аптеки" }}>Аптеки</Link>,
+    },
+  ];
+
+  const DropdownItems: MenuProps['items'] = [
+    {
+      key: "profile",
+      label: <Link to='/profile' state={{ key: "1", page: "Профиль" }}>Профиль</Link>,
+      icon: <SettingOutlined />,
+    },
+    { 
+      key: "score",
+      label: <Link to='/profile' state={{ key: "2", page: "Профиль" }}>Баллы</Link>,
+      icon: <SettingOutlined />
+    },
+    {
+      key: "claim",
+      label: <Link to='/profile' state={{ key: "3", page: "Профиль" }}>Претензии к поставщикам</Link>,
+      icon: <SettingOutlined />,
+    },
+    { type: "divider" },
+    { 
+      key: "logout",
+      label: <a href="#" onClick={handleLogout}>Выход</a>,
+      icon: <LogoutOutlined />
+    },
+  ];
 
   return (
     <header className="layout-header">
@@ -61,38 +74,14 @@ const Header: React.FC = () => {
         </Col>
         <Col span={15}>
           <Menu
-            onClick={handleMenuClick}
-            selectedKeys={current ? [current] : undefined}
+            selectedKeys={state?.key ? [state.key] : undefined}
             mode="horizontal"
-            items={[
-              { key: "about", label: "О компании" },
-              { key: "contact", label: "Контакты" },
-              { key: "store", label: "Аптеки" },
-            ]}
+            items={MenuItems}
           />
         </Col>
         <Col span={4} style={{ textAlign: "end" }}>
           <Dropdown
-            overlay={
-              <Menu
-                onClick={handleDropMenu}
-                items={[
-                  {
-                    key: "profile",
-                    label: "Профиль",
-                    icon: <SettingOutlined />,
-                  },
-                  { key: "score", label: "Баллы", icon: <SettingOutlined /> },
-                  {
-                    key: "claim",
-                    label: "Претензии к поставщикам",
-                    icon: <SettingOutlined />,
-                  },
-                  { type: "divider" },
-                  { key: "logout", label: "Выход", icon: <LogoutOutlined /> },
-                ]}
-              />
-            }
+            menu={{items: DropdownItems}}
             placement="bottomRight"
           >
             <a href="/" onClick={(e) => e.preventDefault()}>

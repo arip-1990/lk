@@ -1,11 +1,6 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.2-fpm-alpine
 
-RUN apk add --no-cache fcgi
-
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-RUN chmod +x /usr/local/bin/install-php-extensions \
-    && install-php-extensions gd intl pdo_mysql zip ssh2
+RUN apk add --no-cache fcgi icu-dev && docker-php-ext-install intl pdo_mysql
 
 COPY ./common/php/conf.d /usr/local/etc/php/conf.d
 COPY ./common/php/php-fpm.d /usr/local/etc/php-fpm.d

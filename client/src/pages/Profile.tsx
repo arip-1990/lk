@@ -1,6 +1,8 @@
 import React from "react";
 import { Row, Col, Card, Tabs, Button } from "antd";
 import { useLocation } from "react-router-dom";
+import type { TabsProps } from 'antd';
+
 import { useAuth } from "../hooks/useAuth";
 import { User, Test, WorkerTest } from "../templates";
 import { API_URL } from "../services/api";
@@ -10,12 +12,39 @@ const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState<string>("1");
   const [testType, setTestType] = React.useState<string>("base");
   const { user } = useAuth();
-  const location = useLocation();
-  const state = location.state as LocationState;
+  const {state} = useLocation();
 
-  React.useEffect(() => setActiveTab(state?.key || "1"), [location.state]);
+  const items: TabsProps['items'] = [
+    {
+      key: '1',
+      label: 'Личные данные',
+      children: <User />,
+    },
+    {
+      key: '2',
+      label: 'Результаты тестов',
+      children: user?.role.name === "worker" ? (
+        <Test
+          user={{
+            id: user.id,
+            name: `${user.firstName} ${user.lastName}`,
+          }}
+          onChangeTestType={(type) => console.log(type)}
+        />
+      ) : (
+        <WorkerTest onChangeTestType={(type) => setTestType(type)} />
+      ),
+    },
+    {
+      key: '3',
+      label: 'Претензии к поставщикам',
+      children: <Claim />,
+    },
+  ];
 
-  const handleTabClick = (key: string) => {
+  React.useEffect(() => setActiveTab(state?.key || "1"), [state]);
+
+  const handleChange = (key: string) => {
     setActiveTab(key);
   };
 
@@ -25,7 +54,7 @@ const Profile: React.FC = () => {
         <Card style={{ height: "100%" }}>
           <Tabs
             style={{ color: "#22aca6" }}
-            onTabClick={handleTabClick}
+            onChange={handleChange}
             activeKey={activeTab}
             tabBarExtraContent={
               user?.role.name === "admin" &&
@@ -42,27 +71,9 @@ const Profile: React.FC = () => {
                 </Button>
               ) : null
             }
-          >
-            <Tabs.TabPane tab="Личные данные" key="1">
-              <User />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Результаты тестов" key="2">
-              {user?.role.name === "worker" ? (
-                <Test
-                  user={{
-                    id: user.id,
-                    name: `${user.firstName} ${user.lastName}`,
-                  }}
-                  onChangeTestType={(type) => console.log(type)}
-                />
-              ) : (
-                <WorkerTest onChangeTestType={(type) => setTestType(type)} />
-              )}
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Претензии к поставщикам" key="3">
-              <Claim />
-            </Tabs.TabPane>
-          </Tabs>
+          
+            items={items}
+          />
         </Card>
       </Col>
     </Row>

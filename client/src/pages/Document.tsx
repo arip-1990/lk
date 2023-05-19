@@ -148,7 +148,7 @@ const Document: React.FC = () => {
 
       <Modal
         title="Добавление документа"
-        visible={modalVisible}
+        open={modalVisible}
         okText="Добавить"
         cancelText="Отмена"
         okButtonProps={{

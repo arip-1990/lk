@@ -5,10 +5,10 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
-        "ext-simplexml": "*",
-        "ext-ssh2": "*",
+        "php": "^8.2",
         "ext-zip": "*",
+        "ext-ssh2": "*",
+        "ext-simplexml": "*",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.15",

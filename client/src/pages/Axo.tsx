@@ -102,7 +102,7 @@ const Axo: React.FC = () => {
 
       <Modal
         title={editData ? "Редактирование заявки" : "Новая заявка"}
-        visible={modalVisible}
+        open={modalVisible}
         okText="Добавить"
         cancelText="Отмена"
         okButtonProps={{

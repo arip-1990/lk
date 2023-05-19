@@ -81,7 +81,7 @@ services:
       - ./api:/app
 
   api-db:
-    image: mariadb:10.8
+    image: mariadb:10.11
     environment:
       MARIADB_ROOT_PASSWORD: secret
       MARIADB_DATABASE: app

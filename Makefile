@@ -24,6 +24,7 @@ docker-pull:
 docker-build:
 	docker compose build --pull
 
+
 api-clear:
 	docker run --rm -v ${PWD}/api:/app -w /app alpine sh -c 'rm -rf storage/framework/cache/data/* storage/framework/sessions/* storage/framework/testing/* storage/framework/views/* storage/logs/*'
 
@@ -43,6 +44,10 @@ api-wait-db:
 
 api-migrations:
 	docker compose run --rm api-php-cli php artisan migrate --force
+
+api-optimize:
+	docker compose run --rm api-php-cli php artisan optimize:clear
+
 
 client-clear:
 	docker run --rm -v ${PWD}/client:/app -w /app alpine sh -c 'rm -rf .ready build'

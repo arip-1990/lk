@@ -1,4 +1,4 @@
-import React from "react";
+import {createContext} from "react";
 import { IUser } from "../../models/IUser";
 
 export interface ContextProps {
@@ -10,6 +10,6 @@ export interface ContextProps {
   checkAuth: () => Promise<boolean>;
 }
 
-const AuthContext = React.createContext<ContextProps | undefined>(undefined);
+const AuthContext = createContext<ContextProps | undefined>(undefined);
 
 export default AuthContext;

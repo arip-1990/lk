@@ -1,9 +1,10 @@
-FROM php:8.1-cli-alpine AS builder
+FROM php:8.2-cli-alpine AS builder
 
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-RUN chmod +x /usr/local/bin/install-php-extensions \
-    && install-php-extensions gd intl pdo_mysql zip ssh2 opcache
+RUN apk add --no-cache bash autoconf build-base \
+    libzip-dev libssh2-dev libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev \
+    && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install gd pdo_mysql zip \
+    && pecl install ssh2-1.4 && docker-php-ext-enable ssh2
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
@@ -18,14 +19,11 @@ RUN composer install --no-dev --no-scripts --prefer-dist --no-progress --no-sugg
 
 ### FPM ###
 
-FROM php:8.1-fpm-alpine
+FROM php:8.2-fpm-alpine
 
-RUN apk add --no-cache fcgi
-
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-RUN chmod +x /usr/local/bin/install-php-extensions \
-    && install-php-extensions gd intl pdo_mysql zip ssh2 opcache
+RUN apk add --no-cache fcgi icu-dev libzip-dev libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev \
+    && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install gd intl pdo_mysql zip opcache sockets
 
 RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 

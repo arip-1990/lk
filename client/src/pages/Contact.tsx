@@ -48,7 +48,7 @@ const Contact: React.FC = () => {
 
       <Modal
         title="Добавление пользователя"
-        visible={modalVisible}
+        open={modalVisible}
         okText="Добавить"
         cancelText="Отмена"
         okButtonProps={{
