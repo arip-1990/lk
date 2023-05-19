@@ -1,6 +1,6 @@
 FROM php:8.2-cli-alpine AS builder
 
-RUN apk add --no-cache bash autoconf build-base \
+RUN apk add --no-cache autoconf build-base \
     libzip-dev libssh2-dev libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev \
     && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install gd pdo_mysql zip \
@@ -21,9 +21,7 @@ RUN composer install --no-dev --no-scripts --prefer-dist --no-progress --no-sugg
 
 FROM php:8.2-fpm-alpine
 
-RUN apk add --no-cache fcgi icu-dev libzip-dev libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev \
-    && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install gd intl pdo_mysql zip opcache sockets
+RUN apk add --no-cache fcgi linux-headers icu-dev && docker-php-ext-install intl pdo_mysql opcache sockets
 
 RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 
