@@ -3,22 +3,27 @@
 .layout {
   min-height: 100vh;
   display: grid;
-  grid-template-rows: minmax(88px, 116px) 1fr minmax(36px, 36px);
-  grid-template-columns: 1fr minmax(540px, 1200px) 1fr;
+  grid-template-rows: minmax(64px, max-content) 1fr;
+  grid-template-columns: minmax(220px, min-content) minmax(540px, max-content) minmax(
+      220px,
+      min-content
+    );
   grid-template-areas:
     "header header header"
-    "leftSider content rightSider"
-    "footer footer footer";
-  background-image: url(../images/bg.svg);
-  background-repeat: repeat-y;
-  background-size: 100%;
+    "leftSider content rightSider";
 
   &-header {
     grid-area: header;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: minmax(220px, min-content) minmax(540px, max-content) minmax(
+        220px,
+        min-content
+      );
     background: #fff;
     font-size: 1.25rem;
     border-bottom: 1px solid $success;
-    padding: 0.75rem;
+    padding: 0.75rem 1.5rem;
 
     .ant-space-item {
       height: 100%;
@@ -31,10 +36,16 @@
 
     .ant-menu {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
+      align-self: center;
       flex: 1;
       line-height: 58px;
       border: 0;
+
+      &::after,
+      &::before {
+        content: none !important;
+      }
 
       &-item {
         text-align: center;
@@ -42,13 +53,18 @@
         min-width: 200px;
         font-size: 1.25rem;
         box-shadow: 0px 0px 18px 6px rgba(34, 60, 80, 0.32);
+        border: 1px solid #0072ce;
+
+        a {
+          color: #d32e11;
+        }
       }
     }
   }
 
   &-left-sider {
     grid-area: leftSider;
-    padding: 1rem 0;
+    padding: 2.5rem 0;
   }
 
   &-content {
@@ -56,19 +72,26 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    background-image: url(../images/bg.svg);
+    background-repeat: repeat-y;
+    background-size: 100%;
     padding: 3rem 50px;
   }
 
   &-right-sider {
     grid-area: rightSider;
-    padding: 1rem 0;
+    padding: 2.5rem 0;
   }
 
   &-footer {
-    grid-area: footer;
+    grid-row: 2 / 3;
+    grid-column: 1 / 4;
+    align-self: self-end;
     display: flex;
     align-items: center;
+    height: 2rem;
     color: $success;
+    background: transparent;
     padding: 0 1.5rem;
   }
 

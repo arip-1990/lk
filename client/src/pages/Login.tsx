@@ -13,25 +13,18 @@ const Login: React.FC = () => {
     setLoading(true);
     try {
       await login(values.login);
-    }
-    catch (e) {
+    } catch (e) {
       setError(e);
     }
     setLoading(false);
   }, []);
 
-  const validator = (_: any, value: any) => {
-    if (!value.trim())
-      return Promise.reject(new Error("Пожалуйста введите код!"));
+  const validator = async (_: any, value: any) => {
+    if (!value.trim()) throw new Error("Пожалуйста введите штрих-код!");
     if (!/^[\d]+$/.test(value.trim()))
-      return Promise.reject(
-        new Error("Значение должно содержать только цифры!")
-      );
+      throw new Error("Значение должно содержать только цифры!");
     if (value.trim().length > 13)
-      return Promise.reject(
-        new Error("Значение должно быть не больше 13 символов!")
-      );
-    return Promise.resolve();
+      throw new Error("Значение должно быть не больше 13 символов!");
   };
 
   return (
@@ -45,7 +38,7 @@ const Login: React.FC = () => {
         >
           <Form.Item
             name="login"
-            rules={[{ validator: validator }]}
+            rules={[{ validator }]}
             {...(error && {
               help: error.data,
               validateStatus: "error",
@@ -60,7 +53,12 @@ const Login: React.FC = () => {
             />
           </Form.Item>
 
-          <Button size="large" type="primary" htmlType="submit" loading={loading}>
+          <Button
+            size="large"
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+          >
             Войти в личный кабинет
           </Button>
         </Form>

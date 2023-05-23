@@ -1,23 +1,23 @@
-import React from "react";
+import { ReactNode, useState, useEffect } from "react";
 import AuthContext from "./AuthContext";
 import api from "../api";
 import { IUser } from "../../models/IUser";
-import { AxiosError } from "axios";
+import axios from "axios";
 
 interface Props {
   checkOnInit?: boolean;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 const Auth: React.FC<Props> = ({ checkOnInit = true, children }) => {
-  const [authState, setAuthState] = React.useState<{
+  const [authState, setAuthState] = useState<{
     user: null | IUser;
     isAuth: null | boolean;
   }>({ user: null, isAuth: null });
   const user = authState.user;
   const isAuth = authState.isAuth;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (checkOnInit) checkAuth();
   }, [checkOnInit]);
 
@@ -37,8 +37,8 @@ const Auth: React.FC<Props> = ({ checkOnInit = true, children }) => {
 
         return resolve({ signedIn: true, user });
       } catch (error) {
-        const err = error as AxiosError;
-        return reject(err);
+        if (axios.isAxiosError(error)) return reject(error.response);
+        return reject(error);
       }
     });
   };
@@ -52,8 +52,8 @@ const Auth: React.FC<Props> = ({ checkOnInit = true, children }) => {
         localStorage.removeItem("token");
         resolve();
       } catch (error) {
-        const err = error as AxiosError;
-        return reject(err);
+        if (axios.isAxiosError(error)) return reject(error.response);
+        return error;
       }
     });
   };
@@ -70,15 +70,14 @@ const Auth: React.FC<Props> = ({ checkOnInit = true, children }) => {
         setUser(data);
         resolve(data);
       } catch (error) {
-        const err = error as AxiosError;
-        if (err.response && err.response.status === 401) {
-          // If there's a 401 error the user is not signed in.
-          setAuthState({ user: null, isAuth: false });
-          return resolve(undefined);
-        } else {
-          // If there's any other error, something has gone wrong.
-          return reject(err);
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401) {
+            // If there's a 401 error the user is not signed in.
+            setAuthState({ user: null, isAuth: false });
+            return resolve(undefined);
+          } else return reject(error.response);
         }
+        return reject(error);
       }
     });
   };
@@ -91,15 +90,14 @@ const Auth: React.FC<Props> = ({ checkOnInit = true, children }) => {
           await revalidate();
           return resolve(true);
         } catch (error) {
-          const err = error as AxiosError;
-          if (err.response && err.response.status === 401) {
-            // If there's a 401 error the user is not signed in.
-            setAuthState({ user: null, isAuth: false });
-            return resolve(false);
-          } else {
-            // If there's any other error, something has gone wrong.
-            return reject(err);
+          if (axios.isAxiosError(error)) {
+            if (error.response?.status === 401) {
+              // If there's a 401 error the user is not signed in.
+              setAuthState({ user: null, isAuth: false });
+              return resolve(false);
+            } else return reject(error.response);
           }
+          return reject(error);
         }
       } else {
         // If it has been checked with the server before, we can just return the state.
