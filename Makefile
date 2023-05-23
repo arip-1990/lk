@@ -7,6 +7,10 @@ up: docker-up
 down: docker-down
 restart: down up
 
+rebuild: docker-down  api-clear client-clear \
+	docker-pull docker-build docker-up \
+	api-init client-init client-ready
+
 update-deps: api-composer-update client-yarn-upgrade restart
 
 docker-up:

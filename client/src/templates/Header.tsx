@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useState } from "react";
+import { FC, MouseEvent } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, Dropdown, Row, Col } from "antd";
 import {
@@ -8,7 +8,6 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from 'antd';
 
-import logo from "../images/logo.svg";
 import { useAuth } from "../hooks/useAuth";
 
 const Header: FC = () => {
@@ -67,19 +66,8 @@ const Header: FC = () => {
         align="middle"
         style={{ maxWidth: 1280, margin: "auto" }}
       >
-        <Col span={5}>
-          <Link to="/">
-            <img className="logo" src={logo} alt="" />
-          </Link>
-        </Col>
-        <Col span={15}>
-          <Menu
-            selectedKeys={state?.key ? [state.key] : undefined}
-            mode="horizontal"
-            items={MenuItems}
-          />
-        </Col>
-        <Col span={4} style={{ textAlign: "end" }}>
+        <Col span={6}>
+          <div>Личный кабинет сотрудника:</div>
           <Dropdown
             menu={{items: DropdownItems}}
             placement="bottomRight"
@@ -89,6 +77,13 @@ const Header: FC = () => {
               <DownOutlined />
             </a>
           </Dropdown>
+        </Col>
+        <Col span={17}>
+          <Menu
+            selectedKeys={state?.key ? [state.key] : undefined}
+            mode="horizontal"
+            items={MenuItems}
+          />
         </Col>
       </Row>
     </header>
