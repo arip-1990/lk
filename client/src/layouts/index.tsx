@@ -13,7 +13,7 @@ const Layout: React.FC = () => {
     <section className="layout">
       <Header />
       <aside className="layout-left-sider">
-        <Row gutter={[0, 32]} justify="center">
+        <Row gutter={[0, 32]}>
           <Col span={18}>
             <img className="logo" src={logoSocial} alt="" />
           </Col>
@@ -27,7 +27,7 @@ const Layout: React.FC = () => {
         <Outlet />
       </main>
       <aside className="layout-right-sider">
-        <Row gutter={[0, 16]} justify="center">
+        <Row gutter={[0, 16]}>
           <Col span={18}>
             <Clock />
           </Col>

@@ -3,8 +3,11 @@
 .layout {
   min-height: 100vh;
   display: grid;
-  grid-template-rows: minmax(92px, max-content) 1fr;
-  grid-template-columns: 320px 1fr 320px;
+  grid-template-rows: minmax(64px, max-content) 1fr;
+  grid-template-columns: minmax(220px, min-content) minmax(540px, max-content) minmax(
+      220px,
+      min-content
+    );
   grid-template-areas:
     "header header header"
     "leftSider content rightSider";
@@ -13,7 +16,10 @@
     grid-area: header;
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: 320px 1fr 320px;
+    grid-template-columns: minmax(220px, min-content) minmax(540px, max-content) minmax(
+        220px,
+        min-content
+      );
     background: #fff;
     font-size: 1.25rem;
     border-bottom: 1px solid $success;
