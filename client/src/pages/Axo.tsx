@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import { useParams } from "react-router-dom";
 import {
   Card,
@@ -12,14 +12,20 @@ import {
   DatePicker,
   Upload,
   Switch,
+  Space,
 } from "antd";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  UploadOutlined,
+  FileExcelOutlined,
+} from "@ant-design/icons";
 import { Statement } from "../components";
 import { statementApi } from "../services/StatementService";
 import { useFetchStoresQuery } from "../services/StoreService";
 import { useAuth } from "../hooks/useAuth";
 import { IStatement } from "../models/IStatement";
 import moment from "moment";
+import { API_URL } from "../services/api";
 
 const Axo: React.FC = () => {
   const [form] = Form.useForm();
@@ -83,19 +89,39 @@ const Axo: React.FC = () => {
     return e && e.fileList;
   };
 
+  const handleExport = (e: MouseEvent) => {
+    e.preventDefault();
+    window.location.href = `${API_URL}/export/statement/${id}`;
+  };
+
+  const getTitle = (id: string) => {
+    let tmp = "Заявка в ";
+    if (id === "67") tmp += "отдел эксплуатации";
+    else if (id === "68") tmp += "отдел информационных технологий";
+    else tmp += "техническую поддержку";
+
+    return tmp;
+  };
+
   return (
     <Card
-      title={
-        id === "67"
-          ? "Заявка в отдел эксплуатации"
-          : "Заявка в отдел информационных технологий"
-      }
+      title={id && getTitle(id)}
       extra={
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => setModalVisible(true)}
-        />
+        <Space>
+          {user?.role.name === "worker" ? null : (
+            <Button
+              type="link"
+              style={{ color: "#22aca6" }}
+              icon={<FileExcelOutlined />}
+              onClick={handleExport}
+            />
+          )}
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => setModalVisible(true)}
+          />
+        </Space>
       }
     >
       <Statement id={Number(id)} onEdit={handleEdit} />

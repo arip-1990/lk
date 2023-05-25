@@ -1,6 +1,6 @@
 FROM php:8.2-fpm-alpine
 
-RUN apk add --no-cache fcgi icu-dev && docker-php-ext-install intl pdo_mysql
+RUN apk add --no-cache fcgi icu-dev libzip-dev && docker-php-ext-install intl pdo_mysql zip
 
 COPY ./common/php/conf.d /usr/local/etc/php/conf.d
 COPY ./common/php/php-fpm.d /usr/local/etc/php-fpm.d

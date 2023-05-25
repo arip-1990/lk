@@ -21,7 +21,7 @@ RUN composer install --no-dev --no-scripts --prefer-dist --no-progress --no-sugg
 
 FROM php:8.2-fpm-alpine
 
-RUN apk add --no-cache fcgi linux-headers icu-dev && docker-php-ext-install intl pdo_mysql opcache sockets
+RUN apk add --no-cache fcgi linux-headers icu-dev libzip-dev && docker-php-ext-install intl pdo_mysql zip opcache sockets
 
 RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 

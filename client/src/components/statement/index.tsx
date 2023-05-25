@@ -54,7 +54,7 @@ const Statement: React.FC<PropsType> = ({ id, onEdit }) => {
       ),
     },
     {
-      title: "Что необходимо выполнить",
+      title: id === 67 ? "Что необходимо выполнить" : "Описание проблемы",
       dataIndex: "must",
       align: "center" as "center",
       render: (text: string | undefined) => <p>{text}</p>,

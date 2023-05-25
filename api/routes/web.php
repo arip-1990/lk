@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\V1;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +19,9 @@ use Illuminate\Support\Facades\Storage;
 //});
 
 Route::prefix('/export')->group(function () {
-    Route::get('/test/{type}', [V1\Test\ExportController::class, 'handle']);
     Route::get('/claim', [V1\Store\Claim\ExportController::class, 'handle']);
+    Route::get('/statement/{category}', V1\OperationDepartment\Statement\ExportController::class);
+    Route::get('/test/{type}', [V1\Test\ExportController::class, 'handle']);
     Route::get('/time-card/{store}', [V1\TimeCard\ExportController::class, 'handle']);
 });
 
