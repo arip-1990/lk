@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 
-import Book from "../images/book.svg";
+import Book from "../images/book.png";
 
 interface PropsType {
   title: string;
