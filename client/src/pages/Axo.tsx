@@ -1,4 +1,4 @@
-import React, { MouseEvent } from "react";
+import { FC, useState, useEffect, MouseEvent } from "react";
 import { useParams } from "react-router-dom";
 import {
   Card,
@@ -27,11 +27,11 @@ import { IStatement } from "../models/IStatement";
 import moment from "moment";
 import { API_URL } from "../services/api";
 
-const Axo: React.FC = () => {
+const Axo: FC = () => {
   const [form] = Form.useForm();
   const { id } = useParams();
-  const [editData, setEditData] = React.useState<IStatement>();
-  const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+  const [editData, setEditData] = useState<IStatement>();
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { data: stores } = useFetchStoresQuery();
   const [
     addStatement,
@@ -43,7 +43,7 @@ const Axo: React.FC = () => {
   ] = statementApi.useUpdateStatementMutation();
   const { user } = useAuth();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (editData) form.resetFields();
   }, [editData]);
 
@@ -95,10 +95,11 @@ const Axo: React.FC = () => {
   };
 
   const getTitle = (id: string) => {
-    let tmp = "Заявка в ";
-    if (id === "67") tmp += "отдел эксплуатации";
-    else if (id === "68") tmp += "отдел информационных технологий";
-    else tmp += "техническую поддержку";
+    let tmp = "Заявка ";
+    if (id === "67") tmp += "в отдел эксплуатации";
+    else if (id === "68") tmp += "в отдел информационных технологий";
+    else if (id === "86") tmp += "в техническую поддержку";
+    else tmp = "Взаимодействие со складом";
 
     return tmp;
   };

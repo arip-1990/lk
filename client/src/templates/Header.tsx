@@ -92,8 +92,10 @@ const Header: FC = () => {
   return (
     <header className="layout-header">
       <Row gutter={[32, 0]} align="middle" style={{ margin: "auto" }}>
-        <Col span={4}>
-          <img className="logo" src={logoSocial} alt="" />
+        <Col span={4} style={{ textAlign: "center" }}>
+          <Link to="/">
+            <img className="logo" src={logoSocial} alt="" />
+          </Link>
         </Col>
         <Col span={16}>
           <Menu
@@ -102,7 +104,7 @@ const Header: FC = () => {
             items={MenuItems}
           />
         </Col>
-        <Col span={4}>
+        <Col span={4} style={{ textAlign: "center" }}>
           <Dropdown menu={{ items: DropdownItems }} placement="bottomRight">
             <a href="/" onClick={(e) => e.preventDefault()}>
               {user && `${user.firstName} ${user.lastName.charAt(0)}.`}{" "}
