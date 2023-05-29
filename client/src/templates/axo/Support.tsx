@@ -26,7 +26,7 @@ interface FormEditDataType {
   status?: boolean;
 }
 
-const Exploitation: FC<PropsType> = ({ id, loading, onEdit, onDelete }) => {
+const Support: FC<PropsType> = ({ id, loading, onEdit, onDelete }) => {
   const { user } = useAuth();
   const [form] = Form.useForm<FormEditDataType>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -59,7 +59,7 @@ const Exploitation: FC<PropsType> = ({ id, loading, onEdit, onDelete }) => {
       ),
     },
     {
-      title: "Что необходимо выполнить",
+      title: id === 67 ? "Что необходимо выполнить" : "Описание проблемы",
       dataIndex: "must",
       align: "center" as "center",
       render: (text: string | undefined) => <p>{text}</p>,
@@ -215,4 +215,4 @@ const Exploitation: FC<PropsType> = ({ id, loading, onEdit, onDelete }) => {
   );
 };
 
-export default Exploitation;
+export default Support;

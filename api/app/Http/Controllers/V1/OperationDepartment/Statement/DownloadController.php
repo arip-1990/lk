@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\OperationDepartment\Statement;
 
 use App\Models\Statement;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -10,7 +11,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DownloadController extends Controller
 {
-    public function handle(Statement $statement): Response | StreamedResponse
+    public function handle(Statement $statement, Request $request): Response | StreamedResponse
     {
         try {
             $zip = new \ZipArchive();
@@ -28,7 +29,7 @@ class DownloadController extends Controller
             foreach (Storage::files($statement->getMediaPath()) as $file) {
                 $fileName = explode('/', $file);
                 $fileName = array_pop($fileName);
-                if (str_starts_with($fileName, $statement->id)) {
+                if (str_starts_with($fileName, $request->has('answer') ? "answer_{$statement->id}" : $statement->id)) {
                     $zip->addFromString($fileName, Storage::get($file));
                 }
             }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\V1\OperationDepartment\Statement;
 use App\Models\Statement;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class UpdateController extends Controller
 {
@@ -16,6 +18,13 @@ class UpdateController extends Controller
             'comment' => $request->get('comment'),
             'status' => $request->get('status', false),
         ]);
+
+        /** @var UploadedFile $file */
+        foreach ($request->file('answerMedias', []) as $i => $file) {
+            if ($file->getError() === UPLOAD_ERR_OK) {
+                Storage::putFileAs($statement->getMediaPath(), $file, "answer_{$statement->id}_{$i}." . strtolower($file->getClientOriginalExtension()));
+            }
+        }
 
         return new JsonResponse();
     }

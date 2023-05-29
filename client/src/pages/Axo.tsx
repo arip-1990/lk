@@ -1,87 +1,69 @@
-import { FC, useState, useEffect, MouseEvent } from "react";
+import { FC, useState, MouseEvent } from "react";
 import { useParams } from "react-router-dom";
-import {
-  Card,
-  Row,
-  Col,
-  Button,
-  Modal,
-  Form,
-  Select,
-  Input,
-  DatePicker,
-  Upload,
-  Switch,
-  Space,
-} from "antd";
+import { Card, Button, Modal, Form, Select, Input, Upload, Space } from "antd";
 import {
   PlusOutlined,
   UploadOutlined,
   FileExcelOutlined,
 } from "@ant-design/icons";
-import { Statement } from "../components";
-import { statementApi } from "../services/StatementService";
+
+import {
+  useAddStatementMutation,
+  useUpdateStatementMutation,
+  useDeleteStatementMutation,
+} from "../services/StatementService";
 import { useFetchStoresQuery } from "../services/StoreService";
 import { useAuth } from "../hooks/useAuth";
-import { IStatement } from "../models/IStatement";
-import moment from "moment";
 import { API_URL } from "../services/api";
+import It from "../templates/axo/It";
+import Stock from "../templates/axo/Stock";
+import Support from "../templates/axo/Support";
+import Exploitation from "../templates/axo/Exploitation";
 
 const Axo: FC = () => {
-  const [form] = Form.useForm();
   const { id } = useParams();
-  const [editData, setEditData] = useState<IStatement>();
+  const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { data: stores } = useFetchStoresQuery();
-  const [
-    addStatement,
-    { isLoading: addLoading },
-  ] = statementApi.useAddStatementMutation();
+  const [addStatement, { isLoading: addLoading }] = useAddStatementMutation();
   const [
     updateStatement,
     { isLoading: updateLoading },
-  ] = statementApi.useUpdateStatementMutation();
+  ] = useUpdateStatementMutation();
+  const [
+    deleteStatement,
+    { isLoading: deleteLoading },
+  ] = useDeleteStatementMutation();
   const { user } = useAuth();
-
-  useEffect(() => {
-    if (editData) form.resetFields();
-  }, [editData]);
 
   const handleForm = async (values: any) => {
     try {
-      if (editData) {
-        values.doneAt = values.doneAt < moment() ? moment() : values.doneAt;
-        updateStatement({ id: editData.id, data: values });
-      } else {
-        if (id) {
-          const formData = new FormData();
-          values.store && formData.set("store", values.store);
-          formData.set("must", values.must);
+      if (id) {
+        const formData = new FormData();
+        values.store && formData.set("store", values.store);
+        formData.set("must", values.must);
 
-          if (values.medias) {
-            values.medias.forEach((item: any) =>
-              formData.append("media[]", item.originFileObj)
-            );
-          }
-          addStatement({ id: id, data: formData });
+        if (values.medias) {
+          values.medias.forEach((item: any) =>
+            formData.append("medias[]", item.originFileObj)
+          );
         }
+        addStatement({ id, data: formData });
       }
     } catch (e) {
       console.log(e);
     } finally {
       onCancel();
-      form.resetFields();
     }
+  };
+
+  const handleEdit = (id: string, data: FormData) => {
+    updateStatement({ id, data });
   };
 
   const onCancel = () => {
     setModalVisible(false);
-    setEditData(undefined);
-  };
-
-  const handleEdit = (data: IStatement) => {
-    setEditData(data);
-    setModalVisible(true);
+    form.resetFields();
   };
 
   const normFile = (e: any) => {
@@ -99,9 +81,52 @@ const Axo: FC = () => {
     if (id === "67") tmp += "в отдел эксплуатации";
     else if (id === "68") tmp += "в отдел информационных технологий";
     else if (id === "86") tmp += "в техническую поддержку";
-    else tmp = "Взаимодействие со складом";
+    else tmp = "Описание проблемы";
 
     return tmp;
+  };
+
+  const getTemplate = (id: string) => {
+    switch (id) {
+      case "67":
+        return (
+          <Exploitation
+            id={Number(id)}
+            loading={addLoading || updateLoading || deleteLoading}
+            onEdit={handleEdit}
+            onDelete={deleteStatement}
+          />
+        );
+      case "68":
+        return (
+          <It
+            id={Number(id)}
+            loading={addLoading || updateLoading || deleteLoading}
+            onEdit={handleEdit}
+            onDelete={deleteStatement}
+          />
+        );
+      case "86":
+        return (
+          <Support
+            id={Number(id)}
+            loading={addLoading || updateLoading || deleteLoading}
+            onEdit={handleEdit}
+            onDelete={deleteStatement}
+          />
+        );
+      case "87":
+        return (
+          <Stock
+            id={Number(id)}
+            loading={addLoading || updateLoading || deleteLoading}
+            onEdit={handleEdit}
+            onDelete={deleteStatement}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -125,17 +150,17 @@ const Axo: FC = () => {
         </Space>
       }
     >
-      <Statement id={Number(id)} onEdit={handleEdit} />
+      {id && getTemplate(id)}
 
       <Modal
-        title={editData ? "Редактирование заявки" : "Новая заявка"}
+        title={"Новая заявка"}
         open={modalVisible}
         okText="Добавить"
         cancelText="Отмена"
         okButtonProps={{
           htmlType: "submit",
           form: "axoForm",
-          loading: addLoading || updateLoading,
+          loading: addLoading,
         }}
         onCancel={onCancel}
       >
@@ -146,75 +171,38 @@ const Axo: FC = () => {
           autoComplete="off"
           onFinish={handleForm}
         >
-          {editData ? (
-            <>
-              <Form.Item
-                name="comment"
-                label="Комментарий"
-                initialValue={editData.comment}
-              >
-                <Input.TextArea />
-              </Form.Item>
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    name="doneAt"
-                    label="Дата исполнения"
-                    initialValue={editData.doneAt}
-                  >
-                    <DatePicker />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  {user?.role.name === "admin" ? (
-                    <Form.Item
-                      name="status"
-                      label="Завершен"
-                      valuePropName="checked"
-                      initialValue={editData.status}
-                    >
-                      <Switch />
-                    </Form.Item>
-                  ) : null}
-                </Col>
-              </Row>
-            </>
-          ) : (
-            <>
-              <Form.Item name="store" label="Адрес аптеки">
-                <Select
-                  options={
-                    stores && [
-                      ...stores
-                        .filter((store) =>
-                          user?.stores.length
-                            ? user.stores.some((item) => item.id === store.id)
-                            : true
-                        )
-                        .map((item) => ({
-                          label: item.name,
-                          value: item.id,
-                        })),
-                      { label: "Офис", value: "" },
-                    ]
-                  }
-                />
-              </Form.Item>
-              <Form.Item name="must" label="Что необходимо выполнить">
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name="medias"
-                label="Вложение"
-                valuePropName="fileList"
-                getValueFromEvent={normFile}
-              >
-                <Upload multiple beforeUpload={() => false}>
-                  <Button icon={<UploadOutlined />}>Выберите файл</Button>
-                </Upload>
-              </Form.Item>
-            </>
-          )}
+          <Form.Item name="store" label="Адрес аптеки">
+            <Select
+              options={
+                stores && [
+                  ...stores
+                    .filter((store) =>
+                      user?.stores.length
+                        ? user.stores.some((item) => item.id === store.id)
+                        : true
+                    )
+                    .map((item) => ({
+                      label: item.name,
+                      value: item.id,
+                    })),
+                  { label: "Офис", value: "" },
+                ]
+              }
+            />
+          </Form.Item>
+          <Form.Item name="must" label="Что необходимо выполнить">
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="medias"
+            label="Вложение"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+          >
+            <Upload multiple beforeUpload={() => false}>
+              <Button icon={<UploadOutlined />}>Выберите файл</Button>
+            </Upload>
+          </Form.Item>
         </Form>
       </Modal>
     </Card>

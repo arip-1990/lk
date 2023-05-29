@@ -19,6 +19,7 @@ class StatementResource extends JsonResource
             'doneAt' => $this->done_at?->format('Y-m-d'),
             'status' => $this->status,
             'media' => $this->hasMedia() ? env('APP_URL') . URL::route('download.statement', ['statement' => $this], false) : null,
+            'answerMedia' => $this->hasMedia(true) ? env('APP_URL') . URL::route('download.statement', ['statement' => $this, 'answer' => true], false) : null,
             'applicant' => new UserResource($this->user),
             'store' => new StoreResource($this->store),
         ];

@@ -34,13 +34,13 @@ class Statement extends Model
         return 'statements/' . ($this->store_id ?? 'office');
     }
 
-    public function hasMedia(): bool
+    public function hasMedia(bool $answer = false): bool
     {
         $hasFile = false;
         foreach (Storage::files($this->getMediaPath()) as $file) {
             $file = explode('/', $file);
             $file = array_pop($file);
-            if (str_starts_with($file, $this->id)) {
+            if (str_starts_with($file, $answer ? "answer_{$this->id}" : $this->id)) {
                 $hasFile = true;
                 break;
             }

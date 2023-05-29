@@ -27,7 +27,14 @@ class ExportController extends Controller
         $sheet->setCellValue('E1', 'Вложение');
         $sheet->setCellValue('F1', 'Заявитель');
         $sheet->setCellValue('G1', 'Комментарий');
-        $sheet->setCellValue('H1', 'Дата исполнения');
+        if ($category->id === 87) {
+            $sheet->setCellValue('H1', 'Вложение склада');
+            $sheet->setCellValue('I1', 'Дата исполнения');
+        }
+        else {
+            $sheet->setCellValue('H1', 'Дата исполнения');
+        }
+
         $sheet->getStyle('A1')->applyFromArray([
             'font' => ['bold' => true],
             'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'wrapText' => true]
@@ -60,10 +67,16 @@ class ExportController extends Controller
             'font' => ['bold' => true],
             'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'wrapText' => true]
         ]);
+        if ($category->id === 87) {
+            $sheet->getStyle('I1')->applyFromArray([
+                'font' => ['bold' => true],
+                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'wrapText' => true]
+            ]);
+        }
 
         $i = 2;
         Statement::where('category_id', $category->id)->orderBy('status')
-            ->orderBy('created_at')->chunk(1000, function ($statements) use (&$i, $sheet) {
+            ->orderBy('created_at')->chunk(1000, function ($statements) use (&$i, $sheet, $category) {
                 /** @var Statement $statement */
                 foreach ($statements as $statement) {
                     $sheet->setCellValue('A' . $i, $i - 1);
@@ -73,11 +86,20 @@ class ExportController extends Controller
                     $sheet->setCellValue('E' . $i, $statement->hasMedia() ? 'Есть' : 'Нет');
                     $sheet->setCellValue('F' . $i, $statement->user->first_name . ' ' . $statement->user->last_name);
                     $sheet->setCellValue('G' . $i, $statement->comment);
-                    $sheet->setCellValue('H' . $i, $statement->done_at?->format('d-m-Y H:i') ?? '');
+
+                    if ($category->id === 87) {
+                        $sheet->setCellValue('H' . $i, $statement->hasMedia(true) ? 'Есть' : 'Нет');
+                        $sheet->setCellValue('I' . $i, $statement->done_at?->format('d-m-Y H:i') ?? '');
+                    }
+                    else {
+                        $sheet->setCellValue('H' . $i, $statement->done_at?->format('d-m-Y H:i') ?? '');
+                    }
 
                     if ($statement->hasMedia())
                         $sheet->getCell('E' . $i)->getHyperlink()->setUrl(env('APP_URL') . URL::route('download.statement', ['statement' => $statement], false));
-                    else $sheet->setCellValue('E' . $i, 'Нет');
+
+                    if ($category->id === 87 and $statement->hasMedia(true))
+                        $sheet->getCell('H' . $i)->getHyperlink()->setUrl(env('APP_URL') . URL::route('download.statement', ['statement' => $statement, 'answer' => true], false));
 
                     $i++;
                 }

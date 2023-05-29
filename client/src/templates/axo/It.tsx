@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Space } from "antd";
+import { Row, Col, Space, Modal, Form, Input, DatePicker, Switch } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -7,28 +7,34 @@ import {
 } from "@ant-design/icons";
 import moment from "moment";
 
+import { useAuth } from "../../hooks/useAuth";
 import { IStatement } from "../../models/IStatement";
-import {
-  useFetchStatementsQuery,
-  useDeleteStatementMutation,
-} from "../../services/StatementService";
+import { useFetchStatementsQuery } from "../../services/StatementService";
 import { Statement } from "../../components";
 
 interface PropsType {
   id: number;
-  onEdit: (data: IStatement) => void;
+  loading?: boolean;
+  onEdit: (id: string, data: FormData) => void;
+  onDelete: (id: string) => void;
 }
 
-const It: FC<PropsType> = ({ id, onEdit }) => {
+interface FormEditDataType {
+  id?: string;
+  comment?: string;
+  doneAt?: moment.Moment;
+  status?: boolean;
+}
+
+const It: FC<PropsType> = ({ id, loading, onEdit, onDelete }) => {
+  const { user } = useAuth();
+  const [form] = Form.useForm<FormEditDataType>();
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
-  const { data, isLoading: fetchLoading } = useFetchStatementsQuery({
+  const { data, isLoading } = useFetchStatementsQuery({
     categoryId: id,
     pagination,
   });
-  const [
-    deleteStatement,
-    { isLoading: deleteLoading },
-  ] = useDeleteStatementMutation();
 
   const columns = [
     {
@@ -53,7 +59,7 @@ const It: FC<PropsType> = ({ id, onEdit }) => {
       ),
     },
     {
-      title: id === 67 ? "Что необходимо выполнить" : "Описание проблемы",
+      title: "Описание проблемы",
       dataIndex: "must",
       align: "center" as "center",
       render: (text: string | undefined) => <p>{text}</p>,
@@ -98,24 +104,115 @@ const It: FC<PropsType> = ({ id, onEdit }) => {
         <Space>
           <EditOutlined
             style={{ color: "#2b74b7" }}
-            onClick={() => onEdit(record)}
+            onClick={() => handleEdit(record)}
           />
           <DeleteOutlined
             style={{ color: "#dc4234" }}
-            onClick={() => deleteStatement(record.id)}
+            onClick={() => onDelete(record.id)}
           />
         </Space>
       ),
     },
   ];
 
-  return data ? (
-    <Statement
-      columns={columns}
-      data={data.data}
-      loading={fetchLoading || deleteLoading}
-    />
-  ) : null;
+  const handleChangePagination = (currentPage: number, pageSize: number) => {
+    setPagination({ current: currentPage, pageSize });
+  };
+
+  const handleEdit = (data: IStatement) => {
+    form.setFieldsValue({
+      id: data.id,
+      comment: data.comment,
+      doneAt: data.doneAt,
+      status: data.status,
+    });
+    setModalVisible(true);
+  };
+
+  const resetData = () => {
+    form.resetFields();
+    setModalVisible(false);
+  };
+
+  const handleForm = async (values: any) => {
+    try {
+      const formData = new FormData();
+      formData.set("comment", values.comment);
+      formData.set(
+        "doneAt",
+        values.doneAt < moment() ? moment() : values.doneAt
+      );
+      formData.set("status", values.status);
+
+      onEdit(values.id, formData);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      resetData();
+    }
+  };
+
+  return (
+    <>
+      <Statement
+        columns={columns}
+        data={data?.data || []}
+        loading={isLoading || loading}
+        pagination={{
+          currentPage: data?.meta.current_page || pagination.current,
+          pageSize: data?.meta.per_page || pagination.pageSize,
+          total: data?.meta.total || 0,
+          onChange: handleChangePagination,
+        }}
+      />
+
+      <Modal
+        title={"Редактирование заявки"}
+        open={modalVisible}
+        okText="Добавить"
+        cancelText="Отмена"
+        okButtonProps={{
+          htmlType: "submit",
+          form: "exploitationForm",
+          loading: loading,
+        }}
+        onCancel={resetData}
+      >
+        <Form
+          form={form}
+          id="exploitationForm"
+          layout="vertical"
+          autoComplete="off"
+          onFinish={handleForm}
+        >
+          <Form.Item name="id" noStyle>
+            <Input type="hidden" />
+          </Form.Item>
+          <Form.Item name="comment" label="Комментарий">
+            <Input.TextArea />
+          </Form.Item>
+          <Row>
+            <Col span={12}>
+              <Form.Item name="doneAt" label="Дата исполнения">
+                <DatePicker />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              {user?.role.name === "admin" ? (
+                <Form.Item
+                  name="status"
+                  label="Завершен"
+                  valuePropName="checked"
+                >
+                  <Switch />
+                </Form.Item>
+              ) : null}
+            </Col>
+          </Row>
+        </Form>
+      </Modal>
+    </>
+  );
 };
 
 export default It;

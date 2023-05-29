@@ -17,7 +17,7 @@ class StoreController extends Controller
 {
     public function handle(Request $request, Category $category): JsonResponse
     {
-        $statement = Statement::query()->create([
+        $statement = Statement::create([
             'id' => Uuid::uuid4()->toString(),
             'must' => $request->get('must'),
             'category_id' => $category->id,
@@ -27,10 +27,11 @@ class StoreController extends Controller
 
         if (!Storage::exists($statement->getMediaPath()))
             Storage::makeDirectory($statement->getMediaPath());
+
         /** @var UploadedFile $file */
-        foreach ($request->file('media', []) as $i => $file) {
+        foreach ($request->file('medias', []) as $i => $file) {
             if ($file->getError() === UPLOAD_ERR_OK) {
-                Storage::putFileAs($statement->getMediaPath(), $file, $statement->id . '_' . $i . '.' . $file->getClientOriginalExtension());
+                Storage::putFileAs($statement->getMediaPath(), $file, $statement->id . '_' . $i . '.' . strtolower($file->getClientOriginalExtension()));
             }
         }
 

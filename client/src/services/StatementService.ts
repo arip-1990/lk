@@ -38,10 +38,10 @@ export const statementApi = createApi({
       }),
       invalidatesTags: ["IStatement"],
     }),
-    updateStatement: builder.mutation<void, { id: string; data: any }>({
+    updateStatement: builder.mutation<void, { id: string; data: FormData }>({
       query: (args) => ({
-        url: `/operation-department/statement/${args.id}`,
-        method: "put",
+        url: `/operation-department/statement/${args.id}/update`,
+        method: "post",
         data: args.data,
       }),
       invalidatesTags: ["IStatement"],

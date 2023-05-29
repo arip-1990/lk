@@ -14,7 +14,7 @@ class IndexController extends Controller
 {
     public function handle(Category $category, Request $request): JsonResource
     {
-        $query = Statement::query()->where('category_id', $category->id)->orderBy('status')->orderBy('created_at');
+        $query = Statement::where('category_id', $category->id)->orderBy('status')->orderBy('created_at');
         if (Auth::user()->stores->count()) {
             $query->whereIn('store_id', Auth::user()->stores->pluck('id'));
         }
