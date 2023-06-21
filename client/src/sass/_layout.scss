@@ -17,7 +17,7 @@
     grid-area: header;
     background: #fff;
     font-size: 1.25rem;
-    border-bottom: 1px solid $success;
+    border-bottom: 1px solid #2c76c7;
     padding: 0.75rem;
 
     .ant-space-item {
@@ -31,7 +31,8 @@
 
     .ant-menu {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
+      column-gap: 3rem;
       flex: 1;
       line-height: 58px;
       border: 0;

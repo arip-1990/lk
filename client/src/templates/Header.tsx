@@ -91,27 +91,41 @@ const Header: FC = () => {
 
   return (
     <header className="layout-header">
-      <Row gutter={[120, 0]} align="middle" style={{ margin: "auto" }}>
-        <Col span={4} style={{ textAlign: "center" }}>
-          <Link to="/">
+      <Row gutter={[64, 0]} align="middle" style={{ margin: "auto" }}>
+        <Col span={6}>
+          {/* <Link to="/">
             <img className="logo" src={logoSocial} alt="" />
-          </Link>
+          </Link> */}
+          <h3
+            style={{
+              fontSize: "1.25rem",
+              fontWeight: 700,
+              letterSpacing: 2,
+              textTransform: "uppercase",
+              color: "#2b74b7",
+            }}
+          >
+            Личный кабинет сотрудника:
+          </h3>
+          <div>
+            <Dropdown menu={{ items: DropdownItems }} placement="bottomRight">
+              <a href="/" onClick={(e) => e.preventDefault()}>
+                {user &&
+                  user.firstName +
+                    (user.lastName ? ` ${user.lastName}` : "")}{" "}
+                <DownOutlined />
+              </a>
+            </Dropdown>
+          </div>
         </Col>
-        <Col span={16}>
+        <Col span={14}>
           <Menu
             selectedKeys={state?.key ? [state.key] : undefined}
             mode="horizontal"
             items={MenuItems}
           />
         </Col>
-        <Col span={4} style={{ textAlign: "center" }}>
-          <Dropdown menu={{ items: DropdownItems }} placement="bottomRight">
-            <a href="/" onClick={(e) => e.preventDefault()}>
-              {user && `${user.firstName} ${user.lastName.charAt(0)}.`}{" "}
-              <DownOutlined />
-            </a>
-          </Dropdown>
-        </Col>
+        <Col span={4} />
       </Row>
     </header>
   );

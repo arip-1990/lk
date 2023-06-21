@@ -6,7 +6,7 @@
 
   &-header {
     height: 40px;
-    background: $success;
+    background: #2c76c7;
     text-align: center;
     position: relative;
     z-index: 100;
@@ -45,7 +45,7 @@
   }
 
   .month {
-    border: 1px solid $success;
+    border: 1px solid #2c76c7;
 
     .week {
       background: #fff;
@@ -108,16 +108,16 @@
     }
 
     &.selected .day-number {
-      background: $success;
+      background: #2c76c7;
     }
 
     &:hover:not(.other):not(.today):not(.selected) {
-      color: $success !important;
+      color: #2c76c7 !important;
     }
 
     &-names {
       background: $secondary;
-      border-bottom: 1px solid $success;
+      border-bottom: 1px solid #2c76c7;
 
       .day-name {
         position: relative;

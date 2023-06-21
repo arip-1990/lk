@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 
-import Book from "../images/book.png";
+import Book from "../images/book-1-1.png";
 
 interface PropsType {
   title: string;
@@ -23,7 +23,6 @@ const Card: React.FC<PropsType> = ({
       className={classnames("card-menu", {
         "card-menu__small": size === "small",
       })}
-      style={{ minHeight: 120 }}
     >
       <div
         className="card-menu_title"
