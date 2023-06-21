@@ -4,13 +4,13 @@
   min-height: 100vh;
   display: grid;
   grid-template-rows: minmax(88px, 116px) 1fr minmax(36px, 36px);
-  grid-template-columns: 1fr minmax(540px, 1200px) 1fr;
+  grid-template-columns: 1fr 1356px 1fr;
   grid-template-areas:
     "header header header"
     "leftSider content rightSider"
     "footer footer footer";
-  background-image: url(../images/bg.svg);
-  background-repeat: repeat-y;
+  background-image: url(../images/bg.jpg);
+  background-repeat: no-repeat;
   background-size: 100%;
 
   &-header {

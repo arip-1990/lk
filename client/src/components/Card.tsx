@@ -23,8 +23,12 @@ const Card: React.FC<PropsType> = ({
       className={classnames("card-menu", {
         "card-menu__small": size === "small",
       })}
+      style={{ minHeight: 120 }}
     >
-      <div className="card-menu_title">
+      <div
+        className="card-menu_title"
+        style={{ flex: "0.8", fontSize: "0.95rem" }}
+      >
         <img className="icon" src={Book} alt="" />
         {title.includes("Скорая помощь") ? (
           <p className="text text__red">{title}</p>

@@ -8,7 +8,7 @@ const Main: React.FC = () => {
   const { data: categories } = categoryApi.useFetchCategoriesQuery();
 
   return (
-    <Row gutter={[100, 48]}>
+    <Row gutter={[36, 36]}>
       {categories &&
         categories
           .filter(
@@ -19,7 +19,7 @@ const Main: React.FC = () => {
               )
           )
           .map((item) => (
-            <Col key={item.id} span={12}>
+            <Col key={item.id} span={8}>
               <Link
                 to={
                   item.type === "media" ? "/media" : `/${item.type}/${item.id}`

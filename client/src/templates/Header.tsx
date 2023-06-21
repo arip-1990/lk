@@ -91,7 +91,7 @@ const Header: FC = () => {
 
   return (
     <header className="layout-header">
-      <Row gutter={[32, 0]} align="middle" style={{ margin: "auto" }}>
+      <Row gutter={[120, 0]} align="middle" style={{ margin: "auto" }}>
         <Col span={4} style={{ textAlign: "center" }}>
           <Link to="/">
             <img className="logo" src={logoSocial} alt="" />
