@@ -6,16 +6,17 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "ext-zip": "*",
-        "ext-ssh2": "*",
         "ext-simplexml": "*",
+        "ext-ssh2": "*",
+        "ext-zip": "*",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.7",
         "league/flysystem-sftp-v3": "^3.0",
         "phpoffice/phpspreadsheet": "^1.23",
-        "psr/simple-cache": "^2.0"
+        "psr/simple-cache": "^2.0",
+        "pusher/pusher-php-server": "^7.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

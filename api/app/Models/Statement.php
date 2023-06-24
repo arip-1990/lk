@@ -40,11 +40,13 @@ class Statement extends Model
         foreach (Storage::files($this->getMediaPath()) as $file) {
             $file = explode('/', $file);
             $file = array_pop($file);
+
             if (str_starts_with($file, $answer ? "answer_{$this->id}" : $this->id)) {
                 $hasFile = true;
                 break;
             }
         }
+
         return $hasFile;
     }
 

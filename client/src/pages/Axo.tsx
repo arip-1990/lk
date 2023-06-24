@@ -134,14 +134,14 @@ const Axo: FC = () => {
       title={id && getTitle(id)}
       extra={
         <Space>
-          {user?.role.name === "worker" ? null : (
+          {user?.role.name !== "worker" ? (
             <Button
               type="link"
               style={{ color: "#22aca6" }}
               icon={<FileExcelOutlined />}
               onClick={handleExport}
             />
-          )}
+          ) : null}
           <Button
             type="primary"
             icon={<PlusOutlined />}

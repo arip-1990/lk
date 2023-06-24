@@ -11,8 +11,7 @@ class LoginController extends Controller
 {
     public function handle(LoginRequest $request): JsonResponse
     {
-        /** @var User $user */
-        if (!$user = User::query()->where('barcode', $request->get('barcode'))->first())
+        if (!$user = User::where('barcode', $request->get('barcode'))->first())
             return new JsonResponse('Учетные данные не совпадают', 401);
 
         return new JsonResponse(['token' => $user->createToken($request->userAgent())->plainTextToken]);

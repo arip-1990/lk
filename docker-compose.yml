@@ -49,11 +49,12 @@ services:
       DB_DATABASE: app
       DB_USERNAME: root
       DB_PASSWORD: secret
-      FILESYSTEM_DISK: sftp
-      SFTP_URL: http://192.168.2.3/static/s
-      SFTP_HOST: 192.168.2.3
-      SFTP_USERNAME: Social
-      SFTP_PASSWORD: 222326
+      # FILESYSTEM_DISK: sftp
+      # SFTP_URL: http://192.168.2.3/static/s
+      # SFTP_HOST: 192.168.2.3
+      # SFTP_USERNAME: Social
+      # SFTP_PASSWORD: 222326
+      BROADCAST_DRIVER: pusher
     volumes:
       - ./api:/app
 
@@ -72,11 +73,12 @@ services:
       DB_DATABASE: app
       DB_USERNAME: root
       DB_PASSWORD: secret
-      FILESYSTEM_DISK: sftp
-      SFTP_URL: http://192.168.2.3/static/s
-      SFTP_HOST: 192.168.2.3
-      SFTP_USERNAME: Social
-      SFTP_PASSWORD: 222326
+      # FILESYSTEM_DISK: sftp
+      # SFTP_URL: http://192.168.2.3/static/s
+      # SFTP_HOST: 192.168.2.3
+      # SFTP_USERNAME: Social
+      # SFTP_PASSWORD: 222326
+      BROADCAST_DRIVER: pusher
     volumes:
       - ./api:/app
 

@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
+import ReactDOM from "react-dom/client";
+import locale from "antd/lib/locale/ru_RU";
+import moment from "moment";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { ConfigProvider } from "antd";
-import { Auth } from './services/auth';
-import locale from "antd/lib/locale/ru_RU";
-import moment from "moment";
+import { Notifications } from "react-push-notification";
+
+import { Auth } from "./services/auth";
 import App from "./App";
 
 import "moment/locale/ru";
@@ -18,23 +18,19 @@ import { store } from "./store";
 
 moment.locale("ru");
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-
-root.render(
-  // <React.StrictMode>
-    <ConfigProvider locale={locale}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <Auth>
-            <App />
-          </Auth>
-        </BrowserRouter>
-      </Provider>
-    </ConfigProvider>
-  // </React.StrictMode>
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+root.render(
+  <ConfigProvider locale={locale}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Auth>
+          <Notifications />
+          <App />
+        </Auth>
+      </BrowserRouter>
+    </Provider>
+  </ConfigProvider>
+);

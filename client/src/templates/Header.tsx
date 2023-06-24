@@ -10,8 +10,6 @@ import type { MenuProps } from "antd";
 
 import { useAuth } from "../hooks/useAuth";
 
-import logoSocial from "../images/logo-social.svg";
-
 const Header: FC = () => {
   const { state } = useLocation();
   const { user, logout } = useAuth();
@@ -93,9 +91,6 @@ const Header: FC = () => {
     <header className="layout-header">
       <Row gutter={[64, 0]} align="middle" style={{ margin: "auto" }}>
         <Col span={6}>
-          {/* <Link to="/">
-            <img className="logo" src={logoSocial} alt="" />
-          </Link> */}
           <h3
             style={{
               fontSize: "1.25rem",
