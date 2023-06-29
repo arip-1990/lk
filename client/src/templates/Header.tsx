@@ -17,7 +17,6 @@ const Header: FC = () => {
   const handleLogout = (e: MouseEvent) => {
     e.preventDefault();
     logout();
-    window.location.reload();
   };
 
   const MenuItems: MenuProps["items"] = [
@@ -79,7 +78,7 @@ const Header: FC = () => {
     {
       key: "logout",
       label: (
-        <a href="#" onClick={handleLogout}>
+        <a href="/" onClick={handleLogout}>
           Выход
         </a>
       ),

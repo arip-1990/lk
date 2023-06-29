@@ -23,6 +23,6 @@ class StatementCreated implements ShouldBroadcast
      */
     public function broadcastOn(): Channel|PrivateChannel|array
     {
-        return new PrivateChannel('statement.' . $this->statement->category_id);
+        return new PrivateChannel('statement');
     }
 }

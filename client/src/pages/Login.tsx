@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Card, Form, Input, Button } from "antd";
 import { BarcodeOutlined } from "@ant-design/icons";
 
 import LoginLayout from "../layouts/login";
 import { useAuth } from "../hooks/useAuth";
-
-import addNotification from "react-push-notification";
 
 const Login: React.FC = () => {
   const { login } = useAuth();
@@ -35,15 +33,6 @@ const Login: React.FC = () => {
       );
     return Promise.resolve();
   };
-
-  useEffect(() => {
-    addNotification({
-      title: "notification",
-      message: error?.data || "message",
-      native: true,
-      duration: 10000,
-    });
-  }, [error]);
 
   return (
     <LoginLayout>

@@ -1,6 +1,7 @@
 import { BaseQueryFn } from "@reduxjs/toolkit/query";
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
 import LaravelEcho from "laravel-echo";
+import Pusher from "pusher-js";
 
 export const API_URL =
   process.env.REACT_APP_API_URL || "http://192.168.2.19:8888";
@@ -56,6 +57,8 @@ export const axiosBaseQuery = (): BaseQueryFn<
 };
 
 export default axiosInstance;
+
+window.Pusher = Pusher;
 
 // Laravel Echo
 const Echo = new LaravelEcho({

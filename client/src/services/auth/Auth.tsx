@@ -50,6 +50,7 @@ const Auth: React.FC<Props> = ({ checkOnInit = true, children }) => {
         // Only sign out after the server has successfully responded.
         setAuthState({ user: null, isAuth: false });
         localStorage.removeItem("token");
+
         resolve();
       } catch (error) {
         const err = error as AxiosError;
