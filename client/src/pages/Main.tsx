@@ -19,7 +19,7 @@ const Main: React.FC = () => {
               )
           )
           .map((item) => (
-            <Col key={item.id} span={8}>
+            <Col key={item.id} span={12} xxl={8}>
               <Link
                 to={
                   item.type === "media" ? "/media" : `/${item.type}/${item.id}`

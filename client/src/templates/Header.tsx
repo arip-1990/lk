@@ -88,38 +88,30 @@ const Header: FC = () => {
 
   return (
     <header className="layout-header">
-      <Row gutter={[64, 0]} align="middle" style={{ margin: "auto" }}>
+      <Row
+        align="middle"
+        gutter={[{ sm: 8, xxl: 64 }, 0]}
+        style={{ height: "100%" }}
+      >
         <Col span={6}>
-          <h3
-            style={{
-              fontSize: "1.25rem",
-              fontWeight: 700,
-              letterSpacing: 2,
-              textTransform: "uppercase",
-              color: "#2b74b7",
-            }}
-          >
-            Личный кабинет сотрудника:
-          </h3>
-          <div>
-            <Dropdown menu={{ items: DropdownItems }} placement="bottomRight">
-              <a href="/" onClick={(e) => e.preventDefault()}>
-                {user &&
-                  user.firstName +
-                    (user.lastName ? ` ${user.lastName}` : "")}{" "}
-                <DownOutlined />
-              </a>
-            </Dropdown>
-          </div>
+          <h3 className="logo">Личный кабинет сотрудника:</h3>
+          <Dropdown menu={{ items: DropdownItems }} placement="bottomRight">
+            <a href="/" onClick={(e) => e.preventDefault()}>
+              {user &&
+                user.firstName +
+                  (user.lastName ? ` ${user.lastName}` : "")}{" "}
+              <DownOutlined />
+            </a>
+          </Dropdown>
         </Col>
-        <Col span={14}>
+        <Col span={18} xxl={14}>
           <Menu
             selectedKeys={state?.key ? [state.key] : undefined}
             mode="horizontal"
             items={MenuItems}
           />
         </Col>
-        <Col span={4} />
+        <Col span={0} xxl={4} />
       </Row>
     </header>
   );

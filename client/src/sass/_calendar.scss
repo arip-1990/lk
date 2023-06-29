@@ -1,19 +1,19 @@
 .calendar {
-  width: 220px;
+  width: 200px;
   overflow: hidden;
   margin: 0 auto;
   transform: translate3d(0, 0, 0);
 
   &-header {
-    height: 40px;
+    height: 36px;
     background: #2c76c7;
     text-align: center;
     position: relative;
     z-index: 100;
 
     h1 {
-      font-size: 1.5rem;
-      line-height: 40px;
+      font-size: 1.25rem;
+      line-height: 36px;
       font-weight: 400;
       color: #fff;
       padding: 0;
@@ -85,11 +85,11 @@
   .day {
     position: relative;
     display: inline-block;
-    width: calc(216px / 7);
+    width: calc(196px / 7);
     text-align: center;
     vertical-align: top;
     color: $primary;
-    padding: 0.25rem;
+    padding: 2px;
     cursor: pointer;
     z-index: 100;
 
@@ -122,19 +122,19 @@
       .day-name {
         position: relative;
         display: inline-block;
-        width: calc(218px / 7);
+        width: calc(198px / 7);
         text-align: center;
         font-size: 0.75rem;
         font-weight: 700;
         text-transform: uppercase;
         color: #666;
-        letter-spacing: 0.7px;
+        letter-spacing: 0.5px;
       }
     }
 
     &-number {
-      font-size: 0.9rem;
-      letter-spacing: 1.4px;
+      line-height: 24px;
+      letter-spacing: 1.3px;
     }
 
     .day-events {

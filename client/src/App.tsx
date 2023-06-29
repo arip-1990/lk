@@ -7,34 +7,40 @@ import { useAuth } from "./hooks/useAuth";
 import Login from "./pages/Login";
 import privateRoute from "./privateRoute";
 import { Echo } from "./services/api";
+import { IUser } from "./models/IUser";
+import { IStatement } from "./models/IStatement";
+
+import logoImage from "./images/logo-social.svg";
 
 const Loader = () => <Spin delay={500} />;
 
 const App: React.FC = () => {
-  const { isAuth } = useAuth();
+  const { isAuth, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    Echo.private("statement").listen("StatementCreated", (e: any) => {
-      console.log(e);
-    });
-  }, []);
-
-  // useEffect(() => {
-  //   addNotification({
-  //     title: "notification",
-  //     message: "message",
-  //     native: true,
-  //     duration: 10000,
-  //   });
-  // }, []);
+    Echo.channel("statement").listen(
+      "StatementCreated",
+      (e: { user?: IUser; statement: IStatement }) => {
+        if (isAuth !== null || e.user?.id !== user?.id) {
+          addNotification({
+            title: e.statement.category.name,
+            message: e.statement.must,
+            native: true,
+            duration: 5000,
+            icon: logoImage,
+          });
+        }
+      }
+    );
+  }, [isAuth, user]);
 
   React.useEffect(() => {
     const path = location.pathname === "/login" ? "/" : location.pathname;
     if (isAuth === false) navigate("/login");
     else if (isAuth === true) navigate(path, { state: location.state });
-  }, [isAuth]);
+  }, [isAuth, location.pathname, location.state, navigate]);
 
   return (
     <React.Suspense fallback={<Loader />}>

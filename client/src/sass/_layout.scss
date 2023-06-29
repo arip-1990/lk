@@ -3,30 +3,37 @@
 .layout {
   min-height: 100vh;
   display: grid;
-  grid-template-rows: minmax(88px, 116px) 1fr minmax(36px, 36px);
-  grid-template-columns: 1fr 1356px 1fr;
+  grid-template-rows: minmax(88px, 116px) 1fr 36px;
+  grid-template-columns: minmax(200px, 260px) minmax(800px, 1fr);
   grid-template-areas:
-    "header header header"
-    "leftSider content rightSider"
-    "footer footer footer";
+    "header header"
+    "leftSider content"
+    "footer footer";
   background-image: url(../images/bg.jpg);
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow-x: hidden;
 
   &-header {
     grid-area: header;
-    background: #fff;
     font-size: 1.25rem;
+    background: #fff;
     border-bottom: 1px solid #2c76c7;
-    padding: 0.75rem;
+    padding: 0.5rem;
 
     .ant-space-item {
       height: 100%;
     }
 
     .logo {
-      height: 86px;
-      padding: 0.25rem 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #2b74b7;
+      margin-bottom: 0;
     }
 
     .ant-menu {
@@ -62,11 +69,12 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 3rem 50px;
+    padding: 1rem;
   }
 
   &-right-sider {
     grid-area: rightSider;
+    display: none;
     padding: 1rem 0;
   }
 
@@ -74,11 +82,36 @@
     grid-area: footer;
     display: flex;
     align-items: center;
-    color: $success;
+    color: #dc4234;
     padding: 0 1.5rem;
   }
 
   p {
     color: $primary;
+  }
+}
+
+@media (min-width: 1600px) {
+  .layout {
+    grid-template-columns: minmax(220px, 300px) minmax(1160px, 1fr) minmax(
+        220px,
+        300px
+      );
+    grid-template-areas:
+      "header header header"
+      "leftSider content rightSider"
+      "footer footer footer";
+
+    &-header {
+      padding: 0.75rem;
+
+      .logo {
+        font-size: 1.25rem;
+      }
+    }
+
+    &-right-sider {
+      display: block;
+    }
   }
 }

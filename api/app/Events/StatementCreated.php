@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Http\Resources\StatementResource;
+use App\Http\Resources\UserResource;
 use App\Models\Statement;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
@@ -16,13 +18,19 @@ class StatementCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public User $user, public Statement $statement) {}
+    public UserResource $user;
+    public StatementResource $statement;
+
+    public function __construct(User $user, Statement $statement) {
+        $this->user = new UserResource($user);
+        $this->statement = new StatementResource($statement);
+    }
 
     /**
      * Get the channels the event should broadcast on.
      */
     public function broadcastOn(): Channel|PrivateChannel|array
     {
-        return new PrivateChannel('statement');
+        return new Channel('statement');
     }
 }

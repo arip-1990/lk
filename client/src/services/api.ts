@@ -7,7 +7,7 @@ export const API_URL =
   process.env.REACT_APP_API_URL || "http://192.168.2.19:8888";
 
 const axiosInstance = axios.create({
-  baseURL: API_URL + "/api/v1/",
+  baseURL: `${API_URL}/api/v1/`,
   // validateStatus: status => status >= 200 && status < 300
 });
 
@@ -60,12 +60,20 @@ export default axiosInstance;
 
 window.Pusher = Pusher;
 
+const headers: { Accept: string; Authorization?: string } = {
+  Accept: "application/json",
+};
+
+const token = localStorage.getItem("token");
+if (token) headers.Authorization = `Bearer ${token}`;
+
 // Laravel Echo
 const Echo = new LaravelEcho({
   broadcaster: "pusher",
   key: "e40e9c78f88612ad8a35",
   cluster: "eu",
-  forceTLS: true,
+  authEndpoint: `${API_URL}/api/broadcasting/auth`,
+  auth: { headers },
 });
 
 export { Echo };

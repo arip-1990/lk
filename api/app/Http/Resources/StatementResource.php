@@ -13,6 +13,7 @@ class StatementResource extends JsonResource
         /** @var Statement $this */
         return [
             'id' => $this->id,
+            'category' => new CategoryResource($this->category),
             'must' => $this->must,
             'comment' => $this->comment,
             'createdAt' => $this->created_at->format('Y-m-d'),

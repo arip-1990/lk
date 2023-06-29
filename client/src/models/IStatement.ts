@@ -1,15 +1,17 @@
+import { ICategory } from "./ICategory";
 import { IStore } from "./IStore";
 import { IUser } from "./IUser";
 
 export interface IStatement extends Key {
   id: string;
+  category: ICategory;
   must: string;
-  comment: string | undefined;
+  comment?: string;
   createdAt: moment.Moment;
-  doneAt: moment.Moment | undefined;
+  doneAt?: moment.Moment;
   status: boolean;
   applicant: IUser;
-  media: string | undefined;
-  store: IStore | undefined;
+  media?: string;
+  store?: IStore;
   editable: boolean;
 }
