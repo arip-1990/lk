@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Import;
 
 use App\Models\Role;
 use App\Models\Store;
 use App\Models\User;
-use Illuminate\Console\Command;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class UserCommand extends Command
+class UserCommand extends ImportCommand
 {
     protected $signature = 'import:user';
     protected $description = 'Import users';
@@ -16,11 +16,10 @@ class UserCommand extends Command
     public function handle(): int
     {
         $this->info('Import users');
-        $data = simplexml_load_file('http://external:123456@10.8.0.30:180/cb/hs/ExternalAPIv2/users');
-        $count_data = count($data->row);
-        $i = 1;
+        $startTime = Carbon::now();
+
+        $data = $this->getData('user');
         foreach ($data->row as $item) {
-            $this->info("\033[2KЗапись данных: " . $i . ' / ' . $count_data . "\r");
             if (!$barcode = (string)$item->id) continue;
 
             $fio = array_filter(explode(' ', (string)$item->fio), fn (string $element) => !empty($element));
@@ -32,8 +31,7 @@ class UserCommand extends Command
 
             try {
                 try {
-                    /** @var User $user */
-                    $user = User::query()->where('barcode', $barcode)->firstOrFail();
+                    $user = User::where('barcode', $barcode)->firstOrFail();
                     $user->first_name = $firstName ?? '';
                     $user->last_name = $lastName;
                     $user->middle_name = $middleName;
@@ -44,14 +42,14 @@ class UserCommand extends Command
                         if (str_starts_with(strtolower($position), 'Директор')
                             or str_starts_with(strtolower($position), 'Заместитель директора')
                             or str_starts_with(strtolower($position), 'Руководитель отдела продаж')) {
-                            $role = Role::query()->where('name', Role::ADMIN)->firstOrFail();
+                            $role = Role::where('name', Role::ADMIN)->firstOrFail();
                         }
                         elseif (str_starts_with(strtolower($position), 'Заведующая')
                             or str_starts_with(strtolower($position), 'Заведующий')) {
-                            $role = Role::query()->where('name', Role::MANAGER)->firstOrFail();
+                            $role = Role::where('name', Role::MANAGER)->firstOrFail();
                         }
                         else {
-                            $role = Role::query()->where('name', Role::WORKER)->firstOrFail();
+                            $role = Role::where('name', Role::WORKER)->firstOrFail();
                         }
                     }
                     catch (ModelNotFoundException $e) {}
@@ -72,7 +70,7 @@ class UserCommand extends Command
                     $stores = [];
                     foreach ($item->apteki as $item2) {
                         foreach ($item2->uuid as $uuid) {
-                            if ($store = Store::query()->find((string)$uuid))
+                            if ($store = Store::find((string)$uuid))
                                 $stores[] = $store;
                         }
                     }
@@ -83,12 +81,14 @@ class UserCommand extends Command
                 $user->save();
             }
             catch (\Exception $e) {
-                $this->newLine();
-                return 1;
+                $this->error($e->getMessage());
+
+                return self::FAILURE;
             }
-            $i++;
         }
 
-        return 0;
+        $this->info('Аптеки успешно обновлены: ' . $startTime->diff(Carbon::now())->format('%iм %sс'));
+
+        return self::SUCCESS;
     }
 }

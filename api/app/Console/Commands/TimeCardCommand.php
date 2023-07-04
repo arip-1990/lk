@@ -25,7 +25,7 @@ class TimeCardCommand extends Command
             $this->copyFile($path);
         }
         catch (\DomainException $e) {
-            if (TimeCard::query()->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count()) {
+            if (TimeCard::whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count()) {
                 $this->warn($e->getMessage());
                 return 1;
             }
@@ -48,14 +48,14 @@ class TimeCardCommand extends Command
                         ->where('schedule', json_encode(['days' => trim($row[7]), 'hours' => $row[6]], JSON_UNESCAPED_UNICODE))
                         ->where('days', $row[4])->where('hours', $row[5])->first();
                     if (!$normative) {
-                        $normative = Normative::query()->create([
+                        $normative = Normative::create([
                             'days' => $row[4],
                             'hours' => $row[5],
                             'schedule' => new Collection(['days' => trim($row[7]), 'hours' => $row[6]])
                         ]);
                     }
 
-                    $timeCard = TimeCard::query()->where('user', trim($row[1]))
+                    $timeCard = TimeCard::where('user', trim($row[1]))
                         ->where('store_id', $store->id)->where('post', trim($row[2]))
                         ->where('created_at', '>', Carbon::now()->startOfMonth())->first();
                     if ($timeCard) {
@@ -66,7 +66,7 @@ class TimeCardCommand extends Command
                         $updated[] = $timeCard->id;
                     }
                     else {
-                        $timeCard = TimeCard::query()->create([
+                        $timeCard = TimeCard::create([
                             'user' => trim($row[1]),
                             'post' => trim($row[2]),
                             'store_id' => $store->id,

@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->json('coordinate')->default('[]');
             $table->string('street');
             $table->string('house')->nullable();
+            $table->json('coordinate')->default('[]');
             $table->timestamps();
 
             $table->foreignUuid('city_id')->constrained()->onDelete('cascade');

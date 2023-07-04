@@ -3,15 +3,23 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $id
  * @property string $name
+ * @property string $prefix
  * @property string $type
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property ?Carbon $created_at
+ * @property ?Carbon $updated_at
+ *
+ * @property ?City $parent
+ * @property Collection<City> $children
+ * @property Collection<Location> $locations
  */
 class City extends Model
 {
@@ -24,5 +32,25 @@ class City extends Model
 
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['id', 'name', 'type'];
+    protected $fillable = ['id', 'name', 'prefix', 'type'];
+
+    public function getName(): string
+    {
+        return $this->parent ? $this->parent->name : $this->name;
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function locations(): HasMany
+    {
+        return $this->hasMany(Location::class);
+    }
 }
