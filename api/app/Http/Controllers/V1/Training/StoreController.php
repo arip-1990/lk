@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +19,7 @@ class StoreController extends Controller
         $training = new Training([
             'id' => Uuid::uuid4()->toString(),
             'title' => $request->get('title'),
-            'user_id' => Auth::id(),
+            'user_id' => $request->user()->id,
             'link' => $request->get('link'),
             'type' => $request->get('type'),
             'category_id' => $category->id
@@ -33,7 +32,7 @@ class StoreController extends Controller
                 if (!Storage::exists('trainings'))
                     Storage::makeDirectory('trainings');
 
-                Storage::putFileAs('trainings', $file, $training->id . '.' . $file->getClientOriginalExtension());
+                $file->storeAs('trainings', $training->id . '.' . $file->getClientOriginalExtension());
 
                 if ($file->getClientOriginalExtension() === 'pdf')
                     $training->type = Training::TYPE_DOCUMENT;

@@ -32,8 +32,8 @@ return new class extends Migration
         });
 
         Schema::table('locations', function (Blueprint $table) {
-            $table->string('type')->after('id')->default('street');
-            $table->string('prefix', 8)->after('type')->default('ул');
+            $table->string('type')->after('id')->nullable();
+            $table->string('prefix', 8)->after('type')->nullable();
 
             $table->unique(['city_id', 'street', 'house']);
         });

@@ -30,7 +30,7 @@ export const statementApi = createApi({
       }),
       providesTags: ["IStatement"],
     }),
-    addStatement: builder.mutation<void, { id: string; data: any }>({
+    addStatement: builder.mutation<void, { id: string; data: FormData }>({
       query: (args) => ({
         url: `/operation-department/statement/${args.id}`,
         method: "post",

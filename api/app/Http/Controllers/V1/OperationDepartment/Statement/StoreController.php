@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +22,7 @@ class StoreController extends Controller
                 'id' => Uuid::uuid4()->toString(),
                 'must' => $request->get('must'),
                 'category_id' => $category->id,
-                'user_id' => Auth::id(),
+                'user_id' => $request->user()?->id,
                 'store_id' => $request->get('store')
             ]);
 
@@ -33,7 +32,7 @@ class StoreController extends Controller
             /** @var UploadedFile $file */
             foreach ($request->file('medias', []) as $i => $file) {
                 if ($file->getError() === UPLOAD_ERR_OK) {
-                    Storage::putFileAs($statement->getMediaPath(), $file, $statement->id . '_' . $i . '.' . strtolower($file->getClientOriginalExtension()));
+                    $file->storeAs($statement->getMediaPath(), "{$statement->id}_{$i}." . strtolower($file->getClientOriginalExtension()));
                 }
             }
 

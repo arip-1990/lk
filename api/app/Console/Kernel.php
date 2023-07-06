@@ -10,6 +10,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
 //        $schedule->command('import:timeCard')->daily();
+        $schedule->command('import:store')->daily();
+        $schedule->command('import:user')->dailyAt('0:05');
     }
 
     protected function commands(): void

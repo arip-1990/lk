@@ -36,7 +36,7 @@ class StoreController extends Controller
             if (!Storage::exists($media->getMediaPath()))
                 Storage::makeDirectory($media->getMediaPath());
 
-            Storage::putFileAs($media->getMediaPath(), $file, $media->id . '.' . $file->getClientOriginalExtension());
+            $file->storeAs($media->getMediaPath(), $media->id . '.' . $file->getClientOriginalExtension());
 
             if ($file->getClientOriginalExtension() === 'pdf')
                 $media->type = Media::TYPE_DOCUMENT;

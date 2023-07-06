@@ -17,22 +17,22 @@ use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property string $id
- * @property string|null $email
- * @property string|null $mobile_phone
+ * @property ?string $email
+ * @property ?string $mobile_phone
  * @property Collection<string> $internal_phones
  * @property string $barcode
- * @property string|null $inn
+ * @property ?string $inn
  * @property string $first_name
  * @property string $last_name
- * @property string|null $middle_name
- * @property string|null $position
+ * @property ?string $middle_name
+ * @property ?string $position
  * @property boolean $status
- * @property string|null $remember_token
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
+ * @property ?string $remember_token
+ * @property ?Carbon $created_at
+ * @property ?Carbon $updated_at
+ * @property ?Carbon $deleted_at
  *
- * @property Role|null $role
+ * @property ?Role $role
  * @property Collection<Grant> $grants
  * @property Collection<Store> $stores
  * @property Collection<Test> $tests

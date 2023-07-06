@@ -15,7 +15,7 @@ class StoreController extends Controller
     {
         foreach ($request->all() as $item) {
             /** @var TimeCard $timeCard */
-            $timeCard = TimeCard::query()->find($item['timeCard']);
+            $timeCard = TimeCard::find($item['timeCard']);
 
             $attendances = new Collection();
             foreach ($item['attendance'] as $tmp) {

@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 
 abstract class ImportCommand extends Command
 {
-    protected function getData(string $type = 'store'): \SimpleXMLElement
+    protected function getData(ImportType $type = ImportType::STORE): \SimpleXMLElement
     {
         $config = config('services.1c');
         try {
@@ -18,7 +18,7 @@ abstract class ImportCommand extends Command
                 'verify' => false
             ]);
 
-            $response = $client->get($config['urls'][$type]);
+            $response = $client->get($config['urls'][$type->value]);
             $xml = simplexml_load_string($response->getBody()->getContents());
             if ($xml === false)
                 throw new \DomainException('Ошибка парсинга xml');

@@ -40,6 +40,8 @@ services:
 
   api:
     image: ${REGISTRY}/lk-social-api:${IMAGE_TAG}
+    volumes:
+      - uploads:/app/storage/app/public
     deploy:
       mode: replicated
       replicas: 2
@@ -60,11 +62,17 @@ services:
       DB_DATABASE: app
       DB_USERNAME: root
       DB_PASSWORD: secret
-      FILESYSTEM_DISK: sftp
-      SFTP_URL: http://192.168.2.3/static/s
-      SFTP_HOST: 192.168.2.3
-      SFTP_USERNAME: Social
-      SFTP_PASSWORD: 222326
+      FILESYSTEM_DISK: public
+      # FILESYSTEM_DISK: sftp
+      # SFTP_URL: http://192.168.2.3/static/s
+      # SFTP_HOST: 192.168.2.3
+      # SFTP_USERNAME: Social
+      # SFTP_PASSWORD: 222326
+      PUSHER_APP_ID: 1624213
+      PUSHER_APP_KEY: e40e9c78f88612ad8a35
+      PUSHER_APP_SECRET: 5eea170da1dad7380c42
+    volumes:
+      - uploads:/app/storage/app/public
     deploy:
       mode: replicated
       replicas: 2
@@ -121,11 +129,14 @@ services:
       DB_DATABASE: app
       DB_USERNAME: root
       DB_PASSWORD: secret
-      FILESYSTEM_DISK: sftp
-      SFTP_URL: http://192.168.2.3/static/s
-      SFTP_HOST: 192.168.2.3
-      SFTP_USERNAME: Social
-      SFTP_PASSWORD: 222326
+      FILESYSTEM_DISK: public
+      # FILESYSTEM_DISK: sftp
+      # SFTP_URL: http://192.168.2.3/static/s
+      # SFTP_HOST: 192.168.2.3
+      # SFTP_USERNAME: Social
+      # SFTP_PASSWORD: 222326
+    volumes:
+      - uploads:/app/storage/app/public
     command: sh -c 'php artisan schedule:run'
     deploy:
       labels:
@@ -138,6 +149,7 @@ services:
 
 volumes:
   db-data:
+  uploads:
 
 
 networks:

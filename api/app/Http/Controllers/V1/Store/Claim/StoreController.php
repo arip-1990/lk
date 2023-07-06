@@ -15,7 +15,7 @@ class StoreController extends Controller
     public function handle(Request $request): JsonResponse
     {
         foreach ($request->all() as $item) {
-            Claim::query()->create([
+            Claim::create([
                 'id' => Uuid::uuid4()->toString(),
                 'invoice' => $item['invoice'],
                 'provider_id' => $item['provider'],

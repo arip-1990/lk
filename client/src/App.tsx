@@ -23,7 +23,7 @@ const App: React.FC = () => {
     Echo.channel("statement").listen(
       "StatementCreated",
       (e: { user?: IUser; statement: IStatement }) => {
-        if (isAuth !== null || e.user?.id !== user?.id) {
+        if (isAuth !== null && e.user?.id !== user?.id) {
           addNotification({
             title: e.statement.category.name,
             message: e.statement.must,

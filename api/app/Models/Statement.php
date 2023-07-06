@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Storage;
 /**
  * @property string $id
  * @property string $must
- * @property string|null $comment
+ * @property ?string $comment
  * @property boolean $status
- * @property Carbon|null $done_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property ?Carbon $done_at
+ * @property ?Carbon $created_at
+ * @property ?Carbon $updated_at
  *
  * @property Category $category
  * @property User $user

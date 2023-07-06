@@ -42,6 +42,7 @@ WORKDIR /app
 COPY --from=builder /app ./
 COPY ./ ./
 
-RUN chown app:app -R ./storage ./bootstrap/cache && php artisan key:generate --force
+RUN chown app:app -R ./storage ./bootstrap/cache \
+    && php artisan key:generate --ansi && php artisan storage:link --ansi
 
 USER app

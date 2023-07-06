@@ -19,7 +19,7 @@ class StoreController extends Controller
         if (!$request->get('name'))
             throw new \DomainException('Отсутствует название документа!');
 
-        $document = Document::query()->create([
+        $document = Document::create([
             'id' => Uuid::uuid4()->toString(),
             'title' => $request->get('name'),
             'category_id' => $category->id,
@@ -32,7 +32,7 @@ class StoreController extends Controller
             if (!Storage::exists('documents'))
                 Storage::makeDirectory('documents');
 
-            Storage::putFileAs('documents', $file, $document->id . '.' . $file->getClientOriginalExtension());
+            $file->storeAs('documents', $document->id . '.' . $file->getClientOriginalExtension());
         }
 
         return new JsonResponse(status: Response::HTTP_CREATED);

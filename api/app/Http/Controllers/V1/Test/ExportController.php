@@ -27,9 +27,9 @@ class ExportController extends Controller
     public function handle(string $type)
     {
         $category = match ($type) {
-            'new' => Category::query()->find(30),
-            'promo' => Category::query()->find(37),
-            default => Category::query()->find(29),
+            'new' => Category::find(30),
+            'promo' => Category::find(37),
+            default => Category::find(29),
         };
 
         $this->createTest($category);

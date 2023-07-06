@@ -29,11 +29,11 @@ class StoreCommand extends ImportCommand
                 $address = explode(',', $item->address);
                 if (count($address) === 4) {
                     $city = trim(str_replace(['мкр.', 'мкр ', 'пгт.', 'пгт '], '', $address[1]));
-                    if (str_contains(strtolower($address[2]), 'пр')) {
+                    if (str_contains(mb_strtolower($address[2]), 'пр')) {
                         $type = Location::TYPE_AVENUE;
                         $prefix = 'пр';
                     }
-                    elseif (str_contains(strtolower($address[2]), 'ул')) {
+                    elseif (str_contains(mb_strtolower($address[2]), 'ул')) {
                         $type = Location::TYPE_STREET;
                         $prefix = 'ул';
                     }
@@ -43,11 +43,11 @@ class StoreCommand extends ImportCommand
                 }
                 else {
                     $city = trim($address[0]);
-                    if (str_contains(strtolower($address[1]), 'пр')) {
+                    if (str_contains(mb_strtolower($address[1]), 'пр')) {
                         $type = Location::TYPE_AVENUE;
                         $prefix = 'пр';
                     }
-                    elseif (str_contains(strtolower($address[1]), 'ул')) {
+                    elseif (str_contains(mb_strtolower($address[1]), 'ул')) {
                         $type = Location::TYPE_STREET;
                         $prefix = 'ул';
                     }
@@ -90,11 +90,11 @@ class StoreCommand extends ImportCommand
                     'location_id' => $location->id,
                     'status' => true,
                     'sort' => $sort++,
-                    'company_id' => str_contains(strtolower((string)$item->title), 'дф') ? 2 : 1
+                    'company_id' => str_contains(mb_strtolower((string)$item->title), 'дф') ? 2 : 1
                 ];
             }
 
-            Store::upsert($fields, 'id', ['name', 'phone', 'schedule']);
+            Store::upsert($fields, 'id', ['name', 'phone', 'schedule', 'company_id']);
         } catch (\DomainException $e) {
             $this->error($e->getMessage());
 

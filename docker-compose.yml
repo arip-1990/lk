@@ -33,6 +33,7 @@ services:
       dockerfile: dev/nginx/Dockerfile
     volumes:
       - ./api:/app
+      - uploads:/app/storage/app/public
 
   api-php-fpm:
     build:
@@ -49,6 +50,7 @@ services:
       DB_DATABASE: app
       DB_USERNAME: root
       DB_PASSWORD: secret
+      FILESYSTEM_DISK: public
       # FILESYSTEM_DISK: sftp
       # SFTP_URL: http://192.168.2.3/static/s
       # SFTP_HOST: 192.168.2.3
@@ -57,6 +59,7 @@ services:
       BROADCAST_DRIVER: pusher
     volumes:
       - ./api:/app
+      - uploads:/app/storage/app/public
 
   api-php-cli:
     build:
@@ -73,6 +76,7 @@ services:
       DB_DATABASE: app
       DB_USERNAME: root
       DB_PASSWORD: secret
+      FILESYSTEM_DISK: public
       # FILESYSTEM_DISK: sftp
       # SFTP_URL: http://192.168.2.3/static/s
       # SFTP_HOST: 192.168.2.3
@@ -81,6 +85,7 @@ services:
       BROADCAST_DRIVER: pusher
     volumes:
       - ./api:/app
+      - uploads:/app/storage/app/public
 
   api-db:
     image: mariadb:10.11
@@ -94,3 +99,4 @@ services:
 
 volumes:
   db-data:
+  uploads:

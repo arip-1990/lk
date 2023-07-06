@@ -7,7 +7,6 @@ use App\UseCases\TestService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class StoreController extends Controller
@@ -16,8 +15,8 @@ class StoreController extends Controller
 
     public function handle(Request $request): JsonResponse
     {
-        $test = Test::query()->find($request->get('test'));
-        if ($test?->user_id !== Auth::id())
+        $test = Test::find($request->get('test'));
+        if ($test?->user_id !== $request->user()->id)
             throw new \DomainException('Ошибка теста.');
 
         if ($test->finished_at)

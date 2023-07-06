@@ -7,9 +7,9 @@ export const storeApi = createApi({
     reducerPath: 'storeApi',
     baseQuery: axiosBaseQuery(),
     endpoints: (builder) => ({
-        fetchStores: builder.query<IStore[], void>({
-            query: () => ({
-                url: '/store'
+        fetchStores: builder.query<IStore[], void | {all: boolean}>({
+            query: (arg) => ({
+                url: '/store' + (arg?.all ? '?all=1' : '')
             }),
         }),
     }),
