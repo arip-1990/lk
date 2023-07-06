@@ -48,6 +48,11 @@ class User extends Authenticatable
     ];
     protected $fillable = ['id', 'email', 'mobile_phone', 'internal_phones', 'barcode', 'inn', 'first_name', 'last_name', 'middle_name', 'position', 'status'];
 
+//    public function receivesBroadcastNotificationsOn(): string
+//    {
+//        return "users.{$this->id}";
+//    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', true);

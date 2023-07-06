@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\V1\OperationDepartment\Statement;
 
-use App\Events\StatementCreated;
 use App\Models\Category;
+use App\Models\Role;
 use App\Models\Statement;
+use App\Models\User;
+use App\Notifications\StatementCreated;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +39,7 @@ class StoreController extends Controller
                 }
             }
 
-            broadcast(new StatementCreated($request->user(), $statement));
+            Notification::send(User::where('role_id', Role::firstWhere('name', Role::ADMIN)?->id)->get(), new StatementCreated($statement));
         }
         catch (\Exception $e) {
             return new JsonResponse(

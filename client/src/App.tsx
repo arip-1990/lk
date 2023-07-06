@@ -7,8 +7,6 @@ import { useAuth } from "./hooks/useAuth";
 import Login from "./pages/Login";
 import privateRoute from "./privateRoute";
 import { Echo } from "./services/api";
-import { IUser } from "./models/IUser";
-import { IStatement } from "./models/IStatement";
 
 import logoImage from "./images/logo-social.svg";
 
@@ -20,21 +18,20 @@ const App: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    Echo.channel("statement").listen(
-      "StatementCreated",
-      (e: { user?: IUser; statement: IStatement }) => {
-        if (isAuth !== null && e.user?.id !== user?.id) {
+    if (user) {
+      Echo.private(`App.Models.User.${user.id}`).notification(
+        (e: { id: string; title: string; message: string; type: string }) => {
           addNotification({
-            title: e.statement.category.name,
-            message: e.statement.must,
+            title: e.title,
+            message: e.message,
             native: true,
             duration: 5000,
             icon: logoImage,
           });
         }
-      }
-    );
-  }, [isAuth, user]);
+      );
+    }
+  }, [user]);
 
   React.useEffect(() => {
     const path = location.pathname === "/login" ? "/" : location.pathname;

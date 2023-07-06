@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\City;
-use App\Models\Statement;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
