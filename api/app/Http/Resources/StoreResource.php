@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helper;
 use App\Models\Store;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -13,7 +14,7 @@ class StoreResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'phone' => $this->phone,
+            'phone' => Helper::formatPhone($this->phone),
             'status' => $this->status,
             'schedule' => $this->formatScheduleShort(),
             'totalClaims' => $this->claims->count()

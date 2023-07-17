@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Import;
 
+use App\Helper;
 use App\Models\City;
 use App\Models\Location;
 use App\Models\Store;
@@ -28,7 +29,7 @@ class StoreCommand extends ImportCommand
                 $prefix = null;
                 $address = explode(',', $item->address);
                 if (count($address) === 4) {
-                    $city = trim(str_replace(['мкр.', 'мкр ', 'пгт.', 'пгт '], '', $address[1]));
+                    $city = Helper::trimPrefixCity($address[1]);
                     if (str_contains(mb_strtolower($address[2]), 'пр')) {
                         $type = Location::TYPE_AVENUE;
                         $prefix = 'пр';
@@ -38,11 +39,11 @@ class StoreCommand extends ImportCommand
                         $prefix = 'ул';
                     }
 
-                    $street = trim(str_replace(['пр.', 'пр ', 'ул.', 'ул '], '', $address[2]));
-                    $house = trim(str_replace(['д.', 'д', ' '], '', $address[3]));
+                    $street = Helper::trimPrefixStreet($address[2]);
+                    $house = Helper::trimPrefixStreet($address[3]);
                 }
                 else {
-                    $city = trim($address[0]);
+                    $city = Helper::trimPrefixCity($address[0]);
                     if (str_contains(mb_strtolower($address[1]), 'пр')) {
                         $type = Location::TYPE_AVENUE;
                         $prefix = 'пр';
@@ -52,8 +53,8 @@ class StoreCommand extends ImportCommand
                         $prefix = 'ул';
                     }
 
-                    $street = trim(str_replace(['пр.', 'пр ', 'ул.', 'ул '], '', $address[1]));
-                    $house = trim(str_replace(['д.', 'д', ' '], '', $address[2]));
+                    $street = Helper::trimPrefixStreet($address[1]);
+                    $house = Helper::trimPrefixStreet($address[2]);
                 }
 
                 if (!$city = City::firstWhere('name', $city))
@@ -85,7 +86,7 @@ class StoreCommand extends ImportCommand
                 $fields[] = [
                     'id' => (string)$item->uuid,
                     'name' => (string)$item->title,
-                    'phone' => trim((string)$item->phone, '+') ?: null,
+                    'phone' => ltrim((string)$item->phone, '+') ?: null,
                     'schedule' => json_encode($schedules, JSON_UNESCAPED_UNICODE),
                     'location_id' => $location->id,
                     'status' => true,
