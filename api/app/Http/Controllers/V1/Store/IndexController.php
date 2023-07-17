@@ -15,9 +15,9 @@ class IndexController extends Controller
         $query = Store::query();
         if (!$request->user()->role?->isAdmin()) {
             if ($request->get('all'))
-                $query->whereIn('company_id', $request->user()->stores()->pluck('company_id')->unique());
+                $query->whereIn('company_id', $request->user()->stores->pluck('company_id')->unique());
             else
-                $query->whereIn('id', $request->user()->stores()->pluck('id'));
+                $query->whereIn('id', $request->user()->stores->pluck('id'));
         }
 
         return new JsonResponse(StoreResource::collection($query->orderBy('sort')->get()));
