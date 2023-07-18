@@ -1,9 +1,21 @@
 import { FC, useState } from "react";
-import { Row, Col, Space, Modal, Form, Input, DatePicker, Switch } from "antd";
+import {
+  Row,
+  Col,
+  Space,
+  Modal,
+  Form,
+  Input,
+  DatePicker,
+  Switch,
+  Upload,
+  Button,
+} from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
   PaperClipOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 
@@ -24,9 +36,10 @@ interface IFormEditData {
   comment?: string;
   doneAt?: moment.Moment;
   status?: boolean;
+  medias?: any[];
 }
 
-const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
+const Rejection: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
   const { user } = useAuth();
   const [form] = Form.useForm<IFormEditData>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -88,6 +101,17 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
       render: (text: string | undefined) => <p>{text}</p>,
     },
     {
+      title: "Вложение склада",
+      dataIndex: "answerMedia",
+      align: "center" as "center",
+      render: (media: string | undefined) =>
+        media ? (
+          <a href={media} style={{ fontSize: "1.5rem" }}>
+            <PaperClipOutlined />
+          </a>
+        ) : null,
+    },
+    {
       title: "Дата исполнения",
       dataIndex: "doneAt",
       align: "center" as "center",
@@ -138,11 +162,18 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
     try {
       const formData = new FormData();
       formData.set("comment", values.comment);
-      formData.set(
-        "doneAt",
-        values.doneAt < moment() ? moment() : values.doneAt
-      );
+      values.doneAt &&
+        formData.set(
+          "doneAt",
+          values.doneAt < moment() ? moment() : values.doneAt
+        );
       formData.set("status", values.status);
+
+      if (values.answerMedias) {
+        values.answerMedias.forEach((item: any) =>
+          formData.append("answerMedias[]", item.originFileObj)
+        );
+      }
 
       onEdit(values.id, formData);
     } catch (e) {
@@ -150,6 +181,11 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
     } finally {
       resetData();
     }
+  };
+
+  const normFile = (e: any) => {
+    if (Array.isArray(e)) return e;
+    return e && e.fileList;
   };
 
   return (
@@ -173,14 +209,14 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
         cancelText="Отмена"
         okButtonProps={{
           htmlType: "submit",
-          form: "exploitationForm",
+          form: "rejectionForm",
           loading: loading,
         }}
         onCancel={resetData}
       >
         <Form
           form={form}
-          id="exploitationForm"
+          id="rejectionForm"
           layout="vertical"
           autoComplete="off"
           onFinish={handleForm}
@@ -209,10 +245,20 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
               ) : null}
             </Col>
           </Row>
+          <Form.Item
+            name="answerMedias"
+            label="Вложение"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+          >
+            <Upload multiple beforeUpload={() => false}>
+              <Button icon={<UploadOutlined />}>Выберите файл</Button>
+            </Upload>
+          </Form.Item>
         </Form>
       </Modal>
     </>
   );
 };
 
-export default It;
+export default Rejection;

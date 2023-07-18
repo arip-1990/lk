@@ -62,11 +62,11 @@ class Helper
         return $str;
     }
 
-    public static function formatPhone(?string $phone, bool $mobile = false): string
+    public static function formatPhone(?string $phone, bool $isMobile = false): string
     {
         $tmp = '';
         if ($phone = ltrim($phone, '+')) {
-            if ($mobile) {
+            if ($isMobile) {
                 $phone = substr_replace($phone, ') ' . substr($phone, 4), 4);
                 $phone = substr_replace($phone, ' (' . substr($phone, 1), 1);
                 $phone = substr_replace($phone, '-' . substr($phone, -4), -4);

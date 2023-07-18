@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Table, TablePaginationConfig } from "antd";
 import { IStatement } from "../../models/IStatement";
 
-interface PropsType {
+interface IProps {
   columns: any[];
   data: IStatement[];
   loading?: boolean;
@@ -14,7 +14,7 @@ interface PropsType {
   };
 }
 
-const Statement: FC<PropsType> = ({ columns, data, loading, pagination }) => {
+const Statement: FC<IProps> = ({ columns, data, loading, pagination }) => {
   const handleChange = (pag: TablePaginationConfig) => {
     pagination &&
       pagination.onChange(

@@ -19,6 +19,7 @@ import It from "../templates/axo/It";
 import Stock from "../templates/axo/Stock";
 import Support from "../templates/axo/Support";
 import Exploitation from "../templates/axo/Exploitation";
+import Rejection from "../templates/axo/Rejection";
 
 const Axo: FC = () => {
   const { id } = useParams();
@@ -77,13 +78,18 @@ const Axo: FC = () => {
   };
 
   const getTitle = (id: string) => {
-    let tmp = "Заявка ";
-    if (id === "67") tmp += "в отдел эксплуатации";
-    else if (id === "68") tmp += "в отдел информационных технологий";
-    else if (id === "86") tmp += "в техническую поддержку";
-    else tmp = "Описание проблемы";
-
-    return tmp;
+    switch (id) {
+      case "67":
+        return "Заявка в отдел эксплуатации";
+      case "68":
+        return "Заявка в отдел информационных технологий";
+      case "86":
+        return "Заявка в техническую поддержку";
+      case "88":
+        return "Забраковка";
+      default:
+        return "Описание проблемы";
+    }
   };
 
   const getTemplate = (id: string) => {
@@ -118,6 +124,15 @@ const Axo: FC = () => {
       case "87":
         return (
           <Stock
+            id={Number(id)}
+            loading={addLoading || updateLoading || deleteLoading}
+            onEdit={handleEdit}
+            onDelete={deleteStatement}
+          />
+        );
+        case "88":
+        return (
+          <Rejection
             id={Number(id)}
             loading={addLoading || updateLoading || deleteLoading}
             onEdit={handleEdit}

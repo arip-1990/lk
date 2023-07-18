@@ -12,23 +12,23 @@ import { IStatement } from "../../models/IStatement";
 import { useFetchStatementsQuery } from "../../services/StatementService";
 import { Statement } from "../../components";
 
-interface PropsType {
+interface IProps {
   id: number;
   loading?: boolean;
   onEdit: (id: string, data: FormData) => void;
   onDelete: (id: string) => void;
 }
 
-interface FormEditDataType {
+interface IFormEditData {
   id?: string;
   comment?: string;
   doneAt?: moment.Moment;
   status?: boolean;
 }
 
-const Support: FC<PropsType> = ({ id, loading, onEdit, onDelete }) => {
+const Support: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
   const { user } = useAuth();
-  const [form] = Form.useForm<FormEditDataType>();
+  const [form] = Form.useForm<IFormEditData>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const { data, isLoading } = useFetchStatementsQuery({
@@ -55,11 +55,11 @@ const Support: FC<PropsType> = ({ id, loading, onEdit, onDelete }) => {
       align: "center" as "center",
       dataIndex: "store",
       render: (store: { id: string; name: string } | undefined) => (
-        <p>{store?.name}</p>
+        <p>{store?.name || 'Офис'}</p>
       ),
     },
     {
-      title: id === 67 ? "Что необходимо выполнить" : "Описание проблемы",
+      title: "Описание проблемы",
       dataIndex: "must",
       align: "center" as "center",
       render: (text: string | undefined) => <p>{text}</p>,

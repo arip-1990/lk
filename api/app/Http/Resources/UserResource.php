@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helper;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,7 +19,7 @@ class UserResource extends JsonResource
             'barcode' => $this->barcode,
             'email' => $this->email,
             'inn' => $this->inn,
-            'mobilePhone' => $this->mobile_phone,
+            'mobilePhone' => Helper::formatPhone($this->mobile_phone, true),
             'internalPhones' => $this->internal_phones,
             'position' => $this->position,
             'status' => $this->status,

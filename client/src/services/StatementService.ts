@@ -12,11 +12,11 @@ export const statementApi = createApi({
       Pagination<IStatement>,
       { categoryId: number; pagination: { current: number; pageSize: number } }
     >({
-      query: (args) => ({
-        url: `/operation-department/statement/${args.categoryId}`,
+      query: ({categoryId, pagination}) => ({
+        url: `/operation-department/statement/${categoryId}`,
         params: {
-          page: args.pagination.current,
-          pageSize: args.pagination.pageSize,
+          page: pagination.current,
+          pageSize: pagination.pageSize,
         },
       }),
       transformResponse: (response: Pagination<IStatement>) => ({
@@ -31,18 +31,18 @@ export const statementApi = createApi({
       providesTags: ["IStatement"],
     }),
     addStatement: builder.mutation<void, { id: string; data: FormData }>({
-      query: (args) => ({
-        url: `/operation-department/statement/${args.id}`,
+      query: ({id, data}) => ({
+        url: `/operation-department/statement/${id}`,
         method: "post",
-        data: args.data,
+        data,
       }),
       invalidatesTags: ["IStatement"],
     }),
     updateStatement: builder.mutation<void, { id: string; data: FormData }>({
-      query: (args) => ({
-        url: `/operation-department/statement/${args.id}/update`,
+      query: ({id, data}) => ({
+        url: `/operation-department/statement/${id}/update`,
         method: "post",
-        data: args.data,
+        data,
       }),
       invalidatesTags: ["IStatement"],
     }),

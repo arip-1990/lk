@@ -2,7 +2,6 @@ FROM nginx:1.25-alpine-slim
 
 RUN apk add --no-cache curl
 
-COPY ./common/nginx/snippets /etc/nginx/snippets
 COPY ./dev/nginx/conf.d /etc/nginx/conf.d
 
 WORKDIR /app

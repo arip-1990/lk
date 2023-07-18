@@ -74,6 +74,7 @@ const Echo = new LaravelEcho({
   cluster: "eu",
   authEndpoint: `${API_URL}/api/broadcasting/auth`,
   auth: { headers },
+  forceTLS: false
 });
 
 export { Echo };
