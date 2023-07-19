@@ -1,7 +1,8 @@
-import React from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import { Row, Breadcrumb as AntBreadcrumb } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import { useLocation, Link } from "react-router-dom";
+
 import { useFetchCategoriesQuery } from "../services/CategoryService";
 import { ICategory } from "../models/ICategory";
 
@@ -28,13 +29,13 @@ const generateUrl = (category: ICategory): string => {
   else return `/${category.type}/${category.id}`;
 };
 
-const Breadcrumb: React.FC = () => {
-  const [crumbs, setCrumbs] = React.useState<React.ReactChild[]>([]);
+const Breadcrumb: FC = () => {
+  const [crumbs, setCrumbs] = useState<ReactElement[]>([]);
   const { data: categories } = useFetchCategoriesQuery();
   const location = useLocation();
   const state = location.state as LocationState;
 
-  React.useEffect(() => {
+  useEffect(() => {
     let tmp: any = [];
     if (state && categories?.length && location.pathname !== "/") {
       if (state.page) {

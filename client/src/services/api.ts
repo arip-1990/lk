@@ -1,8 +1,6 @@
 import { BaseQueryFn } from "@reduxjs/toolkit/query";
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
-import LaravelEcho from "laravel-echo";
 import { Centrifuge } from "centrifuge";
-import { WebSocket } from "ws";
 
 export const API_URL =
   process.env.REACT_APP_API_URL || "http://192.168.2.19:8888";
@@ -59,25 +57,6 @@ export const axiosBaseQuery = (): BaseQueryFn<
 
 export default axiosInstance;
 
-// const headers: { Accept: string; Authorization?: string } = {
-//   Accept: "application/json",
-// };
-
-// const token = localStorage.getItem("token");
-// if (token) headers.Authorization = `Bearer ${token}`;
-
-// // Laravel Echo
-// const Echo = new LaravelEcho({
-//   broadcaster: "pusher",
-//   key: "e40e9c78f88612ad8a35",
-//   cluster: "eu",
-//   authEndpoint: `${API_URL}/api/broadcasting/auth`,
-//   auth: { headers },
-//   forceTLS: false
-// });
-
-// export { Echo };
-
 const getToken = (endpoint: string, ctx: any) => {
   return new Promise<string>((resolve, reject) => {
     axiosInstance
@@ -91,10 +70,15 @@ const getToken = (endpoint: string, ctx: any) => {
   });
 };
 
-const centrifuge = new Centrifuge("ws://localhost:8000/connection/websocket", {
-  debug: true,
-  getToken: (ctx) => getToken("broadcasting/connect-token", ctx),
-});
+const centrifuge = new Centrifuge(
+  `ws://${API_URL.replace(
+    /^(http:\/\/)?([a-zA-Z\d.]+)(:\d{2,5})?$/,
+    "$2"
+  )}:8000/connection/websocket`,
+  {
+    getToken: (ctx) => getToken("broadcasting/connect-token", ctx),
+  }
+);
 
 centrifuge.on("error", (ctx) => {
   console.log(ctx);

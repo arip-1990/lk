@@ -3,9 +3,8 @@
     "api_key": "secret",
     "admin_password": "secret",
     "admin_secret": "secret",
-    "allowed_origins": ["http://localhost"],
+    "allowed_origins": ["http://localhost", "http://192.168.2.19"],
     "usage_stats_disable": true,
-    "debug": true,
     "namespaces": [
         {
             "name": "notify",

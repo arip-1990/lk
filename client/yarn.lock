@@ -6170,11 +6170,6 @@ language-tags@=1.0.5:
   dependencies:
     language-subtag-registry "~0.3.2"
 
-laravel-echo@^1.15.1:
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/laravel-echo/-/laravel-echo-1.15.1.tgz#74d4e0c8b9649da4a31ebe882ed814e05b489618"
-  integrity sha512-rW9XTXqs1v3sgcSFz7aE3/MPa2lfZjnsV/hrjyS/VYecQAx1lSP0hg3KumuR6ftkeneM093tVvTkRyKFumSyXg==
-
 launch-editor@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/launch-editor/-/launch-editor-2.6.0.tgz#4c0c1a6ac126c572bd9ff9a30da1d2cae66defd7"
@@ -7596,13 +7591,6 @@ punycode@^2.1.0, punycode@^2.1.1:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.0.tgz#f67fa67c94da8f4d0cfff981aee4118064199b8f"
   integrity sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==
-
-pusher-js@^8.2.0:
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/pusher-js/-/pusher-js-8.2.0.tgz#f94e94c5db4f2e6e84e60f718e73010dc1bff570"
-  integrity sha512-t3WhhR7vgAr5ARl0VNiAqXOb7g4hyW7CNA9Q11tnlcn8dX+1bFZhgRP6IqWVzTX9n7fgjcji3UQ3y8FEMc1o7Q==
-  dependencies:
-    tweetnacl "^1.0.3"
 
 q@^1.1.2:
   version "1.5.1"
@@ -9316,11 +9304,6 @@ tsutils@^3.21.0:
   integrity sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==
   dependencies:
     tslib "^1.8.1"
-
-tweetnacl@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
-  integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"

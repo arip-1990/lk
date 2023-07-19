@@ -1,10 +1,11 @@
-import React from "react";
+import { FC } from "react";
 import { Row, Col } from "antd";
 import { Link } from "react-router-dom";
+
 import { Card } from "../components";
 import { categoryApi } from "../services/CategoryService";
 
-const Main: React.FC = () => {
+const Main: FC = () => {
   const { data: categories } = categoryApi.useFetchCategoriesQuery();
 
   return (

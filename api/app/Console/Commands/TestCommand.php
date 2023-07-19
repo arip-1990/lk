@@ -2,35 +2,20 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Statement;
-use App\Models\User;
-use App\Notifications\StatementCreated;
-use denis660\Centrifugo\Centrifugo;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Ramsey\Uuid\Uuid;
 
 class TestCommand extends Command
 {
     protected $signature = 'test';
     protected $description = 'Тестовая команда';
 
-    public function handle(Centrifugo $centrifuge): int
+    public function handle(): int
     {
-        $user = User::find('bae9aaa2-5cb8-478d-af69-cb1ce6c92c3c');
-
-        $statement = Statement::create([
-            'id' => Uuid::uuid4()->toString(),
-            'must' => 'test',
-            'category_id' => 68,
-            'user_id' => $user->id,
-        ]);
-
-        Notification::send([$user], new StatementCreated($statement));
+//        Notification::send([$user], new StatementCreated($statement));
 //        $spreadsheet = new Spreadsheet();
 //        $sheet = $spreadsheet->getActiveSheet();
 //        $sheet->setTitle('Products');

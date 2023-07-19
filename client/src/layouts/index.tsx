@@ -1,11 +1,11 @@
-import React from "react";
+import { FC } from "react";
 import { Outlet } from "react-router-dom";
 import { Row, Col } from "antd";
 
 import { Header, Footer } from "../templates";
 import { Calendar, Clock, Breadcrumb } from "../components";
 
-const Layout: React.FC = () => {
+const Layout: FC = () => {
   return (
     <section className="layout">
       <Header />

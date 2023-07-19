@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { FC, Suspense, useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Spin } from "antd";
 import addNotification from "react-push-notification";
@@ -12,25 +12,13 @@ import logoImage from "./images/logo-social.svg";
 
 const Loader = () => <Spin delay={500} />;
 
-const App: React.FC = () => {
+const App: FC = () => {
   const { isAuth, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     if (user) {
-      // Echo.private(`App.Models.User.${user.id}`).notification(
-      //   (e: { id: string; title: string; message: string; type: string }) => {
-      //     addNotification({
-      //       title: e.title,
-      //       message: e.message,
-      //       native: true,
-      //       duration: 5000,
-      //       icon: logoImage,
-      //     });
-      //   }
-      // );
-
       const sub = centrifuge.newSubscription(
         `notify:App.Models.User.${user.id}`,
         {
@@ -38,13 +26,15 @@ const App: React.FC = () => {
         }
       );
 
-      sub.on("publication", (ctx) => {
-        console.log("publication", ctx);
+      sub.on("publication", ({ data }) => {
+        addNotification({
+          title: data.title,
+          message: `Описание: ${data.message}`,
+          native: true,
+          duration: 5000,
+          icon: logoImage,
+        });
       });
-
-      sub.on("subscribing", () => console.log("subscribing"));
-      sub.on("subscribed", () => console.log("subscribed"));
-      sub.on("unsubscribed", () => console.log("unsubscribed"));
 
       sub.subscribe();
 
@@ -52,18 +42,18 @@ const App: React.FC = () => {
     }
   }, [user]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const path = location.pathname === "/login" ? "/" : location.pathname;
     if (isAuth === false) navigate("/login");
     else if (isAuth === true) navigate(path, { state: location.state });
   }, [isAuth, location.pathname, location.state, navigate]);
 
   return (
-    <React.Suspense fallback={<Loader />}>
+    <Suspense fallback={<Loader />}>
       <Routes>
         {isAuth ? privateRoute() : <Route path="/login" element={<Login />} />}
       </Routes>
-    </React.Suspense>
+    </Suspense>
   );
 };
 

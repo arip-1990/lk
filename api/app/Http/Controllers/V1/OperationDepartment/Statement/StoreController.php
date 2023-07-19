@@ -6,19 +6,18 @@ use App\Models\Category;
 use App\Models\Role;
 use App\Models\Statement;
 use App\Models\User;
-use App\Notifications\StatementCreated;
+use denis660\Centrifugo\Centrifugo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 
 class StoreController extends Controller
 {
-    public function handle(Request $request, Category $category): JsonResponse
+    public function handle(Request $request, Category $category, Centrifugo $centrifuge): JsonResponse
     {
         try {
             $statement = Statement::create([
@@ -39,7 +38,13 @@ class StoreController extends Controller
                 }
             }
 
-            Notification::send(User::where('role_id', Role::firstWhere('name', Role::ADMIN)?->id)->get(), new StatementCreated($statement));
+            $centrifuge->broadcast(
+                User::where('role_id', Role::firstWhere('name', Role::ADMIN)?->id)
+                    ->pluck('id')->map(fn($id) => "notify:App.Models.User.{$id}")->toArray(),
+                ['title' => $statement->category->name, 'message' => $statement->must]
+            );
+
+//            Notification::send(User::where('role_id', Role::firstWhere('name', Role::ADMIN)?->id)->get(), new StatementCreated($statement));
         }
         catch (\Exception $e) {
             return new JsonResponse(

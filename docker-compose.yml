@@ -100,16 +100,15 @@ services:
       - "3306:3306"
 
   centrifugo:
-    image: centrifugo/centrifugo:v5
+    build:
+      context: centrifugo
     ulimits:
       nofile:
         soft: 65535
         hard: 65535
-    volumes:
-      - ./centrifugo/dev/config.json:/centrifugo/config.json
     ports:
       - "8000:8000"
-    command: centrifugo -c config.json --admin --health
+    command: centrifugo --admin --health
 
 volumes:
   db-data:

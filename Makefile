@@ -71,15 +71,16 @@ client-ready:
 build: build-gateway build-client build-api
 
 build-gateway:
-	docker --log-level=debug build --pull --file=gateway/docker/prod/nginx/Dockerfile --tag=${REGISTRY}/lk-social-gateway:${IMAGE_TAG} gateway/docker
+	docker --log-level=debug build --pull --file=gateway/docker/prod/nginx/Dockerfile --tag=${REGISTRY}/lk-gateway:${IMAGE_TAG} gateway/docker
 
 build-client:
-	docker --log-level=debug build --pull --file=client/docker/prod/nginx/Dockerfile --tag=${REGISTRY}/lk-social-client:${IMAGE_TAG} client
+	docker --log-level=debug build --pull --file=client/docker/prod/nginx/Dockerfile --tag=${REGISTRY}/lk-client:${IMAGE_TAG} client
 
 build-api:
-	docker --log-level=debug build --pull --file=api/docker/prod/nginx/Dockerfile --tag=${REGISTRY}/lk-social-api:${IMAGE_TAG} api
-	docker --log-level=debug build --pull --file=api/docker/prod/php-fpm/Dockerfile --tag=${REGISTRY}/lk-social-api-php-fpm:${IMAGE_TAG} api
-	docker --log-level=debug build --pull --file=api/docker/prod/php-cli/Dockerfile --tag=${REGISTRY}/lk-social-api-php-cli:${IMAGE_TAG} api
+	docker --log-level=debug build --pull --file=api/docker/prod/nginx/Dockerfile --tag=${REGISTRY}/lk-api:${IMAGE_TAG} api
+	docker --log-level=debug build --pull --file=api/docker/prod/php-fpm/Dockerfile --tag=${REGISTRY}/lk-api-php-fpm:${IMAGE_TAG} api
+	docker --log-level=debug build --pull --file=api/docker/prod/php-cli/Dockerfile --tag=${REGISTRY}/lk-api-php-cli:${IMAGE_TAG} api
+	docker --log-level=debug build --pull --file=centrifugo/Dockerfile --tag=${REGISTRY}/lk-centrifugo:${IMAGE_TAG} centrifugo
 
 try-build:
 	REGISTRY=localhost IMAGE_TAG=0 make build
@@ -87,15 +88,16 @@ try-build:
 push: push-gateway push-client push-api
 
 push-gateway:
-	docker push ${REGISTRY}/lk-social-gateway:${IMAGE_TAG}
+	docker push ${REGISTRY}/lk-gateway:${IMAGE_TAG}
 
 push-client:
-	docker push ${REGISTRY}/lk-social-client:${IMAGE_TAG}
+	docker push ${REGISTRY}/lk-client:${IMAGE_TAG}
 
 push-api:
-	docker push ${REGISTRY}/lk-social-api:${IMAGE_TAG}
-	docker push ${REGISTRY}/lk-social-api-php-fpm:${IMAGE_TAG}
-	docker push ${REGISTRY}/lk-social-api-php-cli:${IMAGE_TAG}
+	docker push ${REGISTRY}/lk-api:${IMAGE_TAG}
+	docker push ${REGISTRY}/lk-api-php-fpm:${IMAGE_TAG}
+	docker push ${REGISTRY}/lk-api-php-cli:${IMAGE_TAG}
+	docker push ${REGISTRY}/lk-centrifugo:${IMAGE_TAG}
 
 deploy:
 	ssh -o StrictHostKeyChecking=no fox@192.168.2.19 'rm -rf lk_${BUILD_NUMBER} && mkdir lk_${BUILD_NUMBER}'
