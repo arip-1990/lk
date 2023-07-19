@@ -1,0 +1,19 @@
+{
+    "token_hmac_secret_key": "secret",
+    "api_key": "secret",
+    "admin_password": "secret",
+    "admin_secret": "secret",
+    "allowed_origins": ["http://localhost"],
+    "usage_stats_disable": true,
+    "debug": true,
+    "namespaces": [
+        {
+            "name": "notify",
+            "presence": true,
+            "join_leave": true,
+            "history_size": 10,
+            "history_ttl": "30s",
+            "allow_subscribe_for_client": true
+        }
+    ]
+}

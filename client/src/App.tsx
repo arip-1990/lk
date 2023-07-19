@@ -6,7 +6,7 @@ import addNotification from "react-push-notification";
 import { useAuth } from "./hooks/useAuth";
 import Login from "./pages/Login";
 import privateRoute from "./privateRoute";
-import { Echo } from "./services/api";
+import { centrifuge, getToken } from "./services/api";
 
 import logoImage from "./images/logo-social.svg";
 
@@ -19,17 +19,36 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      Echo.private(`App.Models.User.${user.id}`).notification(
-        (e: { id: string; title: string; message: string; type: string }) => {
-          addNotification({
-            title: e.title,
-            message: e.message,
-            native: true,
-            duration: 5000,
-            icon: logoImage,
-          });
+      // Echo.private(`App.Models.User.${user.id}`).notification(
+      //   (e: { id: string; title: string; message: string; type: string }) => {
+      //     addNotification({
+      //       title: e.title,
+      //       message: e.message,
+      //       native: true,
+      //       duration: 5000,
+      //       icon: logoImage,
+      //     });
+      //   }
+      // );
+
+      const sub = centrifuge.newSubscription(
+        `notify:App.Models.User.${user.id}`,
+        {
+          getToken: (ctx) => getToken("broadcasting/auth", ctx),
         }
       );
+
+      sub.on("publication", (ctx) => {
+        console.log("publication", ctx);
+      });
+
+      sub.on("subscribing", () => console.log("subscribing"));
+      sub.on("subscribed", () => console.log("subscribed"));
+      sub.on("unsubscribed", () => console.log("unsubscribed"));
+
+      sub.subscribe();
+
+      centrifuge.connect();
     }
   }, [user]);
 

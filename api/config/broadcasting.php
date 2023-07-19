@@ -44,6 +44,15 @@ return [
             ],
         ],
 
+        'centrifugo' => [
+            'driver' => 'centrifugo',
+            'token_hmac_secret_key'  => env('CENTRIFUGO_SECRET','secret'),
+            'api_key'  => env('CENTRIFUGO_KEY','secret'),
+            'url'     => env('CENTRIFUGO_URL', 'http://localhost:8000'), // centrifugo api url
+            'verify'  => env('CENTRIFUGO_VERIFY', false), // Verify host ssl if centrifugo uses this
+            'ssl_key' => env('CENTRIFUGO_SSL_KEY'), // Self-Signed SSl Key for Host (require verify=true)
+        ],
+
         'ably' => [
             'driver' => 'ably',
             'key' => env('ABLY_KEY'),

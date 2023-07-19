@@ -56,7 +56,8 @@ services:
       # SFTP_HOST: 192.168.2.3
       # SFTP_USERNAME: Social
       # SFTP_PASSWORD: 222326
-      BROADCAST_DRIVER: pusher
+      BROADCAST_DRIVER: centrifugo
+      CENTRIFUGO_URL: http://centrifugo:8000
     volumes:
       - ./api:/app
       - uploads:/app/storage/app/public
@@ -82,7 +83,8 @@ services:
       # SFTP_HOST: 192.168.2.3
       # SFTP_USERNAME: Social
       # SFTP_PASSWORD: 222326
-      BROADCAST_DRIVER: pusher
+      BROADCAST_DRIVER: centrifugo
+      CENTRIFUGO_URL: http://centrifugo:8000
     volumes:
       - ./api:/app
       - uploads:/app/storage/app/public
@@ -96,6 +98,18 @@ services:
       - db-data:/var/lib/mysql
     ports:
       - "3306:3306"
+
+  centrifugo:
+    image: centrifugo/centrifugo:v5
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    volumes:
+      - ./centrifugo/dev/config.json:/centrifugo/config.json
+    ports:
+      - "8000:8000"
+    command: centrifugo -c config.json --admin --health
 
 volumes:
   db-data:

@@ -88,5 +88,10 @@ Route::prefix('v1')->group(function () {
                 Route::delete('/{contact}', [V1\OperationDepartment\Contact\DeleteController::class, 'handle']);
             });
         });
+
+        Route::prefix('broadcasting')->group(function () {
+            Route::post('/connect-token', [V1\Broadcast\ConnectController::class, 'handle']);
+            Route::post('/auth', [V1\Broadcast\AuthController::class, 'handle']);
+        });
     });
 });

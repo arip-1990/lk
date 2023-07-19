@@ -9,6 +9,7 @@
         "ext-simplexml": "*",
         "ext-ssh2": "*",
         "ext-zip": "*",
+        "denis660/laravel-centrifugo": "^3.1",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.15",

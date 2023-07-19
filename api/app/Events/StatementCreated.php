@@ -12,13 +12,11 @@ class StatementCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct() {}
-
     /**
      * Get the channels the event should broadcast on.
      */
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('statement');
+        return new PrivateChannel('notify:App.Models.User.{id}');
     }
 }
