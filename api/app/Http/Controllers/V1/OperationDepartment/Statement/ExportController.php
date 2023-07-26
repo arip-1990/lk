@@ -74,6 +74,16 @@ class ExportController extends Controller
             ]);
         }
 
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setWidth(96);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setWidth(96);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
+        if ($category->id === 87) $sheet->getColumnDimension('I')->setAutoSize(true);
+
         $i = 2;
         Statement::where('category_id', $category->id)->orderBy('status')
             ->orderBy('created_at')->chunk(1000, function ($statements) use (&$i, $sheet, $category) {
@@ -81,7 +91,7 @@ class ExportController extends Controller
                 foreach ($statements as $statement) {
                     $sheet->setCellValue('A' . $i, $i - 1);
                     $sheet->setCellValue('B' . $i, $statement->created_at->format('d-m-Y H:i'));
-                    $sheet->setCellValue('C' . $i, $statement->store?->name ?? '');
+                    $sheet->setCellValue('C' . $i, $statement->store?->name ?? 'Офис');
                     $sheet->setCellValue('D' . $i, $statement->must);
                     $sheet->setCellValue('E' . $i, $statement->hasMedia() ? 'Есть' : 'Нет');
                     $sheet->setCellValue('F' . $i, $statement->user->first_name . ' ' . $statement->user->last_name);

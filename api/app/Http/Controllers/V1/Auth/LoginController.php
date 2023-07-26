@@ -14,6 +14,8 @@ class LoginController extends Controller
         if (!$user = User::where('barcode', $request->get('barcode'))->first())
             return new JsonResponse('Учетные данные не совпадают', 401);
 
+        $user->tokens()->delete();
+
         return new JsonResponse(['token' => $user->createToken($request->userAgent())->plainTextToken]);
     }
 }
