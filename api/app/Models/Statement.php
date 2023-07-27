@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Storage;
  * @property ?Carbon $updated_at
  *
  * @property Category $category
- * @property User $user
+ * @property User $applicant
+ * @property ?User $performer
  * @property ?Store $store
  */
 class Statement extends Model
@@ -27,7 +28,7 @@ class Statement extends Model
     protected $casts = [
         'done_at' => 'datetime',
     ];
-    protected $fillable = ['id', 'must', 'comment', 'status', 'done_at', 'category_id', 'user_id', 'store_id'];
+    protected $fillable = ['id', 'must', 'comment', 'status', 'done_at', 'category_id', 'applicant_id', 'performer_id', 'store_id'];
 
     public function getMediaPath(): string
     {
@@ -55,9 +56,14 @@ class Statement extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function user(): BelongsTo
+    public function applicant(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'applicant_id');
+    }
+
+    public function performer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'performer_id');
     }
 
     public function store(): BelongsTo
