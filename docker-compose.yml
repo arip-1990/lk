@@ -110,6 +110,20 @@ services:
       - "8000:8000"
     command: centrifugo --admin --health
 
+  bot:
+    build:
+      context: bot
+      dockerfile: docker/Dockerfile
+    environment:
+      APP_NAME: Личный кабинет 120на80
+      APP_ENV: local
+      REDIS_HOST: redis
+    volumes:
+      - ./bot:/app
+
+  redis:
+    image: redis:7.0-alpine
+
 volumes:
   db-data:
   uploads:

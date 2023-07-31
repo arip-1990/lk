@@ -1,0 +1,5 @@
+redis
+ujson
+uvloop
+aiogram
+aiohttp[speedups]
