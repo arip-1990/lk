@@ -53,6 +53,16 @@ export const statementApi = createApi({
       }),
       invalidatesTags: ["IStatement"],
     }),
+
+    addPerformer: builder.mutation<void, string>( {
+      query: (id:string) => ({
+        url: `/operation-department/statement/${id}`,
+        method: "post",
+        id
+      }),
+      invalidatesTags: ["IStatement"],
+    })
+
   }),
 });
 
@@ -61,4 +71,5 @@ export const {
   useAddStatementMutation,
   useUpdateStatementMutation,
   useDeleteStatementMutation,
+  useAddPerformerMutation,
 } = statementApi;

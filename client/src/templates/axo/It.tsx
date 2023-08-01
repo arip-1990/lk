@@ -1,10 +1,6 @@
 import { FC, useState } from "react";
 import { Row, Col, Space, Modal, Form, Input, DatePicker, Switch } from "antd";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  PaperClipOutlined,
-} from "@ant-design/icons";
+import {PaperClipOutlined} from "@ant-design/icons";
 import moment from "moment";
 
 import { useAuth } from "../../hooks/useAuth";
@@ -96,23 +92,31 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
       ),
     },
     {
-      title: "",
-      width: 80,
-      align: "center" as "center",
-      dataIndex: "operation",
-      render: (_: any, record: IStatement) => (
-        <Space>
-          <EditOutlined
-            style={{ color: "#2b74b7" }}
-            onClick={() => handleEdit(record)}
-          />
-          <DeleteOutlined
-            style={{ color: "#dc4234" }}
-            onClick={() => onDelete(record.id)}
-          />
-        </Space>
-      ),
-    },
+      title: "Исполнитель",
+      dataIndex: "performer",
+      align: "center",
+      render: (text: string | undefined) => <p>{text}</p>
+    }
+
+    // {
+    //   title: "",
+    //   width: 80,
+    //   align: "center" as "center",
+    //   dataIndex: "operation",
+    //   render: (_: any, record: IStatement) => {
+    //     return(
+    //     <Space>
+    //       <EditOutlined
+    //         style={{ color: "#2b74b7" }}
+    //         onClick={() => handleEdit(record)}
+    //       />
+    //       <DeleteOutlined
+    //         style={{ color: "#dc4234" }}
+    //         onClick={() => onDelete(record.id)}
+    //       />
+    //     </Space>
+    //   )},
+    // },
   ];
 
   const handleChangePagination = (currentPage: number, pageSize: number) => {
@@ -146,7 +150,7 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
 
       onEdit(values.id, formData);
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     } finally {
       resetData();
     }
@@ -164,6 +168,8 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
           total: data?.meta.total || 0,
           onChange: handleChangePagination,
         }}
+        onDelete={onDelete}
+        handleEdit={handleEdit}
       />
 
       <Modal

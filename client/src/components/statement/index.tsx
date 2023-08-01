@@ -1,7 +1,16 @@
-import { FC } from "react";
-import { Table, TablePaginationConfig } from "antd";
+import {FC, useState} from "react";
+import {Form, Table, TablePaginationConfig} from "antd";
 
 import { IStatement } from "../../models/IStatement";
+
+import {Menu, Item, Separator, useContextMenu, ItemParams} from 'react-contexify';
+import moment from "moment/moment";
+import {
+    DeleteOutlined,
+    EditOutlined,
+} from "@ant-design/icons";
+import {useAddPerformerMutation} from "../../services/StatementService";
+import {useAuth} from "../../hooks/useAuth";
 
 interface IProps {
   columns: any[];
@@ -13,10 +22,35 @@ interface IProps {
     total: number;
     onChange: (currentPage: number, pageSize: number) => void;
   };
+  onDelete: (id:string)=> void;
+  handleEdit: (data:IStatement) => void;
 }
 
-const Statement: FC<IProps> = ({ columns, data, loading, pagination }) => {
-  const handleChange = (pag: TablePaginationConfig) => {
+
+const MENU_ID = 'context-menu';
+
+interface IFormEditData {
+    id?: string;
+    comment?: string;
+    doneAt?: moment.Moment;
+    status?: boolean;
+}
+
+const Statement: FC<IProps> = ({
+           columns,
+           data,
+           loading,
+           pagination,
+           onDelete,
+           handleEdit,
+    }) => {
+    const { user } = useAuth();
+
+    const [performer] = useAddPerformerMutation()
+
+    const [form] = Form.useForm<IFormEditData>();
+
+    const handleChange = (pag: TablePaginationConfig) => {
     pagination &&
       pagination.onChange(
         pag.current || pagination.currentPage,
@@ -24,7 +58,40 @@ const Statement: FC<IProps> = ({ columns, data, loading, pagination }) => {
       );
   };
 
-  return (
+
+    const { show } = useContextMenu({
+        id: MENU_ID,
+    });
+
+
+    function handleContextMenu(event:any, props:any){
+        const {key} = props
+        show({event, props: {key, props}})
+    }
+
+    const handleItemClick = async ({id, props }:ItemParams) => {
+        switch (id) {
+            case "Выполнить":
+                try {
+                    await performer(props.key).unwrap();
+                }catch (error) {
+                    console.log(error)
+                }
+                break;
+
+            case "Редактировать":
+                handleEdit(props.props)
+                break
+
+            case "Удалить":
+                onDelete(props.key)
+                break
+        }
+    }
+
+
+    return (
+    <>
     <Table
       columns={columns}
       rowClassName={(record) => (record.status ? "disable" : "")}
@@ -43,7 +110,30 @@ const Statement: FC<IProps> = ({ columns, data, loading, pagination }) => {
         }
       }
       onChange={handleChange}
+
+      onRow={(record) => ({
+          onContextMenu: (event) => handleContextMenu(event, record),
+      })}
     />
+        <Menu id={MENU_ID}>
+
+            {user?.role.name === 'admin' ? <Item id="Выполнить" onClick={handleItemClick}>Выполнить</Item> : null}
+
+            <Item id="Редактировать" onClick={handleItemClick}>
+                <EditOutlined/>
+                <span style={{marginLeft:'5px'}}>
+                    Редактировать
+                </span>
+            </Item>
+            <Separator />
+            <Item id="Удалить" onClick={handleItemClick}>
+                <DeleteOutlined/>
+                <span style={{marginLeft:'5px'}}>
+                    Удалить заявку
+                </span>
+            </Item>
+        </Menu>
+    </>
   );
 };
 

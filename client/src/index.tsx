@@ -11,6 +11,7 @@ import App from "./App";
 
 import "moment/locale/ru";
 
+import 'react-contexify/ReactContexify.css';
 import "antd/dist/antd.css";
 import "./sass/index.scss";
 
