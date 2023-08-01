@@ -94,7 +94,7 @@ class ExportController extends Controller
                     $sheet->setCellValue('C' . $i, $statement->store?->name ?? 'Офис');
                     $sheet->setCellValue('D' . $i, $statement->must);
                     $sheet->setCellValue('E' . $i, $statement->hasMedia() ? 'Есть' : 'Нет');
-                    $sheet->setCellValue('F' . $i, $statement->user->first_name . ' ' . $statement->user->last_name);
+                    $sheet->setCellValue('F' . $i, $statement->applicant->first_name . ' ' . $statement->applicant->last_name);
                     $sheet->setCellValue('G' . $i, $statement->comment);
 
                     if ($category->id === 87) {

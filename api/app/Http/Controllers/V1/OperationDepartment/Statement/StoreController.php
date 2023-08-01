@@ -24,7 +24,7 @@ class StoreController extends Controller
                 'id' => Uuid::uuid4()->toString(),
                 'must' => $request->get('must'),
                 'category_id' => $category->id,
-                'user_id' => $request->user()?->id,
+                'applicant_id' => $request->user()?->id,
                 'store_id' => $request->get('store')
             ]);
 
