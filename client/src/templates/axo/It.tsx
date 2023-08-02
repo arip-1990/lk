@@ -33,6 +33,7 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
     pagination,
   });
 
+
   const columns = [
     {
       title: "№",

@@ -1,5 +1,5 @@
-import {FC, useState} from "react";
-import {Form, Table, TablePaginationConfig} from "antd";
+import React, {FC} from "react";
+import {Table, TablePaginationConfig} from "antd";
 
 import { IStatement } from "../../models/IStatement";
 
@@ -9,10 +9,13 @@ import {
     CheckOutlined,
     DeleteOutlined,
     EditOutlined,
+    ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import {useAddPerformerMutation} from "../../services/StatementService";
 import {useAuth} from "../../hooks/useAuth";
 import style from "./Statement.module.scss"
+import { message } from 'antd';
+
 interface IProps {
   columns: any[];
   data: IStatement[];
@@ -49,7 +52,6 @@ const Statement: FC<IProps> = ({
 
     const [performer] = useAddPerformerMutation()
 
-    // const [form] = Form.useForm<IFormEditData>();
 
     const handleChange = (pag: TablePaginationConfig) => {
     pagination &&
@@ -58,7 +60,6 @@ const Statement: FC<IProps> = ({
         pag.pageSize || pagination.pageSize
       );
   };
-
 
     const { show } = useContextMenu({
         id: MENU_ID,
@@ -70,22 +71,50 @@ const Statement: FC<IProps> = ({
         show({event, props: {key, props}})
     }
 
+
     const handleItemClick = async ({id, props }:ItemParams) => {
         switch (id) {
             case "Выполнить":
                 try {
-                    await performer(props.key).unwrap();
+                    await performer(props?.key).unwrap();
                 }catch (error) {
                     console.log(error)
                 }
                 break;
 
             case "Редактировать":
-                handleEdit(props.props)
+                try {
+                    if (user?.id === props.props.performer.id) {
+                        handleEdit(props?.props)
+                    } else {
+                        message.success({
+                            content: 'Вы не можете редактировать данную заявку !',
+                            icon: <ExclamationCircleOutlined style={{  fontSize: '24px', color: 'red' }} />,
+                            type: "error",
+                            duration: 2,
+                            style: {
+                                fontSize: '18px',
+                            },
+                        });
+                    }
+                    break
+                }
+
+            catch (error) {
+                message.success({
+                    content: 'Для редактирования заявки необходимо ее принять !',
+                    icon: <ExclamationCircleOutlined style={{  fontSize: '24px', color: 'red' }} />,
+                    type: "error",
+                    duration: 2,
+                    style: {
+                        fontSize: '18px',
+                    },
+                });
                 break
+            }
 
             case "Удалить":
-                onDelete(props.key)
+                onDelete(props?.key)
                 break
         }
     }
@@ -122,7 +151,7 @@ const Statement: FC<IProps> = ({
                 <Item id="Выполнить" onClick={handleItemClick}>
                 <span  className={style.item}>
                     <CheckOutlined style={{marginRight:5}}/>
-                    Выполнить
+                    Принять заявку
                 </span>
             </Item> : null}
 
