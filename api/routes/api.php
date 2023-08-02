@@ -78,6 +78,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('/{category}', [V1\OperationDepartment\Statement\IndexController::class, 'handle']);
                 Route::post('/{category}', [V1\OperationDepartment\Statement\StoreController::class, 'handle']);
                 Route::post('/{statement}/update', [V1\OperationDepartment\Statement\UpdateController::class, 'handle']);
+                Route::post('/{statement}/add-performer', V1\OperationDepartment\Statement\AddPerformerController::class);
                 Route::delete('/{statement}', [V1\OperationDepartment\Statement\DeleteController::class, 'handle']);
             });
 
