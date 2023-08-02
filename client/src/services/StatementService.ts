@@ -55,10 +55,9 @@ export const statementApi = createApi({
     }),
 
     addPerformer: builder.mutation<void, string>( {
-      query: (id:string) => ({
-        url: `/operation-department/statement/${id}`,
-        method: "post",
-        id
+      query: (id) => ({
+        url: `/operation-department/statement/${id}/add-performer`,
+        method: "post"
       }),
       invalidatesTags: ["IStatement"],
     })

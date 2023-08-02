@@ -11,6 +11,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { IStatement } from "../../models/IStatement";
 import { useFetchStatementsQuery } from "../../services/StatementService";
 import { Statement } from "../../components";
+import {IUser} from "../../models/IUser";
 
 interface IProps {
   id: number;
@@ -79,7 +80,7 @@ const Support: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
       title: "Заявитель",
       dataIndex: "applicant",
       align: "center" as "center",
-      render: (user: { id: string; name: string }) => <p>{user.name}</p>,
+      render: (user: IUser) => <p>{user && (user.firstName + (user.lastName && ` ${user.lastName.charAt(0)}.`))}</p>,
     },
     {
       title: "Комментарий",
@@ -96,22 +97,13 @@ const Support: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
       ),
     },
     {
-      title: "",
-      width: 80,
-      align: "center" as "center",
-      dataIndex: "operation",
-      render: (_: any, record: IStatement) => (
-        <Space>
-          <EditOutlined
-            style={{ color: "#2b74b7" }}
-            onClick={() => handleEdit(record)}
-          />
-          <DeleteOutlined
-            style={{ color: "#dc4234" }}
-            onClick={() => onDelete(record.id)}
-          />
-        </Space>
-      ),
+      title:"Исполнитель",
+      dataIndex: "performer",
+      align: "center",
+      render: (user: IUser | undefined) =>
+          <p>
+            {user && (user.firstName + (user.lastName && ` ${user.lastName.charAt(0)}.`))}
+          </p>
     },
   ];
 
@@ -164,6 +156,8 @@ const Support: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
           total: data?.meta.total || 0,
           onChange: handleChangePagination,
         }}
+        onDelete={onDelete}
+        handleEdit={handleEdit}
       />
 
       <Modal

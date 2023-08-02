@@ -6,12 +6,13 @@ import { IStatement } from "../../models/IStatement";
 import {Menu, Item, Separator, useContextMenu, ItemParams} from 'react-contexify';
 import moment from "moment/moment";
 import {
+    CheckOutlined,
     DeleteOutlined,
     EditOutlined,
 } from "@ant-design/icons";
 import {useAddPerformerMutation} from "../../services/StatementService";
 import {useAuth} from "../../hooks/useAuth";
-
+import style from "./Statement.module.scss"
 interface IProps {
   columns: any[];
   data: IStatement[];
@@ -48,7 +49,7 @@ const Statement: FC<IProps> = ({
 
     const [performer] = useAddPerformerMutation()
 
-    const [form] = Form.useForm<IFormEditData>();
+    // const [form] = Form.useForm<IFormEditData>();
 
     const handleChange = (pag: TablePaginationConfig) => {
     pagination &&
@@ -117,18 +118,26 @@ const Statement: FC<IProps> = ({
     />
         <Menu id={MENU_ID}>
 
-            {user?.role.name === 'admin' ? <Item id="Выполнить" onClick={handleItemClick}>Выполнить</Item> : null}
+            {user?.role.name === 'admin' ?
+                <Item id="Выполнить" onClick={handleItemClick}>
+                <span  className={style.item}>
+                    <CheckOutlined style={{marginRight:5}}/>
+                    Выполнить
+                </span>
+            </Item> : null}
 
             <Item id="Редактировать" onClick={handleItemClick}>
-                <EditOutlined/>
-                <span style={{marginLeft:'5px'}}>
+
+                <span className={style.item}>
+                    <EditOutlined style={{marginRight:5}}/>
                     Редактировать
                 </span>
             </Item>
+
             <Separator />
             <Item id="Удалить" onClick={handleItemClick}>
-                <DeleteOutlined/>
-                <span style={{marginLeft:'5px'}}>
+                <span style={{color:'#dc4234'}}>
+                    <DeleteOutlined style={{marginRight:5}}/>
                     Удалить заявку
                 </span>
             </Item>
