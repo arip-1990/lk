@@ -159,7 +159,7 @@ const Statement: FC<IProps> = ({
 
                 <span className={style.item}>
                     <EditOutlined style={{marginRight:5}}/>
-                    Редактировать
+                    Завершить заявку
                 </span>
             </Item>
 
