@@ -30,9 +30,11 @@ class ExportController extends Controller
         if ($category->id === 87) {
             $sheet->setCellValue('H1', 'Вложение склада');
             $sheet->setCellValue('I1', 'Дата исполнения');
+            $sheet->setCellValue('J1', 'Исполнитель');
         }
         else {
             $sheet->setCellValue('H1', 'Дата исполнения');
+            $sheet->setCellValue('I1', 'Исполнитель');
         }
 
         $sheet->getStyle('A1')->applyFromArray([
@@ -67,8 +69,12 @@ class ExportController extends Controller
             'font' => ['bold' => true],
             'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'wrapText' => true]
         ]);
+        $sheet->getStyle('I1')->applyFromArray([
+            'font' => ['bold' => true],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'wrapText' => true]
+        ]);
         if ($category->id === 87) {
-            $sheet->getStyle('I1')->applyFromArray([
+            $sheet->getStyle('J1')->applyFromArray([
                 'font' => ['bold' => true],
                 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'wrapText' => true]
             ]);
@@ -82,11 +88,12 @@ class ExportController extends Controller
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setWidth(96);
         $sheet->getColumnDimension('H')->setAutoSize(true);
-        if ($category->id === 87) $sheet->getColumnDimension('I')->setAutoSize(true);
+        $sheet->getColumnDimension('I')->setAutoSize(true);
+        if ($category->id === 87) $sheet->getColumnDimension('J')->setAutoSize(true);
 
         $i = 2;
-        Statement::where('category_id', $category->id)->orderBy('status')
-            ->orderBy('created_at')->chunk(1000, function ($statements) use (&$i, $sheet, $category) {
+        Statement::where('category_id', $category->id)->whereBetween('created_at', [Carbon::now()->subYear()->startOfYear(), Carbon::now()->subYear()->endOfYear()])
+            ->orderBy('status')->orderBy('created_at')->chunk(1000, function ($statements) use (&$i, $sheet, $category) {
                 /** @var Statement $statement */
                 foreach ($statements as $statement) {
                     $sheet->setCellValue('A' . $i, $i - 1);
@@ -100,9 +107,11 @@ class ExportController extends Controller
                     if ($category->id === 87) {
                         $sheet->setCellValue('H' . $i, $statement->hasMedia(true) ? 'Есть' : 'Нет');
                         $sheet->setCellValue('I' . $i, $statement->done_at?->format('d-m-Y H:i') ?? '');
+                        $sheet->setCellValue('J' . $i, $statement->performer?->first_name . ' ' . $statement->performer?->last_name);
                     }
                     else {
                         $sheet->setCellValue('H' . $i, $statement->done_at?->format('d-m-Y H:i') ?? '');
+                        $sheet->setCellValue('I' . $i, $statement->performer?->first_name . ' ' . $statement->performer?->last_name);
                     }
 
                     if ($statement->hasMedia())
