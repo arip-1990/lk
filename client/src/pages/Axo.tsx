@@ -1,6 +1,6 @@
 import { FC, useState, MouseEvent } from "react";
 import { useParams } from "react-router-dom";
-import { Card, Button, Modal, Form, Select, Input, Upload, Space } from "antd";
+import {Card, Button, Modal, Form, Select, Input, Upload, Space, RadioChangeEvent} from "antd";
 import {
   PlusOutlined,
   UploadOutlined,
@@ -21,12 +21,25 @@ import Support from "../templates/axo/Support";
 import Exploitation from "../templates/axo/Exploitation";
 import Rejection from "../templates/axo/Rejection";
 
+
+//
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { DatePicker } from 'antd';
+import {Moment} from "moment";
+dayjs.extend(customParseFormat);
+const monthFormat = 'YYYY';
+//
+
+
 const Axo: FC = () => {
   const { id } = useParams();
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { data: stores } = useFetchStoresQuery();
   const [addStatement, { isLoading: addLoading }] = useAddStatementMutation();
+  const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
+
   const [
     updateStatement,
     { isLoading: updateLoading },
@@ -74,7 +87,7 @@ const Axo: FC = () => {
 
   const handleExport = (e: MouseEvent) => {
     e.preventDefault();
-    window.location.href = `${API_URL}/export/statement/${id}`;
+    // window.location.href = `${API_URL}/export/statement/${id}`;
   };
 
   const getTitle = (id: string) => {
@@ -144,11 +157,36 @@ const Axo: FC = () => {
     }
   };
 
+  //
+  const disabledDate = (current: Moment | null) => {
+    const restrictedYear = 2024;
+    const currentYear = current.year();
+    return currentYear >= restrictedYear;
+  };
+
+  const handleDateChange = (date: Moment | null, dateString: string) => {
+    setSelectedDate(date);
+  };
+  //
+  console.log(selectedDate)
+
   return (
     <Card
       title={id && getTitle(id)}
       extra={
+
         <Space>
+          <Space direction="vertical" size={12}>
+            <DatePicker
+                value={selectedDate}
+                // defaultValue={dayjs('2020', monthFormat)}
+                format={monthFormat}
+                picker="year"
+                disabledDate = {disabledDate}
+                // onChange={(e)=>{console.log(e.$d)}}
+                onChange={handleDateChange}
+            />
+          </Space>
           {user?.role.name !== "worker" ? (
             <Button
               type="link"

@@ -146,7 +146,6 @@ const Statement: FC<IProps> = ({
       })}
     />
         <Menu id={MENU_ID}>
-
             {user?.role.name === 'admin' ?
                 <Item id="Выполнить" onClick={handleItemClick}>
                 <span  className={style.item}>
