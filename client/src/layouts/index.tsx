@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { Outlet } from "react-router-dom";
-import { Row, Col } from "antd";
+import {Row, Col, Card} from "antd";
 
 import { Header, Footer } from "../templates";
 import { Calendar, Clock, Breadcrumb } from "../components";
-
 const Layout: FC = () => {
-  return (
+
+    return (
     <section className="layout">
       <Header />
       <aside className="layout-left-sider">

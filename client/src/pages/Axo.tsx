@@ -1,4 +1,4 @@
-import { FC, useState, MouseEvent } from "react";
+import React, { FC, useState, MouseEvent } from "react";
 import { useParams } from "react-router-dom";
 import {Card, Button, Modal, Form, Select, Input, Upload, Space, RadioChangeEvent} from "antd";
 import {
@@ -20,22 +20,20 @@ import Stock from "../templates/axo/Stock";
 import Support from "../templates/axo/Support";
 import Exploitation from "../templates/axo/Exploitation";
 import Rejection from "../templates/axo/Rejection";
-
-
-//
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { DatePicker } from 'antd';
 import {Moment} from "moment";
 dayjs.extend(customParseFormat);
 const monthFormat = 'YYYY';
-//
+
 
 
 const Axo: FC = () => {
   const { id } = useParams();
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [exportModal, setExportModal] = useState<boolean>(false);
   const { data: stores } = useFetchStoresQuery();
   const [addStatement, { isLoading: addLoading }] = useAddStatementMutation();
   const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
@@ -76,8 +74,9 @@ const Axo: FC = () => {
   };
 
   const onCancel = () => {
-    setModalVisible(false);
-    form.resetFields();
+    setExportModal(false);
+    setModalVisible(false)
+    // form.resetFields();
   };
 
   const normFile = (e: any) => {
@@ -86,8 +85,16 @@ const Axo: FC = () => {
   };
 
   const handleExport = (e: MouseEvent) => {
-    e.preventDefault();
-    // window.location.href = `${API_URL}/export/statement/${id}`;
+    // e.preventDefault();
+    // console.log(selectedDate?.year())
+    const date = selectedDate?.year();
+    if  (date){
+      // window.location.href = `${API_URL}/export/statement/${id}`;
+      console.log(date)
+    }else{
+      window.location.href = `${API_URL}/export/statement/${id}`;
+    }
+
   };
 
   const getTitle = (id: string) => {
@@ -168,7 +175,6 @@ const Axo: FC = () => {
     setSelectedDate(date);
   };
   //
-  console.log(selectedDate)
 
   return (
     <Card
@@ -176,24 +182,16 @@ const Axo: FC = () => {
       extra={
 
         <Space>
-          <Space direction="vertical" size={12}>
-            <DatePicker
-                value={selectedDate}
-                // defaultValue={dayjs('2020', monthFormat)}
-                format={monthFormat}
-                picker="year"
-                disabledDate = {disabledDate}
-                // onChange={(e)=>{console.log(e.$d)}}
-                onChange={handleDateChange}
-            />
-          </Space>
+
           {user?.role.name !== "worker" ? (
             <Button
               type="link"
               style={{ color: "#22aca6" }}
               icon={<FileExcelOutlined />}
-              onClick={handleExport}
+              // onClick={handleExport}
+              onClick={() => setExportModal(true)}
             />
+
           ) : null}
           <Button
             type="primary"
@@ -204,6 +202,39 @@ const Axo: FC = () => {
       }
     >
       {id && getTemplate(id)}
+
+      <Modal
+          title={"Экпорт заявок"}
+          open={exportModal}
+          okText="Сохранить"
+          cancelText="Отмена"
+          okButtonProps={{
+            htmlType: "submit",
+            form: "axoForm",
+            loading: addLoading,
+          }}
+          onCancel={onCancel}
+      >
+
+        <Form
+            form={form}
+            id="axoForm"
+            layout="vertical"
+            autoComplete="off"
+            onFinish={handleExport}
+        >
+          <Form.Item name='data' label='Выбeрите за какой год необходимо сделать экспорт заявок'>
+            <DatePicker
+                value={selectedDate}
+                format={monthFormat}
+                picker="year"
+                disabledDate = {disabledDate}
+                onChange={handleDateChange}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
+
 
       <Modal
         title={"Новая заявка"}
@@ -258,6 +289,7 @@ const Axo: FC = () => {
           </Form.Item>
         </Form>
       </Modal>
+
     </Card>
   );
 };
