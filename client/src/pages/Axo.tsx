@@ -27,7 +27,11 @@ import {Moment} from "moment";
 dayjs.extend(customParseFormat);
 const monthFormat = 'YYYY';
 
+import { Drawer, Radio } from 'antd';
+import type { DrawerProps } from 'antd/es/drawer';
 
+import { Checkbox, Col, Row } from 'antd';
+import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 
 const Axo: FC = () => {
   const { id } = useParams();
@@ -37,7 +41,10 @@ const Axo: FC = () => {
   const { data: stores } = useFetchStoresQuery();
   const [addStatement, { isLoading: addLoading }] = useAddStatementMutation();
   const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
-
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState<DrawerProps['placement']>('right');
+  const [radio, setRadio] = useState("all")
+  const [checkBox, setCheckBox] = useState<CheckboxValueType[]>([])
   const [
     updateStatement,
     { isLoading: updateLoading },
@@ -164,7 +171,7 @@ const Axo: FC = () => {
     }
   };
 
-  //
+  // export
   const disabledDate = (current: Moment | null) => {
     const restrictedYear = 2024;
     const currentYear = current.year();
@@ -174,7 +181,33 @@ const Axo: FC = () => {
   const handleDateChange = (date: Moment | null, dateString: string) => {
     setSelectedDate(date);
   };
-  //
+  // end export
+
+  // sorted
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onChange = () => {
+    setPlacement('right');
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  const radioChecked = (event:RadioChangeEvent) => {
+    setRadio(event.target.value)
+  }
+
+  const checkbox = (checkedValues: CheckboxValueType[]) => {
+    setCheckBox(checkedValues)
+  };
+  // end sorted
+  console.log(radio)
+  console.log(checkBox)
+
+
 
   return (
     <Card
@@ -182,7 +215,9 @@ const Axo: FC = () => {
       extra={
 
         <Space>
-
+          <Button type="primary" onClick={showDrawer}>
+            Сортировка
+          </Button>
           {user?.role.name !== "worker" ? (
             <Button
               type="link"
@@ -201,6 +236,61 @@ const Axo: FC = () => {
         </Space>
       }
     >
+
+      <Drawer
+          title="Сортировка заявок"
+          placement={placement}
+          width={500}
+          onClose={onClose}
+          open={open}
+          extra={
+            <Space>
+              <Button onClick={onClose}>Cancel</Button>
+              <Button type="primary" onClick={onClose}>
+                OK
+              </Button>
+            </Space>
+          }
+      >
+        <>
+          <Radio.Group defaultValue="a" buttonStyle="solid">
+            <Radio.Button
+                value="all"
+                onChange={(e) => radioChecked(e)}
+            >
+              Все
+            </Radio.Button>
+            <Radio.Button
+                value="active"
+                onChange={(e) => radioChecked(e)}
+            >
+              Активные
+            </Radio.Button>
+            <Radio.Button
+                value="NotActive"
+                onChange={(e) => radioChecked(e)}
+            >
+              Завершенные
+            </Radio.Button>
+          </Radio.Group>
+        </>
+
+        <Checkbox.Group style={{ width: '100%', marginTop:25}} onChange={(e) => checkbox(e)}>
+          <Row>
+            <Col span={8}>
+              <Checkbox value="Data">Дата</Checkbox>
+            </Col>
+            <Col span={8}>
+              <Checkbox value="address">Адрес аптеки</Checkbox>
+            </Col>
+            <Col span={8}>
+              <Checkbox value="placeholder">Исполнитель</Checkbox>
+            </Col>
+          </Row>
+        </Checkbox.Group>
+
+      </Drawer>
+
       {id && getTemplate(id)}
 
       <Modal
