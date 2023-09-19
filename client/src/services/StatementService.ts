@@ -10,13 +10,18 @@ export const statementApi = createApi({
   endpoints: (builder) => ({
     fetchStatements: builder.query<
       Pagination<IStatement>,
-      { categoryId: number; pagination: { current: number; pageSize: number } }
+      { categoryId: number; pagination: {current: number; pageSize: number},
+        filter?: {applications: string; data?: moment.Moment; address?: string; performer?: string}}
     >({
-      query: ({categoryId, pagination}) => ({
+      query: ({categoryId, pagination, filter}) => ({
         url: `/operation-department/statement/${categoryId}`,
         params: {
           page: pagination.current,
           pageSize: pagination.pageSize,
+          // filterAll: filter.applications,
+          // filterPerformer: filter.data,
+          // filterAddress: filter.address,
+          // filterData: filter.performer
         },
       }),
       transformResponse: (response: Pagination<IStatement>) => ({
