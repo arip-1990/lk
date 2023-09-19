@@ -122,7 +122,6 @@ const Statement: FC<IProps> = ({
 
     return (
     <>
-        <h1>Сортировка</h1>
     <Table
       columns={columns}
       rowClassName={(record) => (record.status ? "disable" : "")}
