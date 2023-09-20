@@ -28,11 +28,17 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
   const [form] = Form.useForm<IFormEditData>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
+  const [filter, setFilter] = useState({applications:'', data:'', address:'', performer:''});
   const { data, isLoading } = useFetchStatementsQuery({
     categoryId: id,
     pagination,
+    // filter
   });
 
+  const FilterFunctionTest = (applications:string, data:string, address:string, performer:string) => {
+    setFilter({applications:applications, data:data, address:address, performer:performer});
+  }
+  console.log(filter)
 
   const columns = [
     {
@@ -152,6 +158,7 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
         }}
         onDelete={onDelete}
         handleEdit={handleEdit}
+        FilterFunctionTest={FilterFunctionTest}
       />
 
       <Modal
