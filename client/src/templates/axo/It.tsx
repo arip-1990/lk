@@ -32,7 +32,7 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
   const { data, isLoading } = useFetchStatementsQuery({
     categoryId: id,
     pagination,
-    // filter
+    filter
   });
 
 

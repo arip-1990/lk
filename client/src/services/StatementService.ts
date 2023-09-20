@@ -11,7 +11,7 @@ export const statementApi = createApi({
     fetchStatements: builder.query<
       Pagination<IStatement>,
       { categoryId: number; pagination: {current: number; pageSize: number},
-        filter?: {applications: string; data?: moment.Moment[]; address?: string; performer?: string}}
+        filter?: {applications: string; data?: any; address?: string; performer?: string}}
     >({
       query: ({categoryId, pagination, filter}) => ({
         url: `/operation-department/statement/${categoryId}`,
