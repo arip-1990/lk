@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1\OperationDepartment\Statement;
 use App\Models\Category;
 use App\Models\Statement;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -15,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExportController extends Controller
 {
-    public function __invoke(Category $category): Response
+    public function __invoke(Category $category, Request $request): Response
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -92,7 +93,8 @@ class ExportController extends Controller
         if ($category->id === 87) $sheet->getColumnDimension('J')->setAutoSize(true);
 
         $i = 2;
-        Statement::where('category_id', $category->id)->whereBetween('created_at', [Carbon::now()->subYear()->startOfYear(), Carbon::now()->subYear()->endOfYear()])
+        $date = Carbon::now()->setYear((int)$request->get('year', Carbon::now()->year));
+        Statement::where('category_id', $category->id)->whereBetween('created_at', [$date->startOfYear(), $date->endOfYear()])
             ->orderBy('status')->orderBy('created_at')->chunk(1000, function ($statements) use (&$i, $sheet, $category) {
                 /** @var Statement $statement */
                 foreach ($statements as $statement) {
