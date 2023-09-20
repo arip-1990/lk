@@ -138,20 +138,8 @@ const Statement: FC<IProps> = ({
         }
     }
 
-    // new global
-        const [applications1, setApplications1] = useState('all');
-        const [data1, setData1] = useState('');
-        const [address1, setAddress1] = useState('');
-        const [performer1, setPerformer1] = useState('');
-    // end newGlobal
-
-    //new global props
-    //     useEffect(() => {
-    //         FilterFunctionTest(applications1, data1, address1, performer1);
-    //     }, [applications1, data1, address1, performer1]);
 
 
-    // end new global props
 
     // global
     const [open, setOpen] = useState(false);
@@ -205,12 +193,10 @@ const Statement: FC<IProps> = ({
     const [valueName, setValue] = useState<string>('');
     const [addressName, setAddressName] = useState<string>('');
     const onSelectName = (newValue: string) => {
-        // console.log(newValue);
         setValue(newValue);
     };
 
     const onSelectAddress = (newValue: string) => {
-        // console.log(newValue);
         setAddressName(newValue);
     };
 
@@ -219,57 +205,7 @@ const Statement: FC<IProps> = ({
             setSelectData(dates)
         }
     }
-    // console.log(selectData)
 
-    // useEffect(() => {
-    //     setDat(data)
-    //     switch (radio) {
-    //
-    //         case 'all':
-    //             if (checkBox.includes('performer')){
-    //                 setDat(data.filter(e => e.performer?.firstName == valueName))
-    //             }else if (checkBox.includes('address')) {
-    //                 setDat(data.filter(e => e.store?.name == addressName))
-    //             }else if (checkBox.includes('Data')) {
-    //                 setDat(data.filter(e => selectData?.length === 2 &&
-    //                     e.createdAt.isSameOrAfter(selectData[0]) &&
-    //                     e.createdAt.isSameOrBefore(selectData[1])))
-    //             }else{
-    //                 setDat(data)
-    //             }
-    //             break
-    //
-    //         case 'active':
-    //             if (checkBox.includes('performer')){
-    //                 setDat(data.filter(e => e.status == false && e.performer?.firstName == valueName))
-    //                 // console.log(dat, 'ddddd')
-    //             }else if (checkBox.includes('address')) {
-    //                 setDat(data.filter(e => e.status == false && e.store?.name == addressName))
-    //             }else if (checkBox.includes('Data')) {
-    //                 setDat(data.filter(e => selectData?.length === 2 &&
-    //                     e.createdAt.isSameOrAfter(selectData[0]) &&
-    //                     e.createdAt.isSameOrBefore(selectData[1]) && e.status == false))
-    //             }else{
-    //                 setDat(data.filter(e => e.status == false))
-    //             }
-    //             break
-    //
-    //         case 'NotActive':
-    //             if (checkBox.includes('performer')){
-    //                 setDat(data.filter(e => e.status == true && e.performer?.firstName == valueName))
-    //
-    //             }else if (checkBox.includes('address')) {
-    //                 setDat(data.filter(e => e.status == true && e.store?.name == addressName))
-    //             }else if (checkBox.includes('Data')) {
-    //                 setDat(data.filter(e => selectData?.length === 2 &&
-    //                     e.createdAt.isSameOrAfter(selectData[0]) &&
-    //                     e.createdAt.isSameOrBefore(selectData[1]) && e.status == true))
-    //             }else{
-    //                 setDat(data.filter(e => e.status == true))
-    //             }
-    //             break
-    //     }
-    // }, [data]);
 
     const showDrawer = () => {
         setOpen(true);
@@ -294,66 +230,7 @@ const Statement: FC<IProps> = ({
     const checkActiveNotActive  = () => {
         FilterFunctionTest(radio, selectData, addressName, valueName);
         setOpen(false);
-        // switch (value) {
-        //
-        //     case 'all':
-        //         setApplications1('all');
-        //
-        //         if (checkBox.includes('performer')){
-        //             setDat(data.filter(e => e.performer?.firstName == valueName))
-        //         }else if (checkBox.includes('address')) {
-        //             setDat(data.filter(e => e.store?.name == addressName))
-        //         }else if (checkBox.includes('Data')) {
-        //             setDat(data.filter(e => selectData?.length === 2 &&
-        //                 e.createdAt.isSameOrAfter(selectData[0]) &&
-        //                 e.createdAt.isSameOrBefore(selectData[1])))
-        //         }else{
-        //             setDat(data)
-        //         }
-        //
-        //         break
-        //
-        //     case 'active':
-        //         setApplications1('active');
-        //
-        //         if (checkBox.includes('performer')){
-        //             setDat(data.filter(e => e.status == false && e.performer?.firstName == valueName))
-        //             // console.log(dat, valueName)
-        //         }else if (checkBox.includes('address')) {
-        //             setDat(data.filter(e => e.status == false && e.store?.name == addressName))
-        //         }else if (checkBox.includes('Data')) {
-        //             setDat(data.filter(e => selectData?.length === 2 &&
-        //                 e.createdAt.isSameOrAfter(selectData[0]) &&
-        //                 e.createdAt.isSameOrBefore(selectData[1]) && e.status == false))
-        //         }else{
-        //             setDat(data.filter(e => e.status == false))
-        //         }
-        //         break
-        //
-        //     case 'NotActive':
-        //         setApplications1('notActive');
-        //
-        //         if (checkBox.includes('performer')){
-        //             setDat(data.filter(e => e.status == true && e.performer?.firstName == valueName))
-        //         }else if (checkBox.includes('address')) {
-        //             setDat(data.filter(e => e.status == true && e.store?.name == addressName))
-        //         }else if (checkBox.includes('Data')) {
-        //             setDat(data.filter(e => selectData?.length === 2 &&
-        //                 e.createdAt.isSameOrAfter(selectData[0]) &&
-        //                 e.createdAt.isSameOrBefore(selectData[1]) && e.status == true))
-        //         }else{
-        //             setDat(data.filter(e => e.status == true))
-        //         }
-        //         break
-        // }
-
     }
-
-
-    // useEffect(() => {
-    //
-    //     FilterFunctionTest(radio, data1, addressName, valueName);
-    // }, [radio, data1, addressName, valueName]);
 
 
     useEffect(() => {
