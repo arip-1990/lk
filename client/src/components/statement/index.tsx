@@ -462,7 +462,7 @@ const Statement: FC<IProps> = ({
                 rowClassName={(record) => (record.status ? "disable" : "")}
                 loading={loading}
                 bordered
-                dataSource={dat?.map((statement, index) => ({
+                dataSource={data?.map((statement, index) => ({
                     ...statement,
                     index: pagination ? pagination.currentPage * 10 - 10 + index + 1 : 0,
                     key: statement.id,

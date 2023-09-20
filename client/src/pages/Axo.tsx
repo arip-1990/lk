@@ -92,7 +92,7 @@ const Axo: FC = () => {
     // console.log(selectedDate?.year())
     const date = selectedDate?.year();
     if  (date){
-      // window.location.href = `${API_URL}/export/statement/${id}`;
+      window.location.href = `${API_URL}/export/statement/${id}/?year=${date}`;
       console.log(date)
     }else{
       window.location.href = `${API_URL}/export/statement/${id}`;
