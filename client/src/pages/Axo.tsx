@@ -97,7 +97,7 @@ const Axo: FC = () => {
     }else{
       window.location.href = `${API_URL}/export/statement/${id}`;
     }
-
+    setExportModal(false);
   };
 
   const getTitle = (id: string) => {
@@ -212,7 +212,7 @@ const Axo: FC = () => {
       <Modal
           title={"Экпорт заявок"}
           open={exportModal}
-          okText="Сохранить"
+          okText="Скачать"
           cancelText="Отмена"
           okButtonProps={{
             htmlType: "submit",
