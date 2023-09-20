@@ -160,7 +160,7 @@ const Statement: FC<IProps> = ({
     const [checkBox, setCheckBox] = useState<CheckboxValueType[]>([])
     const [dat, setDat] = useState<IStatement[]>();
     const { data: stores } = useFetchStoresQuery();
-    const [selectData, setSelectData] = useState<[moment.Moment, moment.Moment]>();
+    const [selectData, setSelectData] = useState('');
     const treeData = [
         {
             title: 'Арип',
@@ -214,12 +214,12 @@ const Statement: FC<IProps> = ({
         setAddressName(newValue);
     };
 
-    const onSelectDate = (dates: [moment.Moment, moment.Moment] | null) => {
+    const onSelectDate = (dates: any | null) => {
         if (dates) {
             setSelectData(dates)
         }
     }
-
+    // console.log(selectData)
 
     // useEffect(() => {
     //     setDat(data)
@@ -292,7 +292,7 @@ const Statement: FC<IProps> = ({
     };
 
     const checkActiveNotActive  = () => {
-        FilterFunctionTest(radio, data1, addressName, valueName);
+        FilterFunctionTest(radio, selectData, addressName, valueName);
         setOpen(false);
         // switch (value) {
         //
@@ -357,16 +357,25 @@ const Statement: FC<IProps> = ({
 
 
     useEffect(() => {
-
         const performer = true ? checkBox.includes('performer') : false;
         const address = true ? checkBox.includes('performer') : false;
-        console.log(performer, 'sssss', address)
-        // setValue(performer)
-        // setAddressName(address)
+        const data = true ? checkBox.includes('Data') : false;
+        if (performer) {
+        }else{
+            setValue('')
+        }
 
+        if (address) {
+        }else{
+            setAddressName('')
+        }
 
-
+        if (data) {
+        }else{
+            setSelectData('')
+        }
     }, [checkBox]);
+
     // end global
 
 
@@ -510,7 +519,5 @@ const Statement: FC<IProps> = ({
 };
 
 export default Statement;
-
-
 
 

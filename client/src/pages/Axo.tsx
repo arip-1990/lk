@@ -89,7 +89,6 @@ const Axo: FC = () => {
 
   const handleExport = (e: MouseEvent) => {
     // e.preventDefault();
-    // console.log(selectedDate?.year())
     const date = selectedDate?.year();
     if  (date){
       window.location.href = `${API_URL}/export/statement/${id}/?year=${date}`;

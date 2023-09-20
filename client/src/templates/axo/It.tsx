@@ -35,9 +35,8 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
     // filter
   });
 
-  // console.log(data)
 
-  const FilterFunctionTest = (applications:string, data:string, address:string, performer:string) => {
+  const FilterFunctionTest = (applications:string, data:any, address:string, performer:string) => {
     setFilter({applications:applications, data:data, address:address, performer:performer});
   }
   console.log(filter)
