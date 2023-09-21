@@ -93,8 +93,8 @@ class ExportController extends Controller
         if ($category->id === 87) $sheet->getColumnDimension('J')->setAutoSize(true);
 
         $i = 2;
-        $date = Carbon::now()->setYear((int)$request->get('year', Carbon::now()->year));
-        Statement::where('category_id', $category->id)->whereBetween('created_at', [$date->startOfYear(), $date->endOfYear()])
+        $date = $request->get('year') ? Carbon::now()->setYear((int)$request->get('year')) : Carbon::now();
+        Statement::where('category_id', $category->id)->whereBetween('created_at', [$date->startOfYear(), $date->clone()->endOfYear()])
             ->orderBy('status')->orderBy('created_at')->chunk(1000, function ($statements) use (&$i, $sheet, $category) {
                 /** @var Statement $statement */
                 foreach ($statements as $statement) {
