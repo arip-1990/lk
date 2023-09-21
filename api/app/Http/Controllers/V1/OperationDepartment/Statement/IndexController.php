@@ -15,12 +15,16 @@ class IndexController extends Controller
 {
     public function handle(Category $category, Request $request): JsonResource
     {
-        $query = Statement::where('category_id', $category->id)->where('created_at', '>', Carbon::now()->startOfYear())
-            ->orderBy('status')->orderByDesc('created_at');
-        if (Auth::user()->stores->count()) {
-            $query->whereIn('store_id', Auth::user()->stores->pluck('id'));
-        }
+        $query = Statement::where('category_id', $category->id)->where('created_at', '>', Carbon::now()->startOfYear());
 
-        return StatementResource::collection($query->paginate($request->get('pageSize', 10)));
+        if ($request->has('status')) $query->where('status', (bool)$request->get('status'));
+        if ($request->has('performer')) $query->where('performer_id', $request->get('performer'));
+
+        if ($request->has('store')) $query->where('store_id', $request->get('store'));
+        elseif (Auth::user()->stores->count()) $query->whereIn('store_id', Auth::user()->stores->pluck('id'));
+
+        return StatementResource::collection(
+            $query->orderBy('status')->orderByDesc('created_at')->paginate($request->get('pageSize', 10))
+        );
     }
 }

@@ -10,18 +10,28 @@ export const statementApi = createApi({
   endpoints: (builder) => ({
     fetchStatements: builder.query<
       Pagination<IStatement>,
-      { categoryId: number; pagination: {current: number; pageSize: number},
-        filter?: {applications: string; data?: any; address?: string; performer?: string}}
+      {
+        categoryId: number;
+        pagination: { current: number; pageSize: number };
+        filter?: {
+          applications: boolean;
+          data?: any;
+          address?: string;
+          performer?: string;
+        };
+      }
     >({
-      query: ({categoryId, pagination, filter}) => ({
+      query: ({ categoryId, pagination, filter }) => ({
         url: `/operation-department/statement/${categoryId}`,
         params: {
           page: pagination.current,
           pageSize: pagination.pageSize,
-          filterApplication: filter?.applications,
-          filterPerformer: filter?.data,
-          filterAddress: filter?.address,
-          filterData: filter?.performer
+          filter: {
+            status: filter?.applications,
+            date: filter?.data,
+            store: filter?.address,
+            performer: filter?.performer,
+          },
         },
       }),
       transformResponse: (response: Pagination<IStatement>) => ({
@@ -36,7 +46,7 @@ export const statementApi = createApi({
       providesTags: ["IStatement"],
     }),
     addStatement: builder.mutation<void, { id: string; data: FormData }>({
-      query: ({id, data}) => ({
+      query: ({ id, data }) => ({
         url: `/operation-department/statement/${id}`,
         method: "post",
         data,
@@ -44,7 +54,7 @@ export const statementApi = createApi({
       invalidatesTags: ["IStatement"],
     }),
     updateStatement: builder.mutation<void, { id: string; data: FormData }>({
-      query: ({id, data}) => ({
+      query: ({ id, data }) => ({
         url: `/operation-department/statement/${id}/update`,
         method: "post",
         data,
@@ -59,14 +69,13 @@ export const statementApi = createApi({
       invalidatesTags: ["IStatement"],
     }),
 
-    addPerformer: builder.mutation<void, string>( {
+    addPerformer: builder.mutation<void, string>({
       query: (id) => ({
         url: `/operation-department/statement/${id}/add-performer`,
-        method: "post"
+        method: "post",
       }),
       invalidatesTags: ["IStatement"],
-    })
-
+    }),
   }),
 });
 
