@@ -1,6 +1,6 @@
-import React, { FC, useState, MouseEvent } from "react";
+import { FC, useState, MouseEvent } from "react";
 import { useParams } from "react-router-dom";
-import {Card, Button, Modal, Form, Select, Input, Upload, Space, RadioChangeEvent} from "antd";
+import { Card, Button, Modal, Form, Select, Input, Upload, Space } from "antd";
 import {
   PlusOutlined,
   UploadOutlined,
@@ -20,18 +20,13 @@ import Stock from "../templates/axo/Stock";
 import Support from "../templates/axo/Support";
 import Exploitation from "../templates/axo/Exploitation";
 import Rejection from "../templates/axo/Rejection";
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { DatePicker } from 'antd';
-import {Moment} from "moment";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { DatePicker } from "antd";
+import moment, { Moment } from "moment";
+
 dayjs.extend(customParseFormat);
-const monthFormat = 'YYYY';
-
-import { Drawer, Radio } from 'antd';
-import type { DrawerProps } from 'antd/es/drawer';
-
-import { Checkbox, Col, Row } from 'antd';
-import type { CheckboxValueType } from 'antd/es/checkbox/Group';
+const monthFormat = "YYYY";
 
 const Axo: FC = () => {
   const { id } = useParams();
@@ -78,7 +73,7 @@ const Axo: FC = () => {
 
   const onCancel = () => {
     setExportModal(false);
-    setModalVisible(false)
+    setModalVisible(false);
     // form.resetFields();
   };
 
@@ -90,10 +85,10 @@ const Axo: FC = () => {
   const handleExport = (e: MouseEvent) => {
     // e.preventDefault();
     const date = selectedDate?.year();
-    if  (date){
+    if (date) {
       window.location.href = `${API_URL}/export/statement/${id}/?year=${date}`;
-      console.log(date)
-    }else{
+      console.log(date);
+    } else {
       window.location.href = `${API_URL}/export/statement/${id}`;
     }
     setExportModal(false);
@@ -152,7 +147,7 @@ const Axo: FC = () => {
             onDelete={deleteStatement}
           />
         );
-        case "88":
+      case "88":
         return (
           <Rejection
             id={Number(id)}
@@ -166,25 +161,19 @@ const Axo: FC = () => {
     }
   };
 
-  // export
-  const disabledDate = (current: Moment | null) => {
-    const restrictedYear = 2024;
-    const currentYear = current.year();
-    return currentYear >= restrictedYear;
-  };
+  // export !! Учись новичок))
+  const disabledDate = (current: Moment | null) =>
+    !(current && current.year() <= moment().year());
 
   const handleDateChange = (date: Moment | null, dateString: string) => {
     setSelectedDate(date);
   };
   // end export
 
-
-
   return (
     <Card
       title={id && getTitle(id)}
       extra={
-
         <Space>
           {user?.role.name !== "worker" ? (
             <Button
@@ -194,7 +183,6 @@ const Axo: FC = () => {
               // onClick={handleExport}
               onClick={() => setExportModal(true)}
             />
-
           ) : null}
           <Button
             type="primary"
@@ -204,42 +192,41 @@ const Axo: FC = () => {
         </Space>
       }
     >
-
-
       {id && getTemplate(id)}
 
       <Modal
-          title={"Экпорт заявок"}
-          open={exportModal}
-          okText="Скачать"
-          cancelText="Отмена"
-          okButtonProps={{
-            htmlType: "submit",
-            form: "axoForm",
-            loading: addLoading,
-          }}
-          onCancel={onCancel}
+        title={"Экпорт заявок"}
+        open={exportModal}
+        okText="Скачать"
+        cancelText="Отмена"
+        okButtonProps={{
+          htmlType: "submit",
+          form: "axoForm",
+          loading: addLoading,
+        }}
+        onCancel={onCancel}
       >
-
         <Form
-            form={form}
-            id="axoForm"
-            layout="vertical"
-            autoComplete="off"
-            onFinish={handleExport}
+          form={form}
+          id="axoForm"
+          layout="vertical"
+          autoComplete="off"
+          onFinish={handleExport}
         >
-          <Form.Item name='data' label='Выбeрите за какой год необходимо сделать экспорт заявок'>
+          <Form.Item
+            name="data"
+            label="Выбeрите за какой год необходимо сделать экспорт заявок"
+          >
             <DatePicker
-                value={selectedDate}
-                format={monthFormat}
-                picker="year"
-                disabledDate = {disabledDate}
-                onChange={handleDateChange}
+              value={selectedDate}
+              format={monthFormat}
+              picker="year"
+              disabledDate={disabledDate}
+              onChange={handleDateChange}
             />
           </Form.Item>
         </Form>
       </Modal>
-
 
       <Modal
         title={"Новая заявка"}
@@ -294,7 +281,6 @@ const Axo: FC = () => {
           </Form.Item>
         </Form>
       </Modal>
-
     </Card>
   );
 };

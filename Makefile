@@ -1,15 +1,14 @@
-init: init-ci client-ready
-init-ci: docker-down-clear \
-	api-clear client-clear \
+init: docker-down-clear init-ci client-ready
+
+init-ci: api-clear client-clear \
 	docker-pull docker-build docker-up \
 	api-init client-init
+
 up: docker-up
 down: docker-down
 restart: down up
 
-rebuild: docker-down  api-clear client-clear \
-	docker-pull docker-build docker-up \
-	api-init client-init client-ready
+rebuild: docker-down init-ci client-ready
 
 update-deps: api-composer-update client-yarn-upgrade restart
 

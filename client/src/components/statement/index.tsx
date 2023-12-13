@@ -1,400 +1,197 @@
-import React, {FC, useEffect, useState} from "react";
+import { FC, useState } from "react";
+import { Button, Table, TablePaginationConfig, message } from "antd";
 import {
-    Button,
-    Checkbox,
-    Col,
-    Drawer,
-    Radio,
-    RadioChangeEvent,
-    Row,
-    Space,
-    Table,
-    TreeSelect,
-    TablePaginationConfig,
-    Select, Form
-} from "antd";
+  CheckOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
+import {
+  Menu,
+  Item,
+  Separator,
+  useContextMenu,
+  ItemParams,
+} from "react-contexify";
 
 import { IStatement } from "../../models/IStatement";
+import { useAddPerformerMutation } from "../../services/StatementService";
+import { useAuth } from "../../hooks/useAuth";
 
-import {Menu, Item, Separator, useContextMenu, ItemParams} from 'react-contexify';
-import moment from "moment/moment";
-import {
-    CheckOutlined,
-    DeleteOutlined,
-    EditOutlined,
-    ExclamationCircleOutlined,
-} from "@ant-design/icons";
-import {useAddPerformerMutation} from "../../services/StatementService";
-import {useAuth} from "../../hooks/useAuth";
-import style from "./Statement.module.scss"
-import { message } from 'antd';
-import {CheckboxValueType} from "antd/es/checkbox/Group";
-import {DrawerProps} from "antd/es/drawer";
-import {useFetchStoresQuery} from "../../services/StoreService";
-import { DatePicker } from 'antd';
+import Sorting from "./Sorting";
+import type { FormData } from "./Sorting";
+
+import style from "./Statement.module.scss";
 
 interface IProps {
-    columns: any[];
-    data: IStatement[];
-    loading?: boolean;
-    pagination?: {
-        currentPage: number;
-        pageSize: number;
-        total: number;
-        onChange: (currentPage: number, pageSize: number) => void;
-    };
-    onDelete: (id:string)=> void;
-    handleEdit: (data:IStatement) => void;
-    FilterFunctionTest:(applications: string, data:string, address: string, performer:string)=>void;
+  columns: any[];
+  data: IStatement[];
+  loading?: boolean;
+  pagination?: {
+    currentPage: number;
+    pageSize: number;
+    total: number;
+    onChange: (currentPage: number, pageSize: number) => void;
+  };
+  onDelete: (id: string) => void;
+  handleEdit: (data: IStatement) => void;
 }
 
-
-const MENU_ID = 'context-menu';
-
-interface IFormEditData {
-    id?: string;
-    comment?: string;
-    doneAt?: moment.Moment;
-    status?: boolean;
-}
+const MENU_ID = "context-menu";
 
 const Statement: FC<IProps> = ({
-                                   columns,
-                                   data,
-                                   loading,
-                                   pagination,
-                                   onDelete,
-                                   handleEdit,
-                                   FilterFunctionTest,
-                               }) => {
-    const { user } = useAuth();
+  columns,
+  data,
+  loading,
+  pagination,
+  onDelete,
+  handleEdit,
+}) => {
+  const { user } = useAuth();
+  const [showSorting, setShowSorting] = useState(false);
+  const [performer] = useAddPerformerMutation();
 
-    const [performer] = useAddPerformerMutation()
+  const onSorting = (values: FormData) => {
+    setShowSorting(false);
+    console.log(values);
+  };
 
+  const handleChange = (pag: TablePaginationConfig) => {
+    pagination &&
+      pagination.onChange(
+        pag.current || pagination.currentPage,
+        pag.pageSize || pagination.pageSize
+      );
+  };
 
-    const handleChange = (pag: TablePaginationConfig) => {
-        pagination &&
-        pagination.onChange(
-            pag.current || pagination.currentPage,
-            pag.pageSize || pagination.pageSize
-        );
-    };
+  const { show } = useContextMenu({
+    id: MENU_ID,
+  });
 
-    const { show } = useContextMenu({
-        id: MENU_ID,
-    });
+  function handleContextMenu(event: any, props: any) {
+    const { key } = props;
+    show({ event, props: { key, props } });
+  }
 
-
-    function handleContextMenu(event:any, props:any){
-        const {key} = props
-        show({event, props: {key, props}})
-    }
-
-
-    const handleItemClick = async ({id, props }:ItemParams) => {
-        switch (id) {
-            case "Выполнить":
-                try {
-                    await performer(props?.key).unwrap();
-                }catch (error) {
-                    console.log(error)
-                }
-                break;
-
-            case "Редактировать":
-                try {
-                    if (user?.id === props.props.performer.id) {
-                        handleEdit(props?.props)
-                    } else {
-                        message.success({
-                            content: 'Вы не можете редактировать данную заявку !',
-                            icon: <ExclamationCircleOutlined style={{  fontSize: '24px', color: 'red' }} />,
-                            type: "error",
-                            duration: 2,
-                            style: {
-                                fontSize: '18px',
-                            },
-                        });
-                    }
-                    break
-                }
-
-                catch (error) {
-                    message.success({
-                        content: 'Для редактирования заявки необходимо ее принять !',
-                        icon: <ExclamationCircleOutlined style={{  fontSize: '24px', color: 'red' }} />,
-                        type: "error",
-                        duration: 2,
-                        style: {
-                            fontSize: '18px',
-                        },
-                    });
-                    break
-                }
-
-            case "Удалить":
-                onDelete(props?.key)
-                break
+  const handleItemClick = async ({ id, props }: ItemParams) => {
+    switch (id) {
+      case "Выполнить":
+        try {
+          await performer(props?.key).unwrap();
+        } catch (error) {
+          console.log(error);
         }
-    }
+        break;
 
-
-
-
-    // global
-    const [open, setOpen] = useState(false);
-    const [placement, setPlacement] = useState<DrawerProps['placement']>('right');
-    const [radio, setRadio] = useState("all")
-    const [checkBox, setCheckBox] = useState<CheckboxValueType[]>([])
-    const [dat, setDat] = useState<IStatement[]>();
-    const { data: stores } = useFetchStoresQuery();
-    const [selectData, setSelectData] = useState('');
-    const treeData = [
-        {
-            title: 'Арип',
-            value: 'Арип',
-        },
-        {
-            title: 'Магомед',
-            value: 'Магомед',
-        },
-        {
-            title: 'Арслан',
-            value: 'Арслан',
-        },
-        {
-            title: 'Наби',
-            value: 'Наби',
-        },
-        {
-            title: 'Гаджи',
-            value: 'Гаджи',
-        },
-        {
-            title: 'Гаджимурад',
-            value: 'Гаджимурад',
-        },
-    ];
-    const address = stores && [
-        ...stores
-            .filter((store) =>
-                user?.stores.length
-                    ? user.stores.some((item) => item.id === store.id)
-                    : true
-            )
-            .map((item) => ({
-                label: item.name,
-                value: item.name,
-            })),
-        { label: "Офис", value: "" },
-    ]
-    const { RangePicker } = DatePicker;
-
-    const [valueName, setValue] = useState<string>('');
-    const [addressName, setAddressName] = useState<string>('');
-    const onSelectName = (newValue: string) => {
-        setValue(newValue);
-    };
-
-    const onSelectAddress = (newValue: string) => {
-        setAddressName(newValue);
-    };
-
-    const onSelectDate = (dates: any | null) => {
-        if (dates) {
-            setSelectData(dates)
-        }
-    }
-
-
-    const showDrawer = () => {
-        setOpen(true);
-    };
-
-    const onChan = () => {
-        setPlacement('right');
-    };
-
-    const onClose = () => {
-        setOpen(false);
-    };
-
-    const radioChecked = (event:RadioChangeEvent) => {
-        setRadio(event.target.value)
-    }
-
-    const checkbox = (checkedValues: CheckboxValueType[]) => {
-        setCheckBox(checkedValues)
-    };
-
-    const checkActiveNotActive  = () => {
-        FilterFunctionTest(radio, selectData, addressName, valueName);
-        setOpen(false);
-    }
-
-
-    useEffect(() => {
-        const performer = true ? checkBox.includes('performer') : false;
-        const address = true ? checkBox.includes('performer') : false;
-        const data = true ? checkBox.includes('Data') : false;
-        if (performer) {
-        }else{
-            setValue('')
+      case "Редактировать":
+        try {
+          if (user?.id === props.props.performer.id) {
+            handleEdit(props?.props);
+          } else {
+            message.success({
+              content: "Вы не можете редактировать данную заявку !",
+              icon: (
+                <ExclamationCircleOutlined
+                  style={{ fontSize: "24px", color: "red" }}
+                />
+              ),
+              type: "error",
+              duration: 2,
+              style: {
+                fontSize: "18px",
+              },
+            });
+          }
+          break;
+        } catch (error) {
+          message.success({
+            content: "Для редактирования заявки необходимо ее принять !",
+            icon: (
+              <ExclamationCircleOutlined
+                style={{ fontSize: "24px", color: "red" }}
+              />
+            ),
+            type: "error",
+            duration: 2,
+            style: {
+              fontSize: "18px",
+            },
+          });
+          break;
         }
 
-        if (address) {
-        }else{
-            setAddressName('')
+      case "Удалить":
+        onDelete(props?.key);
+        break;
+    }
+  };
+
+  return (
+    <>
+      <Button
+        type="primary"
+        style={{ marginBottom: 14, marginTop: -6 }}
+        onClick={() => setShowSorting(true)}
+        disabled
+      >
+        Сортировка
+      </Button>
+
+      <Sorting
+        show={showSorting}
+        onHide={() => setShowSorting(false)}
+        onSorting={onSorting}
+      />
+
+      <Table
+        columns={columns}
+        rowClassName={(record) => (record.status ? "disable" : "")}
+        loading={loading}
+        bordered
+        dataSource={data?.map((statement, index) => ({
+          ...statement,
+          index: pagination ? pagination.currentPage * 10 - 10 + index + 1 : 0,
+          key: statement.id,
+        }))}
+        pagination={
+          pagination && {
+            current: pagination.currentPage || 1,
+            total: pagination.total || 0,
+            pageSize: pagination.pageSize || 10,
+          }
         }
+        onChange={handleChange}
+        onRow={(record) => ({
+          onContextMenu: (event) => handleContextMenu(event, record),
+        })}
+      />
+      <Menu id={MENU_ID}>
+        {user?.role.name === "admin" ? (
+          <Item id="Выполнить" onClick={handleItemClick}>
+            <span className={style.item}>
+              <CheckOutlined style={{ marginRight: 5 }} />
+              Принять заявку
+            </span>
+          </Item>
+        ) : null}
 
-        if (data) {
-        }else{
-            setSelectData('')
-        }
-    }, [checkBox]);
+        <Item id="Редактировать" onClick={handleItemClick}>
+          <span className={style.item}>
+            <EditOutlined style={{ marginRight: 5 }} />
+            Завершить заявку
+          </span>
+        </Item>
 
-    // end global
-
-
-    return (
-        <>
-            <Button type="primary" onClick={showDrawer} style={{marginBottom:14, marginTop:-6}}>
-                Сортировка
-            </Button>
-
-            <Drawer
-                title="Сортировка заявок"
-                placement={placement}
-                width={500}
-                onClose={onClose}
-                open={open}
-                extra={
-                    <Space>
-                        <Button onClick={onClose}>Закрыть</Button>
-                        <Button type="primary" onClick={() => checkActiveNotActive()}>
-                            Применить
-                        </Button>
-                    </Space>
-                }
-            >
-                <>
-                    <Radio.Group defaultValue="a" buttonStyle="solid">
-                        <Radio.Button
-                            value="all"
-                            onChange={(e) => radioChecked(e)}
-                        >
-                            Все
-                        </Radio.Button>
-                        <Radio.Button
-                            value="active"
-                            onChange={(e) => radioChecked(e)}
-                        >
-                            Активные
-                        </Radio.Button>
-                        <Radio.Button
-                            value="NotActive"
-                            onChange={(e) => radioChecked(e)}
-                        >
-                            Завершенные
-                        </Radio.Button>
-                    </Radio.Group>
-                </>
-
-                <Checkbox.Group style={{ width: '100%', marginTop:25}} onChange={(e) => checkbox(e)}>
-                    <Row>
-                        <Col span={8}>
-                            <Checkbox value="Data">Дата</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="address">Адрес аптеки</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="performer">Исполнитель</Checkbox>
-                        </Col>
-                    </Row>
-                </Checkbox.Group>
-                {checkBox.includes('performer') ? <TreeSelect
-                    style={{width: '100%', marginTop: 20}}
-                    value={valueName}
-                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                    treeData={treeData}
-                    placeholder="Выберите по имени "
-                    treeDefaultExpandAll
-                    onChange={onSelectName}
-                /> : null}
-
-                {checkBox.includes('address') ? <TreeSelect
-                    style={{width: '100%', marginTop: 20}}
-                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                    placeholder="Выбор Аптеки"
-                    treeData={address}
-                    treeDefaultExpandAll
-                    onChange={onSelectAddress}
-                /> : null}
-
-                {checkBox.includes('Data') ? <Space
-                        direction="vertical"
-                        size={12}
-                        style={{marginTop: 20}}
-                    >
-                        <RangePicker onChange={onSelectDate}/>
-                    </Space>
-                    : null}
-
-            </Drawer>
-
-            <Table
-                columns={columns}
-                rowClassName={(record) => (record.status ? "disable" : "")}
-                loading={loading}
-                bordered
-                dataSource={data?.map((statement, index) => ({
-                    ...statement,
-                    index: pagination ? pagination.currentPage * 10 - 10 + index + 1 : 0,
-                    key: statement.id,
-                }))}
-                pagination={
-                    pagination && {
-                        current: pagination.currentPage || 1,
-                        total: pagination.total || 0,
-                        pageSize: pagination.pageSize || 10,
-                    }
-                }
-                onChange={handleChange}
-
-                onRow={(record) => ({
-                    onContextMenu: (event) => handleContextMenu(event, record),
-                })}
-            />
-            <Menu id={MENU_ID}>
-                {user?.role.name === 'admin' ?
-                    <Item id="Выполнить" onClick={handleItemClick}>
-                <span  className={style.item}>
-                    <CheckOutlined style={{marginRight:5}}/>
-                    Принять заявку
-                </span>
-                    </Item> : null}
-
-                <Item id="Редактировать" onClick={handleItemClick}>
-
-                <span className={style.item}>
-                    <EditOutlined style={{marginRight:5}}/>
-                    Завершить заявку
-                </span>
-                </Item>
-
-                <Separator />
-                <Item id="Удалить" onClick={handleItemClick}>
-                <span style={{color:'#dc4234'}}>
-                    <DeleteOutlined style={{marginRight:5}}/>
-                    Удалить заявку
-                </span>
-                </Item>
-            </Menu>
-        </>
-    );
+        <Separator />
+        <Item id="Удалить" onClick={handleItemClick}>
+          <span style={{ color: "#dc4234" }}>
+            <DeleteOutlined style={{ marginRight: 5 }} />
+            Удалить заявку
+          </span>
+        </Item>
+      </Menu>
+    </>
+  );
 };
 
 export default Statement;
-
-

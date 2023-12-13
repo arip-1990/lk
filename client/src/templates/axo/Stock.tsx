@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import {
   Row,
   Col,
-  Space,
   Modal,
   Form,
   Input,
@@ -11,19 +10,14 @@ import {
   Upload,
   Button,
 } from "antd";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  PaperClipOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { PaperClipOutlined, UploadOutlined } from "@ant-design/icons";
 import moment from "moment";
 
 import { useAuth } from "../../hooks/useAuth";
 import { IStatement } from "../../models/IStatement";
 import { useFetchStatementsQuery } from "../../services/StatementService";
 import { Statement } from "../../components";
-import {IUser} from "../../models/IUser";
+import { IUser } from "../../models/IUser";
 
 interface IProps {
   id: number;
@@ -69,7 +63,7 @@ const Stock: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
       align: "center" as "center",
       dataIndex: "store",
       render: (store: { id: string; name: string } | undefined) => (
-        <p>{store?.name || 'Офис'}</p>
+        <p>{store?.name || "Офис"}</p>
       ),
     },
     {
@@ -93,7 +87,12 @@ const Stock: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
       title: "Заявитель",
       dataIndex: "applicant",
       align: "center" as "center",
-      render: (user: IUser) => <p>{user && (user.firstName + (user.lastName && ` ${user.lastName.charAt(0)}.`))}</p>,
+      render: (user: IUser) => (
+        <p>
+          {user &&
+            user.firstName + (user.lastName && ` ${user.lastName.charAt(0)}.`)}
+        </p>
+      ),
     },
     {
       title: "Комментарий",
@@ -121,13 +120,15 @@ const Stock: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
       ),
     },
     {
-      title:"Исполнитель",
+      title: "Исполнитель",
       dataIndex: "performer",
       align: "center",
-      render: (user: IUser | undefined) =>
-          <p>
-            {user && (user.firstName + (user.lastName && ` ${user.lastName.charAt(0)}.`))}
-          </p>
+      render: (user: IUser | undefined) => (
+        <p>
+          {user &&
+            user.firstName + (user.lastName && ` ${user.lastName.charAt(0)}.`)}
+        </p>
+      ),
     },
   ];
 

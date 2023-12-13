@@ -1,13 +1,13 @@
 import { FC, useState } from "react";
-import { Row, Col, Space, Modal, Form, Input, DatePicker, Switch } from "antd";
-import {PaperClipOutlined} from "@ant-design/icons";
+import { Row, Col, Modal, Form, Input, DatePicker, Switch } from "antd";
+import { PaperClipOutlined } from "@ant-design/icons";
 import moment from "moment";
 
 import { useAuth } from "../../hooks/useAuth";
 import { IStatement } from "../../models/IStatement";
 import { useFetchStatementsQuery } from "../../services/StatementService";
 import { Statement } from "../../components";
-import {IUser} from "../../models/IUser";
+import { IUser } from "../../models/IUser";
 
 interface IProps {
   id: number;
@@ -28,18 +28,10 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
   const [form] = Form.useForm<IFormEditData>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
-  const [filter, setFilter] = useState({applications:'', data:'', address:'', performer:''});
   const { data, isLoading } = useFetchStatementsQuery({
     categoryId: id,
     pagination,
-    filter
   });
-
-
-  const FilterFunctionTest = (applications:string, data:any, address:string, performer:string) => {
-    setFilter({applications:applications, data:data, address:address, performer:performer});
-  }
-  console.log(filter)
 
   const columns = [
     {
@@ -60,7 +52,7 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
       align: "center" as "center",
       dataIndex: "store",
       render: (store: { id: string; name: string } | undefined) => (
-        <p>{store?.name || 'Офис'}</p>
+        <p>{store?.name || "Офис"}</p>
       ),
     },
     {
@@ -84,7 +76,12 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
       title: "Заявитель",
       dataIndex: "applicant",
       align: "center" as "center",
-      render: (user: IUser) => <p>{user && (user.firstName + (user.lastName && ` ${user.lastName.charAt(0)}.`))}</p>,
+      render: (user: IUser) => (
+        <p>
+          {user &&
+            user.firstName + (user.lastName && ` ${user.lastName.charAt(0)}.`)}
+        </p>
+      ),
     },
     {
       title: "Комментарий",
@@ -104,8 +101,13 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
       title: "Исполнитель",
       dataIndex: "performer",
       align: "center",
-      render: (user: IUser | undefined) => <p>{user && (user.firstName + (user.lastName && ` ${user.lastName.charAt(0)}.`))}</p>
-    }
+      render: (user: IUser | undefined) => (
+        <p>
+          {user &&
+            user.firstName + (user.lastName && ` ${user.lastName.charAt(0)}.`)}
+        </p>
+      ),
+    },
   ];
 
   const handleChangePagination = (currentPage: number, pageSize: number) => {
@@ -159,7 +161,6 @@ const It: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
         }}
         onDelete={onDelete}
         handleEdit={handleEdit}
-        FilterFunctionTest={FilterFunctionTest}
       />
 
       <Modal
