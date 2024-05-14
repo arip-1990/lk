@@ -7,8 +7,12 @@ export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
-    fetchUser: builder.query<IUser[], void>({
-      query: () => ({url: '/user'})
+    fetchUser: builder.query<IUser[], any>({
+      query: ({role}) => ({
+        url: '/user',
+        params: {role: role},
+
+      })
     }),
   }),
 });

@@ -28,10 +28,16 @@ const Support: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
   const [form] = Form.useForm<IFormEditData>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
+  const [filter, setFilter] = useState<any>();
   const { data, isLoading } = useFetchStatementsQuery({
     categoryId: id,
     pagination,
+    filter
   });
+
+  const FilterFunction = (values:any) => {
+    setFilter(values);
+  }
 
   const columns = [
     {
@@ -161,6 +167,7 @@ const Support: FC<IProps> = ({ id, loading, onEdit, onDelete }) => {
         }}
         onDelete={onDelete}
         handleEdit={handleEdit}
+        FilterFunction={FilterFunction}
       />
 
       <Modal

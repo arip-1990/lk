@@ -35,6 +35,7 @@ interface IProps {
   };
   onDelete: (id: string) => void;
   handleEdit: (data: IStatement) => void;
+  FilterFunction:any
 }
 
 const MENU_ID = "context-menu";
@@ -46,6 +47,7 @@ const Statement: FC<IProps> = ({
   pagination,
   onDelete,
   handleEdit,
+  FilterFunction
 }) => {
   const { user } = useAuth();
   const [showSorting, setShowSorting] = useState(false);
@@ -53,7 +55,8 @@ const Statement: FC<IProps> = ({
 
   const onSorting = (values: FormData) => {
     setShowSorting(false);
-    console.log(values);
+    // console.log(values);
+    FilterFunction(values);
   };
 
   const handleChange = (pag: TablePaginationConfig) => {
@@ -132,7 +135,6 @@ const Statement: FC<IProps> = ({
         type="primary"
         style={{ marginBottom: 14, marginTop: -6 }}
         onClick={() => setShowSorting(true)}
-        disabled
       >
         Сортировка
       </Button>

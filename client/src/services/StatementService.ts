@@ -14,8 +14,8 @@ export const statementApi = createApi({
         categoryId: number;
         pagination: { current: number; pageSize: number };
         filter?: {
-          applications: boolean;
-          data?: any;
+          status: number|null;
+          // data?: any;
           address?: string;
           performer?: string;
         };
@@ -26,12 +26,17 @@ export const statementApi = createApi({
         params: {
           page: pagination.current,
           pageSize: pagination.pageSize,
-          filter: {
-            status: filter?.applications,
-            date: filter?.data,
-            store: filter?.address,
-            performer: filter?.performer,
-          },
+
+          status: filter?.status,
+          store: filter?.address,
+          performer: filter?.performer,
+
+          // filter: {
+          //   status: filter?.applications,
+          //   date: filter?.data,
+          //   store: filter?.address,
+          //   performer: filter?.performer,
+          // },
         },
       }),
       transformResponse: (response: Pagination<IStatement>) => ({

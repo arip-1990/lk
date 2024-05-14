@@ -15,9 +15,10 @@ import { CheckboxValueType } from "antd/es/checkbox/Group";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useFetchStoresQuery } from "../../services/StoreService";
+import {useFetchUserQuery} from "../../services/UserService";
 
 export type FormData = {
-  status: "all" | "active" | "inactive";
+  status: string| null | 1 | 0; // "all" | "active" | "inactive";
   performer?: string;
   address?: string;
   date?: string;
@@ -34,44 +35,31 @@ const Sorting: FC<IProps> = ({ show, onHide, onSorting }) => {
   const [form] = Form.useForm<FormData>();
   const [filters, setFilters] = useState<Array<CheckboxValueType>>([]);
   const { data: stores } = useFetchStoresQuery();
+  const { data: userAdmin} = useFetchUserQuery({
+    role:'admin',
+  });
+
 
   const onFinish = async () => {
     try {
       const data = await form.validateFields();
-      form.resetFields();
-
+      // form.resetFields();
       onSorting && onSorting(data);
+
+      if (data.status === "all"){
+        data.status = null
+      }
+
     } catch (error) {
       console.log("Error: ", error);
     }
   };
 
-  const performers = [
-    {
-      label: "Арип",
-      value: "Арип",
-    },
-    {
-      label: "Магомед",
-      value: "Магомед",
-    },
-    {
-      label: "Арслан",
-      value: "Арслан",
-    },
-    {
-      label: "Наби",
-      value: "Наби",
-    },
-    {
-      label: "Гаджи",
-      value: "Гаджи",
-    },
-    {
-      label: "Гаджимурад",
-      value: "Гаджимурад",
-    },
-  ];
+  const performers:any = userAdmin ? userAdmin.map((item) => ({
+    label: item.firstName,
+    value: item.id
+  })) : ''
+
 
   const addresses = stores && [
     ...stores
@@ -82,7 +70,7 @@ const Sorting: FC<IProps> = ({ show, onHide, onSorting }) => {
       )
       .map((item) => ({
         label: item.name,
-        value: item.name,
+        value: item.id,
       })),
     { label: "Офис", value: "" },
   ];
@@ -108,13 +96,12 @@ const Sorting: FC<IProps> = ({ show, onHide, onSorting }) => {
         name="sorting"
         form={form}
         autoComplete="off"
-        initialValues={{ status: "all" }}
       >
         <Form.Item name="status" noStyle>
           <Radio.Group buttonStyle="solid">
-            <Radio.Button value="all">Все</Radio.Button>
-            <Radio.Button value="active">Активные</Radio.Button>
-            <Radio.Button value="inactive">Завершенные</Radio.Button>
+            <Radio.Button value='all'>Все</Radio.Button>
+            <Radio.Button value={0}>Активные</Radio.Button>
+            <Radio.Button value={1}>Завершенные</Radio.Button>
           </Radio.Group>
         </Form.Item>
 
@@ -123,11 +110,11 @@ const Sorting: FC<IProps> = ({ show, onHide, onSorting }) => {
           onChange={setFilters}
         >
           <Row>
-            <Col span={8}>
-              <Checkbox value="date" disabled>
-                Дата
-              </Checkbox>
-            </Col>
+            {/*<Col span={8}>*/}
+            {/*  <Checkbox value="date" disabled>*/}
+            {/*    Дата*/}
+            {/*  </Checkbox>*/}
+            {/*</Col>*/}
             <Col span={8}>
               <Checkbox value="address">Адрес аптеки</Checkbox>
             </Col>
@@ -148,7 +135,7 @@ const Sorting: FC<IProps> = ({ show, onHide, onSorting }) => {
             );
           }
 
-          if (typeof item === "string" && item in ["performer", "address"]) {
+          if (typeof item === "string" && item === "performer" || item === "address") {
             return (
               <Form.Item
                 key={item}
