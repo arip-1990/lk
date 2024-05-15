@@ -7,7 +7,7 @@ import { Contact as BaseContact } from "../components";
 
 const Contact: React.FC = () => {
   const { user } = useAuth();
-  const { data: users, isLoading: fetchLoading } = userApi.useFetchUserQuery();
+  const { data: users, isLoading: fetchLoading } = userApi.useFetchUserQuery({});
   const [addContact, { isLoading: addLoading }] = useAddContactMutation();
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [form] = Form.useForm();
