@@ -36,9 +36,8 @@ const Sorting: FC<IProps> = ({ show, onHide, onSorting }) => {
   const [filters, setFilters] = useState<Array<CheckboxValueType>>([]);
   const { data: stores } = useFetchStoresQuery();
   const { data: userAdmin} = useFetchUserQuery({
-    role:'admin',
+    role:"admin"
   });
-
 
   const onFinish = async () => {
     try {
