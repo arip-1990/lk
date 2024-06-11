@@ -111,7 +111,7 @@ const Media: React.FC = () => {
                     <MediaCard
                       title={item.name}
                       description={item.description}
-                      size="small"
+                      size="middle"
                     />
                   </Link>
                 </Col>

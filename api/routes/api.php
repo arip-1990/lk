@@ -94,5 +94,12 @@ Route::prefix('v1')->group(function () {
             Route::post('/connect-token', [V1\Broadcast\ConnectController::class, 'handle']);
             Route::post('/auth', [V1\Broadcast\AuthController::class, 'handle']);
         });
+
+        Route::prefix('/inventory')->group(function (){
+            Route::get('/{id}', [V1\Inventory\InventoryController::class, 'handle']);
+            Route::post('/', [V1\Inventory\AddInventory::class, 'store']);
+            Route::delete('/{id}', [V1\Inventory\DeleteInventory::class, 'delete']);
+        });
+
     });
 });

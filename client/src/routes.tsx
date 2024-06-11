@@ -104,6 +104,12 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("./pages/Contact")),
     children: [],
   },
+  {
+    key: "inventory",
+    path: "inventory/:id",
+    element: React.lazy(() => import("./pages/Inventory")),
+    children:[]
+  },
 ];
 
 export default routes;

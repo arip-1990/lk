@@ -14,6 +14,7 @@ import { contactApi } from "../services/ContactService";
 import { userApi } from "../services/UserService";
 import { dateReducer } from "./dateReducer";
 import { timeCardApi } from "../services/TimeCardService";
+import { inventoryApi } from  "../services/InventoryService";
 
 const rootReducer = combineReducers({
   [categoryApi.reducerPath]: categoryApi.reducer,
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   [contactApi.reducerPath]: contactApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [timeCardApi.reducerPath]: timeCardApi.reducer,
+  [inventoryApi.reducerPath]: inventoryApi.reducer,
   crumbs: crumbReducer,
   date: dateReducer,
 });
@@ -47,7 +49,8 @@ export const store = configureStore({
       .concat(statementApi.middleware)
       .concat(contactApi.middleware)
       .concat(userApi.middleware)
-      .concat(timeCardApi.middleware),
+      .concat(timeCardApi.middleware)
+      .concat(inventoryApi.middleware),
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
