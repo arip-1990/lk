@@ -9,7 +9,7 @@ import { IStore } from "../models/IStore";
 import { useFetchStoresQuery } from "../services/StoreService";
 import { useAuth } from "../hooks/useAuth";
 
-const getFilterCategories = (categories: ICategory[]): ICategory[] => {
+export const getFilterCategories = (categories: ICategory[]): ICategory[] => {
   let data: ICategory[] = [];
   categories.forEach((item) => {
     if (item.type === "media") {
@@ -22,7 +22,7 @@ const getFilterCategories = (categories: ICategory[]): ICategory[] => {
   return data;
 };
 
-const getCategoryById = (
+export const getCategoryById = (
   id: number,
   categories: ICategory[]
 ): ICategory | undefined => {

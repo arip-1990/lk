@@ -23,7 +23,7 @@ const Main: FC = () => {
             <Col key={item.id} span={12} xxl={8}>
               <Link
                 to={
-                  item.type === "media" ? "/media" : `/${item.type}/${item.id}`
+                  item.type === "media" ? "/media" : item.type === "invent" ? "/invent" : `/${item.type}/${item.id}`
                 }
                 state={{ category: item }}
               >

@@ -7,7 +7,7 @@ const Inventory = () => {
 
     return (
         <Card>
-            <InventoryTable/>
+
         </Card>
     );
 };

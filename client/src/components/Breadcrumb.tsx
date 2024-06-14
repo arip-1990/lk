@@ -21,10 +21,10 @@ const getCategoryById = (
 const generateUrl = (category: ICategory): string => {
   if (
     category.children.length &&
-    !["test", "store", "media"].includes(category.type)
+    !["test", "store", "media", "invent"].includes(category.type)
   )
     return `/category/${category.id}`;
-  else if (category.type === "timecard" || category.type === "media")
+  else if (category.type === "timecard" || category.type === "media" || category.type === "invent")
     return `/${category.type}`;
   else return `/${category.type}/${category.id}`;
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { FC, useEffect, useState} from 'react';
 import {Button, Form, Input, Select, Table} from "antd";
 import { DeleteOutlined, PlusOutlined} from "@ant-design/icons";
 import {InventData} from '../../models/Inventory';
@@ -10,7 +10,6 @@ import {
 } from "../../services/InventoryService";
 import {columns} from "./colums";
 import { Modal } from "antd";
-import {useParams} from "react-router-dom";
 import { useFetchStoresQuery } from "../../services/StoreService";
 import {Item, Menu, useContextMenu} from "react-contexify";
 import Sorting from "../inventory/Sorting";
@@ -29,29 +28,40 @@ const formItemLayout = {
     },
 };
 
+interface params{
+    id: string | undefined,
+    store_id: string | undefined,
+}
+
 const MENU_ID = "context-menu";
-const InventoryTable = () => {
+const InventoryTable: FC<params> = ({id, store_id}) => {
+    const [sort, setSort] = useState<string|undefined>();
+
+    if (store_id == 'all') {
+        store_id = sort
+    }
+
     const { user } = useAuth();
-    const [store_id, setStoreId] = useState<string|undefined>('');
     const [addInventory] = useAddInventoryMutation();
     const [inventories, setInventories] = useState<InventData[]|undefined>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
-    const {id} = useParams();
-    const {data: stores} = useFetchStoresQuery();
+    const { data: stores} = useFetchStoresQuery();
     const { data: newInventory, refetch } = useFetchInventoriesQuery({id, store_id});
     const [deleteInvent] = useDeleteInventoryMutation();
+    const [showSorting, setShowSorting] = useState(false);
+
     const { show } = useContextMenu({
         id: MENU_ID,
     });
-    const [showSorting, setShowSorting] = useState(false);
+    console.log(id, store_id, 'index')
+
 
     useEffect(() => {
         if (newInventory) {
             setInventories(newInventory);
         }
     }, [newInventory]);
-
 
     const options = stores && [
         ...stores
@@ -89,7 +99,8 @@ const InventoryTable = () => {
 
     const onSorting = (values: FormData) => {
         setShowSorting(false);
-        setStoreId(values.address);
+        // console.log(values.address);
+        setSort(values.address)
     }
 
     function handleContextMenu(event: any, props: any) {
@@ -234,3 +245,6 @@ const InventoryTable = () => {
 };
 
 export default InventoryTable;
+
+
+

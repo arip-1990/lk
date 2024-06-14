@@ -86,12 +86,6 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("./pages/Training")),
     children: [],
   },
-  // {
-  //   key: "timecard",
-  //   path: "timecard",
-  //   element: React.lazy(() => import("./pages/Timecard")),
-  //   children: [],
-  // },
   {
     key: "axo",
     path: "axo/:id",
@@ -105,10 +99,24 @@ const routes: RouteType[] = [
     children: [],
   },
   {
-    key: "inventory",
-    path: "inventory/:id",
-    element: React.lazy(() => import("./pages/Inventory")),
-    children:[]
+    key: "invent",
+    path: "invent",
+    element: React.lazy(() => import("./pages/Invent")),
+    children:[
+      {
+      key: "invent-store",
+      path: ":storeId",
+      element: React.lazy(() => import("./pages/Invent")),
+      children: [
+        {
+          key: "invent-id",
+          path: ":categoryId",
+          element: React.lazy(() => import("./pages/Invent")),
+          children: [],
+        },
+      ],
+    }
+    ]
   },
 ];
 

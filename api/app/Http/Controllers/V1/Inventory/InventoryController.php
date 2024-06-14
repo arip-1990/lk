@@ -11,7 +11,7 @@ class InventoryController extends Controller
 {
     public function handle(string $id, Request $request):JsonResponse
     {
-        if ($request->get('store_id')) {
+        if ($request->get('store_id') and $request->get('store_id') != 'all' ) {
             return new JsonResponse(Inventory::query()
                 ->where('category_id', $id)
                 ->where('store_id', $request->get('store_id'))
