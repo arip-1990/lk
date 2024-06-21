@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState} from 'react';
 import {Button, Form, Input, Select, Table} from "antd";
-import { DeleteOutlined, PlusOutlined} from "@ant-design/icons";
+import {DeleteOutlined, FileExcelOutlined, PlusOutlined} from "@ant-design/icons";
 import {InventData} from '../../models/Inventory';
 import {
     CreateInventParams,
@@ -15,6 +15,7 @@ import {Item, Menu, useContextMenu} from "react-contexify";
 import Sorting from "../inventory/Sorting";
 import type {FormData} from "../statement/Sorting";
 import {useAuth} from "../../hooks/useAuth";
+import {API_URL} from "../../services/api";
 
 
 const formItemLayout = {
@@ -54,7 +55,6 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
     const { show } = useContextMenu({
         id: MENU_ID,
     });
-    console.log(id, store_id, 'index')
 
 
     useEffect(() => {
@@ -99,7 +99,6 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
 
     const onSorting = (values: FormData) => {
         setShowSorting(false);
-        // console.log(values.address);
         setSort(values.address)
     }
 
@@ -117,6 +116,10 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
         }
     };
 
+    const inventExport = () => {
+        window.location.href = `${API_URL}/download/inventory/${id}`;
+    }
+
     return (
         <>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -128,12 +131,29 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
                     Сортировка
                 </Button>
 
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    style={{ marginBottom: 14, marginTop: -6 }}
-                    onClick={showModal}
-                />
+                <div style={{
+                    display: "flex",}}
+                >
+                    <Button
+                        type="link"
+                        style={{
+                            color: "#22aca6",
+                            marginBottom: 14,
+                            marginTop: -6,
+                            marginRight: 12,
+                        }}
+                        icon={<FileExcelOutlined />}
+                        onClick={inventExport}
+                    />
+
+                    <Button
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        style={{ marginBottom: 14, marginTop: -6 }}
+                        onClick={showModal}
+                    />
+                </div>
+
             </div>
 
             <Sorting
@@ -176,7 +196,6 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
                     <Form.Item
                         label="Инвентарный номер"
                         name="inventory_number"
-                        rules={[{ required: true, message: 'Введите инвентарный номер' }]}
                     >
                         <Input />
                     </Form.Item>
@@ -184,7 +203,6 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
                     <Form.Item
                         label="Line1"
                         name="line1"
-                        rules={[{ required: true, message: 'Введите данные!' }]}
                     >
                         <Input style={{ width: '100%' }} />
                     </Form.Item>
@@ -192,7 +210,6 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
                     <Form.Item
                         label="Line2"
                         name="line2"
-                        rules={[{ required: true, message: 'Введите данные!' }]}
                     >
                         <Input />
                     </Form.Item>
@@ -200,7 +217,6 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
                     <Form.Item
                         label="Barcode"
                         name="barcode"
-                        rules={[{ required: true, message: 'Введите данные!' }]}
                     >
                         <Input />
                     </Form.Item>
@@ -208,7 +224,6 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
                     <Form.Item
                         label="Sheet"
                         name="sheet"
-                        rules={[{ required: true, message: 'Введите данные!' }]}
                     >
                         <Input />
                     </Form.Item>
@@ -216,7 +231,6 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
                     <Form.Item
                         label="Выбор аптеки"
                         name="store_id"
-                        rules={[{ required: true, message: 'Введите данные!' }]}
                     >
                         <Select
                             options={options}

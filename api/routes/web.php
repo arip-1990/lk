@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/', function () {
-//    dd('');
-//});
 
 Route::prefix('/export')->group(function () {
     Route::get('/claim', [V1\Store\Claim\ExportController::class, 'handle']);
@@ -28,4 +25,5 @@ Route::prefix('/export')->group(function () {
 Route::prefix('/download')->group(function () {
     Route::get('/media', [V1\Media\DownloadController::class, 'handle'])->name('download.media');
     Route::get('/statement/{statement}', [V1\OperationDepartment\Statement\DownloadController::class, 'handle'])->name('download.statement');
+    Route::get('/inventory/{category}', [V1\Inventory\ExportController::class, 'export']);
 });

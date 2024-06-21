@@ -13,14 +13,14 @@ class AddInventory extends Controller
     public function store(Request $request):JsonResponse
     {
         $validatedData = $request->validate([
-            'description' => 'required|string',
-            'inventory_number' => 'required|string|max:255',
-            'line1' => 'required|string|max:255',
-            'line2' => 'required|string|max:255',
-            'barcode' => 'required|string|max:255',
-            'sheet' => 'required|string|max:255',
-            'category_id' => 'required|integer',
-            'store_id' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'inventory_number' => 'nullable|string|max:255',
+            'line1' => 'nullable|string|max:255',
+            'line2' => 'nullable|string|max:255',
+            'barcode' => 'nullable|string|max:255',
+            'sheet' => 'nullable|string|max:255',
+            'category_id' => 'required|integer|exists:categories,id',
+            'store_id' => 'nullable|string|max:255|exists:stores,id',
         ]);
 
         $inventory = Inventory::create($validatedData);

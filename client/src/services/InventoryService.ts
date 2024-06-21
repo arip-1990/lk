@@ -8,14 +8,14 @@ interface FetchInventParams {
 }
 
 export interface CreateInventParams {
-    description : string | null,
-    inventory_number : string | null,
-    line1 : string | null,
-    line2 : string | null,
-    barcode : string | null,
-    sheet : string | null,
-    category_id : number | null,
-    store_id : null | string,
+    description : string | null | undefined,
+    inventory_number : string | null | undefined,
+    line1 : string | null | undefined,
+    line2 : string | null | undefined,
+    barcode : string | null | undefined,
+    sheet : string | null | undefined,
+    category_id : number | null | undefined,
+    store_id : null | string | undefined,
 }
 
 export interface DeleteInventParams {
