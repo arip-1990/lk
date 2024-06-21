@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1\Inventory;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Inventory;
-use Carbon\Carbon;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -26,7 +26,14 @@ class ExportController extends Controller
         $sheet->setCellValue('G1', 'Barcode');
         $sheet->setCellValue('H1', 'Sheet');
 
-        $data = Inventory::where('category_id', $category->id)->get();
+
+
+        $data = Inventory::where('category_id', $category->id);
+        if ($request->get('store_id') !== null) {
+            $data->where('store_id', $request->get('store_id'));
+        }
+        $data = $data->get();
+
 
         $row = 2;
         foreach ($data as $item) {
@@ -53,13 +60,3 @@ class ExportController extends Controller
         return response()->download($filePath)->deleteFileAfterSend(true);
     }
 }
-
-
-
-
-
-
-
-
-
-

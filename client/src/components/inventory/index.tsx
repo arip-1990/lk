@@ -117,7 +117,11 @@ const InventoryTable: FC<params> = ({id, store_id}) => {
     };
 
     const inventExport = () => {
-        window.location.href = `${API_URL}/download/inventory/${id}`;
+        if (store_id != undefined){
+            window.location.href = `${API_URL}/download/inventory/${id}/?store_id=${store_id}`;
+        }else{
+            window.location.href = `${API_URL}/download/inventory/${id}`;
+        }
     }
 
     return (
