@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1\OperationDepartment\Statement;
 
+use App\Events\StatementEvent;
 use App\Models\Category;
 use App\Models\Role;
 use App\Models\Statement;
@@ -45,6 +46,7 @@ class StoreController extends Controller
             );
 
 //            Notification::send(User::where('role_id', Role::firstWhere('name', Role::ADMIN)?->id)->get(), new StatementCreated($statement));
+            event(new StatementEvent($statement));
         }
         catch (\Exception $e) {
             return new JsonResponse(
