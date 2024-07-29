@@ -82,7 +82,7 @@ const Invent = () => {
     };
 
     return (
-        <Row style={categoryId? { width: 1382, margin: "0 auto" } : { width: 782, margin: "0 auto" }}>
+        <Row style={categoryId? { width: "-webkit-fill-available", margin: "0 auto" } : { width: 782, margin: "0 auto" }}>
             <Col>
                 {categoryId ? (
                     <Card>
