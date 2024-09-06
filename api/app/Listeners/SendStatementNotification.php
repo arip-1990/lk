@@ -30,9 +30,9 @@ class SendStatementNotification
         // Преобразование модели в массив с включенными связанными данными
         $data = $statement->toArray();
 
-        Http::post('http://192.168.0.103:5000/broadcast', [
-            $data
-        ]);
+//        Http::post('http://192.168.0.103:5000/broadcast', [
+//            $data
+//        ]);
     }
 }
 
