@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Row, Col, Card, Table, Button } from "antd";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { useFetchCategoriesQuery } from "../services/CategoryService";
@@ -10,6 +10,7 @@ import { useFetchStoresQuery } from "../services/StoreService";
 import { useAuth } from "../hooks/useAuth";
 
 export const getFilterCategories = (categories: ICategory[]): ICategory[] => {
+
   let data: ICategory[] = [];
   categories.forEach((item) => {
     if (item.type === "media") {
@@ -35,13 +36,14 @@ export const getCategoryById = (
 };
 
 const Media: React.FC = () => {
+  const [caspianPharm, setCaspianPharm] = useState(false)
   const { storeId, categoryId } = useParams();
   const { user } = useAuth();
   const {
     data: categories,
     isLoading: categoryLoading,
   } = useFetchCategoriesQuery();
-  const { data: stores, isLoading: storeLoading } = useFetchStoresQuery();
+  const { data: stores, isLoading: storeLoading } = useFetchStoresQuery({all:false, CaspianPharma:caspianPharm});
   const location = useLocation();
   const state = location.state as LocationState;
 
@@ -129,6 +131,13 @@ const Media: React.FC = () => {
             //   ) : null
             // }
           >
+            <Button
+                onClick={() => setCaspianPharm(!caspianPharm)}
+                style={{marginBottom: '7px'}}
+                type='primary'
+            >
+              {caspianPharm ? "Выйти" : "Показать каспий фарм"}
+            </Button>
             <Table
               size="small"
               rowClassName="primary"

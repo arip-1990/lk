@@ -20,6 +20,10 @@ class IndexController extends Controller
                 $query->whereIn('id', $request->user()->stores->pluck('id'));
         }
 
-        return new JsonResponse(StoreResource::collection($query->orderBy('sort')->get()));
+        if ($request->get('CaspianPharma')) {
+            return new JsonResponse(StoreResource::collection($query->where('company_id', '3')->orderBy('sort')->get()));
+        }
+
+        return new JsonResponse(StoreResource::collection($query->whereIn('company_id', ['1', '2'])->orderBy('sort')->get()));
     }
 }
