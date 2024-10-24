@@ -4,9 +4,11 @@ namespace App\Http\Controllers\V1\Test;
 
 use App\Models\Category;
 use App\Models\Result;
+use App\Models\Store;
 use App\Models\Test;
 use App\Models\User;
 use App\UseCases\TestService;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -14,6 +16,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class ExportController extends Controller
 {
     private Spreadsheet $spreadsheet;
+    private $store;
 
     public function __construct(private readonly TestService $testService)
     {
@@ -24,8 +27,9 @@ class ExportController extends Controller
         $this->spreadsheet->getActiveSheet()->calculateColumnWidths();
     }
 
-    public function handle(string $type)
+    public function handle(string $type, Request $request)
     {
+        $this->store = Store::where('id', $request->get('store_id'))->first();
         $category = match ($type) {
             'new' => Category::find(30),
             'promo' => Category::find(37),
@@ -61,7 +65,7 @@ class ExportController extends Controller
 
             foreach ($workers as $worker) {
                 /** @var Test $test */
-                foreach (Test::query()->whereNotNull('finished_at')->where('user_id', $worker['id'])->where('category_id', $category->id) as $test) {
+                foreach (Test::query()->whereNotNull('finished_at')->where('user_id', $worker['id'])->where('category_id', $category->id)->get() as $test) {
                     $index++;
                     $totalRes = $test->results->count();
                     $sheet->setCellValue('B' . $index, $worker['firstName'] . ' ' . $worker['lastName']);
@@ -100,7 +104,7 @@ class ExportController extends Controller
     {
         $newData = [];
         /** @var User $user */
-        foreach (User::active()->orderBy('role_id')->orderBy('position')->get() as $user) {
+        foreach ($this->store->users as $user) {
             $percent = 0;
             $newCorrects = [0, 0];
             foreach ($user->tests as $test) {
