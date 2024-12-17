@@ -138,9 +138,9 @@ const Test: React.FC<PropsType> = ({ user, onChangeTestType }) => {
           size="small"
           onChange={handleCheckType}
         >
-          <Radio.Button value="ПРОМО">ПРОМО</Radio.Button>
+          <Radio.Button value="promo">ПРОМО</Radio.Button>
           <Radio.Button value="Базовые">Базовые</Radio.Button>
-          <Radio.Button value="Новые">Новые</Radio.Button>
+          <Radio.Button value="new">Новые</Radio.Button>
         </Radio.Group>
       </Row>
       <Table

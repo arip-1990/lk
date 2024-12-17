@@ -17,7 +17,7 @@ const Profile: React.FC = () => {
   const [openModalExport, setOpenModalExport] = useState<boolean>(false);
   const {data:stores} = useFetchStoresQuery()
   const [storeId, setStoreId] = useState<string>('')
-console.log(testType)
+
   const items: TabsProps['items'] = [
     {
       key: '1',
@@ -69,9 +69,11 @@ console.log(testType)
             onChange={handleChange}
             activeKey={activeTab}
             tabBarExtraContent={
+
               user?.role.name === "admin" &&
               (activeTab == "2" || activeTab == "3") ? (
-                <Button
+
+                  <Button
                     type="primary"
                     onClick={() => exportModal(activeTab)}
                 >
@@ -94,15 +96,21 @@ console.log(testType)
             <Modal
                 title="Basic Modal"
                 open={openModalExport}
-                okText={<a href={`${API_URL}/export/test/${testType}?store_id=${storeId}`}>Выгрузить в exel</a>}
+                okText={
+                    storeId != '' ?
+                    <a href={`${API_URL}/export/test/${testType}?store_id=${storeId}`}>Выгрузить в exel</a>:
+                    "Выберите аптеку"
+                }
+
                 onCancel={() => setOpenModalExport(false)}
             >
                 <Select
                     showSearch
                     style={{ width: 400 }}
-                    placeholder="Search to Select"
+                    placeholder="Выберите аптеку"
                     optionFilterProp="label"
                     onChange={selectStore}
+
                     filterSort={(optionA, optionB) =>
                         (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                     }
